@@ -93,7 +93,7 @@ This repo is already linked to a real Convex deployment:
 - Team: `walter-furrer`, Project: `bullshit-corner`
 - Dev deployment: `dev:avid-stoat-60` (dashboard: https://dashboard.convex.dev/t/walter-furrer/bullshit-corner)
 
-For Vercel: add `CONVEX_DEPLOYMENT` and `VITE_CONVEX_URL` as Vercel project environment variables (Production/Preview/Development as appropriate) — typically pointed at a **prod** Convex deployment for the Vercel Production environment, and `npx convex deploy` should be run (e.g. in CI or manually) whenever `convex/` changes, since Vercel only builds the frontend and does not push Convex functions itself.
+For Vercel: see "Deployment (Vercel)" below — it does NOT use `CONVEX_DEPLOYMENT`/`VITE_CONVEX_URL` as static Vercel env vars. Instead it uses a `CONVEX_DEPLOY_KEY`-based build command (per Convex's official Vercel guide, `docs.convex.dev/production/hosting/vercel`, fetched fresh via the `convex-docs` skill on 2026-08-05 since this differs from the CLI's default `.env.local` flow) so each Vercel deployment pushes Convex functions and injects the right `VITE_CONVEX_URL` automatically.
 
 ## Dev workflow
 
@@ -123,11 +123,36 @@ Nitro auto-detects the `vercel` preset at build time via the `VERCEL` env var th
 
 `vercel.json` sets `"framework": null` so Vercel's dashboard doesn't misdetect this as a plain Vite project (which would expect a static `dist/` folder) and instead just runs the configured Build Command and picks up `.vercel/output/`.
 
+### Convex + Vercel wiring
+
+`vercel.json` also sets the Build Command to:
+
+```
+npx convex deploy --cmd-url-env-var-name VITE_CONVEX_URL --cmd 'pnpm build'
+```
+
+This is Convex's official Vercel pattern, not something invented for this repo. `npx convex deploy`:
+1. reads `CONVEX_DEPLOY_KEY` from the Vercel build environment,
+2. pushes `convex/` functions to the deployment that key is scoped to,
+3. injects that deployment's URL into `VITE_CONVEX_URL` for the wrapped build (`--cmd-url-env-var-name` targets Vite's `VITE_` prefix instead of Convex's Next.js-oriented default of `CONVEX_URL`),
+4. then runs `pnpm build`, which is what actually invokes Nitro.
+
+**Required Vercel env var — `CONVEX_DEPLOY_KEY`, set twice with different scopes and different values:**
+
+| Vercel scope | Value source (Convex dashboard) |
+|---|---|
+| Production only | Deployment Settings → General (for the **prod** deployment) → "Generate Production Deploy Key" (needs `deployment:deploy` permission) |
+| Preview only | Project Settings → "Generate Preview Deploy Key" — gives each Vercel preview branch its own ephemeral Convex deployment |
+
+Do **not** set `CONVEX_DEPLOYMENT` or `VITE_CONVEX_URL` as static Vercel env vars — the wrapped build command sets `VITE_CONVEX_URL` dynamically per-deployment, and a static value would fight with that.
+
+The `bullshit-corner` Convex project currently only has a `dev:` deployment (see above) — before deploying to Vercel, create a **production** Convex deployment (Convex dashboard → this project → add a Production deployment) to generate the Production Deploy Key against.
+
 Vercel project settings:
 - Install Command: `pnpm install` (default)
-- Build Command: `pnpm build` (default — runs `vite build`, which is what actually invokes Nitro)
+- Build Command: from `vercel.json` (see above) — no need to override in the dashboard
 - Output Directory: leave default/empty — Build Output API v3 in `.vercel/output/` takes precedence once present
-- Env vars: `CONVEX_DEPLOYMENT`, `VITE_CONVEX_URL` (see above)
+- Env vars: `CONVEX_DEPLOY_KEY` (Production scope + Preview scope, two different key values — see table above)
 
 Gotcha: if Nitro ever fails to auto-detect Vercel (e.g. a future Nitro version changes detection), set `NITRO_PRESET=vercel` as a Vercel env var to force it.
 
@@ -145,8 +170,8 @@ Verified locally: `pnpm build` completes successfully with the `nitro()` plugin 
 1. `pnpm dev` to run the app + Convex dev sync locally (web on port 3000, falls back to next free port if busy).
 2. Add shadcn components as needed: `pnpm dlx shadcn@latest add <component>`.
 3. Delete `src/routes/demo/*` once real routes exist.
-4. Connect the repo to Vercel, set `CONVEX_DEPLOYMENT`/`VITE_CONVEX_URL` env vars, and confirm a deployment builds via the Nitro `vercel` preset (watch the build log for `preset: vercel`).
-5. Decide on a Convex prod/dev deployment split (the auto-created `bullshit-corner` project is currently a single `dev:` deployment) and wire `npx convex deploy` into CI (or a Vercel build hook) so Convex functions ship alongside frontend deploys.
+4. Create a production Convex deployment for the `bullshit-corner` project (currently only has `dev:avid-stoat-60`), generate a Production Deploy Key and a Preview Deploy Key from the Convex dashboard, and add both as `CONVEX_DEPLOY_KEY` in Vercel (scoped Production / Preview respectively — see "Convex + Vercel wiring" above).
+5. Connect the repo to Vercel and confirm a deployment builds — check the build log for both `[CONVEX] Deploying...` (from the wrapped build command) and `preset: vercel` (from Nitro).
 
 ## TanStack Intent skills used
 
