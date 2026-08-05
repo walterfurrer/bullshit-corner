@@ -89,9 +89,12 @@ Defined in `.env.example` (copy to `.env.local`, which is gitignored):
 
 Setup: `pnpm dev` (see "Dev workflow" below) runs `convex dev` for you, which on first run logs in, creates/links a Convex project+deployment, and writes `CONVEX_DEPLOYMENT`/`VITE_CONVEX_URL` into `.env.local`.
 
-This repo is already linked to a real Convex deployment:
-- Team: `walter-furrer`, Project: `bullshit-corner`
-- Dev deployment: `dev:avid-stoat-60` (dashboard: https://dashboard.convex.dev/t/walter-furrer/bullshit-corner)
+This repo is linked to a real Convex deployment:
+- Team: `walterfurrer-dev`, Project: `bullshit-corner`
+- Dev deployment: `doting-gerbil-236` (dashboard: https://dashboard.convex.dev/t/walterfurrer-dev/bullshit-corner)
+- Prod deployment: `ceaseless-penguin-97` (this is what Vercel's `CONVEX_DEPLOY_KEY` is scoped to)
+
+This is the **second** account this project has lived on — see the "Known gotchas" entry on ambient auth below for why. The original account/project (team `walter-furrer`, deployments `avid-stoat-60`/`dependable-owl-532`) has been deleted; ignore any lingering references to those names in git history or old chat logs.
 
 For Vercel: see "Deployment (Vercel)" below — it does NOT use `CONVEX_DEPLOYMENT`/`VITE_CONVEX_URL` as static Vercel env vars. Instead it uses a `CONVEX_DEPLOY_KEY`-based build command (per Convex's official Vercel guide, `docs.convex.dev/production/hosting/vercel`, fetched fresh via the `convex-docs` skill on 2026-08-05 since this differs from the CLI's default `.env.local` flow) so each Vercel deployment pushes Convex functions and injects the right `VITE_CONVEX_URL` automatically.
 
@@ -107,7 +110,7 @@ For Vercel: see "Deployment (Vercel)" below — it does NOT use `CONVEX_DEPLOYME
 
 Run them separately (`pnpm dev:web`, `pnpm dev:convex`) if you need isolated logs, e.g. while debugging one side.
 
-Gotcha: `convex dev` needs an authenticated CLI and a linked project. In an already-authenticated environment with no linked deployment yet, it can silently auto-create a new Convex project on first run instead of prompting — this happened once while verifying this setup (see git history / team dashboard for the `bullshit-corner` project it created). In a fresh/unauthenticated environment it will instead prompt interactively for login, so the very first `pnpm dev` there may need a real terminal (not a CI job) to complete that flow.
+Gotcha: `convex dev` needs an authenticated CLI and a linked project. In an already-authenticated environment with no linked deployment yet, it can silently auto-create a new Convex project on first run instead of prompting against whatever account happens to be cached — see "Known gotchas" below for two real incidents of this. In a fresh/unauthenticated environment it will instead prompt interactively for login, so the very first `pnpm dev` there may need a real terminal (not a CI job) to complete that flow.
 
 ## Deployment (Vercel)
 
@@ -146,7 +149,9 @@ This is Convex's official Vercel pattern, not something invented for this repo. 
 
 Do **not** set `CONVEX_DEPLOYMENT` or `VITE_CONVEX_URL` as static Vercel env vars — the wrapped build command sets `VITE_CONVEX_URL` dynamically per-deployment, and a static value would fight with that.
 
-The `bullshit-corner` Convex project currently only has a `dev:` deployment (see above) — before deploying to Vercel, create a **production** Convex deployment (Convex dashboard → this project → add a Production deployment) to generate the Production Deploy Key against.
+Both keys are set in Vercel: Production (scoped to `ceaseless-penguin-97`) and Preview (project-scoped `preview:walterfurrer-dev:bullshit-corner`, format `preview:<team>:<project>|<token>` — distinct from a deployment-scoped key like `dev:...`/`prod:...`). Verified with an ad-hoc `vercel deploy` (no `--prod`): it correctly spun up a fresh, ephemeral Convex deployment for that preview rather than reusing `dev` or `prod`. Since the repo is Git-connected, this same path now runs automatically for every PR/branch push — no further Vercel config needed for that.
+
+Gotcha: the Convex CLI has no command to generate a Preview Deploy Key (`npx convex deployment token create` only mints keys tied to a specific deployment — `dev`/`prod`/`local`/named). It's dashboard-only: Project Settings → "Generate Preview Deploy Key". Easy to grab the wrong one by mistake — the *dev deployment's* deploy key (Deployment Settings, prefixed `dev:<deployment-name>|...`) looks similar but is a different, deployment-scoped key; using it as the Preview `CONVEX_DEPLOY_KEY` would make CI deploy against your personal local dev deployment instead of per-branch ephemeral ones. Check the prefix before using: `preview:<team>:<project>|...` is correct, `dev:...`/`prod:...` is not.
 
 Vercel project settings:
 - Install Command: `pnpm install` (default)
@@ -164,14 +169,14 @@ Verified locally: `pnpm build` completes successfully with the `nitro()` plugin 
 - Import alias is `#/*` (Node subpath imports), not the more common `@/*` — `components.json` and `tsconfig.json` both point shadcn/imports at `#/*` (a `@/*` alias also exists in `tsconfig.json` as a fallback, but new code should use `#/*` to match what's already there).
 - `src/routeTree.gen.ts` and everything under `convex/_generated/` are generated — don't hand-edit; regenerate via `pnpm generate-routes` (routes) or the Convex dev/deploy commands (Convex types).
 - Convex demo route (`src/routes/demo/convex.tsx`) sets `ssr: false` — Convex's React client is client-only in this scaffold.
+- **Ambient/cached auth can silently provision resources on the wrong account.** This happened twice: (1) an already-authenticated `convex` CLI session created the original `walter-furrer` team's project without any interactive prompt, and (2) a `vercel login` device-flow auto-approved against an already-signed-in browser session with no real interactive step. Both times, an agent running CLI commands ended up creating real cloud resources under whatever identity happened to be cached — not necessarily the intended one. Before generating deploy keys, creating projects, or wiring credentials into a third-party service (Vercel, etc.), verify identity first (`npx convex login status` for Convex; there's no CLI `whoami`, but this subcommand isn't in the top-level `--help` listing — worth remembering it exists). Don't assume a CLI is authenticated as who you think it is just because a command succeeds.
+- `npx convex dev --once` with no existing project link can default to Convex's **anonymous/local** backend mode (`CONVEX_DEPLOYMENT=anonymous:...`, `VITE_CONVEX_URL=http://127.0.0.1:3210`, a local `.convex/` state dir) instead of linking to your logged-in cloud account, even when `npx convex login status` shows you're authenticated. To force a real cloud project non-interactively, use `npx convex dev --once --configure new --team <team_slug> --project <project_slug> --dev-deployment cloud` explicitly rather than relying on the default.
 
 ## Next steps
 
 1. `pnpm dev` to run the app + Convex dev sync locally (web on port 3000, falls back to next free port if busy).
 2. Add shadcn components as needed: `pnpm dlx shadcn@latest add <component>`.
 3. Delete `src/routes/demo/*` once real routes exist.
-4. Create a production Convex deployment for the `bullshit-corner` project (currently only has `dev:avid-stoat-60`), generate a Production Deploy Key and a Preview Deploy Key from the Convex dashboard, and add both as `CONVEX_DEPLOY_KEY` in Vercel (scoped Production / Preview respectively — see "Convex + Vercel wiring" above).
-5. Connect the repo to Vercel and confirm a deployment builds — check the build log for both `[CONVEX] Deploying...` (from the wrapped build command) and `preset: vercel` (from Nitro).
 
 ## TanStack Intent skills used
 
