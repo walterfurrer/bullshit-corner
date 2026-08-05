@@ -1,0 +1,21 @@
+{
+  "projectName": "my-tanstack-app",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "pnpm",
+  "git": true,
+  "install": true,
+  "intent": true,
+  "addOnOptions": {},
+  "projectPreset": "default",
+  "includeExamples": true,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": [
+    "tanstack-query",
+    "convex",
+    "shadcn"
+  ]
+}
