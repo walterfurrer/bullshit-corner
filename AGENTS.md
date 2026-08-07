@@ -191,3 +191,38 @@ Convex agent skills for common tasks can be installed by running
 `npx convex ai-files install`.
 
 <!-- convex-ai-end -->
+
+## Tailwind CSS v4.1
+
+### Removed Utilities (never use)
+
+| Removed                                                                                                             | Replacement                                     |
+| ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `bg-opacity-*`, `text-opacity-*`, `border-opacity-*`, `ring-opacity-*`, `placeholder-opacity-*`, `divide-opacity-*` | Opacity modifier: `bg-black/50`                 |
+| `flex-shrink-*` / `flex-grow-*`                                                                                     | `shrink-*` / `grow-*`                           |
+| `overflow-ellipsis`                                                                                                 | `text-ellipsis`                                 |
+| `decoration-slice` / `decoration-clone`                                                                             | `box-decoration-slice` / `box-decoration-clone` |
+
+### Renamed Utilities (always use v4 name)
+
+| v3 Name                              | v4 Name                                 |
+| ------------------------------------ | --------------------------------------- |
+| `bg-gradient-*`                      | `bg-linear-*`                           |
+| `shadow-sm` / `shadow`               | `shadow-xs` / `shadow-sm`               |
+| `drop-shadow-sm` / `drop-shadow`     | `drop-shadow-xs` / `drop-shadow-sm`     |
+| `blur-sm` / `blur`                   | `blur-xs` / `blur-sm`                   |
+| `backdrop-blur-sm` / `backdrop-blur` | `backdrop-blur-xs` / `backdrop-blur-sm` |
+| `rounded-sm` / `rounded`             | `rounded-xs` / `rounded-sm`             |
+| `outline-none`                       | `outline-hidden`                        |
+
+### Rules
+
+- Never use `space-x-*` / `space-y-*` on a flex/grid container — use `gap-*` there. On a plain block container (no `flex`/`grid`), `space-x-*` / `space-y-*` is fine
+- Use line-height modifiers with text size (`text-base/7`), never standalone `leading-*` (exception: `leading-none`)
+- Use `size-*` for equal width/height instead of separate `w-*` and `h-*`
+- Always use `/50` opacity modifier syntax, never `-opacity-*` utilities
+- Only add breakpoint variants when the value actually changes — no redundant classes
+- Use `min-h-dvh` not `min-h-screen` (Safari mobile bug)
+- Prefer Tailwind's design scale over arbitrary values (`ml-4` over `ml-[16px]`)
+- Dynamic Tailwind classes: JIT cannot detect template literals like `grid-cols-${n}` — use lookup objects with full class strings
+- **Logical CSS by default, everywhere — not just RTL surfaces.** Use flow-relative utilities (`ms-*` / `me-*`, `ps-*` / `pe-*`, `start-*` / `end-*`, `text-start` / `text-end`) over physical ones (`ml-*` / `mr-*`, `pl-*` / `pr-*`, `left-*` / `right-*`, `text-left` / `text-right`) for any spacing, position, or alignment that tracks reading order. This is the house style across admin, marketing, and player-facing alike: one convention means no per-line "will this ever render RTL?" decision, and a surface that later gains RTL already works. There is no runtime, tooling, or browser-support cost. Reach for physical utilities only when the value is tied to a fixed visual axis regardless of direction — symmetric spacing (`-mx-*`, `px-*`), centering (`left-1/2 -translate-x-1/2`), or a deliberate design offset (shadow/glow). For RTL specifics that logical CSS doesn't cover (directional icons, transforms, gradients, shadow offsets), see `docs/accessibility.md` → "i18n and direction".

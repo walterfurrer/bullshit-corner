@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "concurrently -n web,convex -c blue,magenta \"pnpm dev:web\" \"pnpm dev:convex\"",
-    "dev:web": "vite dev --port 3000",
+    "dev:web": "vite dev --port 3000 --host",
     "dev:convex": "convex dev",
     "generate-routes": "tsr generate",
     "build": "vite build",
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@convex-dev/react-query": "0.1.0",
+    "@phosphor-icons/react": "^2.1.10",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-devtools": "^0.10.9",
     "@tanstack/react-query": "^5.101.4",
@@ -26,8 +27,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.43.0",
-    "lucide-react": "^1.28.0",
     "nitro": "npm:nitro-nightly@3.0.1-20260731-205209-52abde8a",
+    "radix-ui": "^1.6.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwind-merge": "^3.6.0",

@@ -1,0 +1,67 @@
+import { DiscordLogoIcon, XLogoIcon } from '@phosphor-icons/react'
+
+import { Separator } from '#/components/ui/separator.tsx'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '#/components/ui/tooltip.tsx'
+import { useCopyToClipboard } from '#/hooks/use-copy-to-clipboard.ts'
+
+const DISCORD_USERNAME = 'walterfurrer'
+
+export function SiteFooter() {
+  const { copied, copy } = useCopyToClipboard()
+
+  return (
+    <footer className="mt-10 sm:mt-14">
+      <p className="text-center text-xs text-muted-foreground">
+        Unofficial fan project tracking Bullshit Corner from High Performance
+        Racing.
+      </p>
+      <Separator className="mt-6" />
+      <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+        <p>
+          Built by{' '}
+          <a
+            href="https://github.com/walterfurrer"
+            target="_blank"
+            rel="noreferrer"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Walter Furrer
+          </a>
+        </p>
+
+        <TooltipProvider>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://x.com/waltercodes"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Walter Furrer on X"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <XLogoIcon size={24} weight="regular" />
+            </a>
+
+            <Tooltip open={copied || undefined}>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => copy(DISCORD_USERNAME)}
+                  aria-label="Copy Discord username to clipboard"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <DiscordLogoIcon size={24} weight="regular" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>{copied ? 'Copied!' : DISCORD_USERNAME}</TooltipContent>
+            </Tooltip>
+          </div>
+        </TooltipProvider>
+      </div>
+    </footer>
+  )
+}

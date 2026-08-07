@@ -37,11 +37,53 @@
   --sidebar-accent-foreground: oklch(0.21 0.004 230);
   --sidebar-border: oklch(0.92 0.003 230);
   --sidebar-ring: oklch(0.871 0.003 230);
+  --gold: oklch(0.8 0.15 88);
+  --silver: oklch(0.78 0.006 230);
+  --bronze: oklch(0.62 0.12 55);
+}
+
+.dark {
+  --background: oklch(0.14 0.005 230);
+  --foreground: oklch(0.96 0.003 230);
+  --card: oklch(0.19 0.006 230);
+  --card-foreground: oklch(0.96 0.003 230);
+  --popover: oklch(0.19 0.006 230);
+  --popover-foreground: oklch(0.96 0.003 230);
+  --primary: oklch(0.65 0.19 29);
+  --primary-foreground: oklch(0.145 0.02 29);
+  --secondary: oklch(0.23 0.006 230);
+  --secondary-foreground: oklch(0.96 0.003 230);
+  --muted: oklch(0.23 0.006 230);
+  --muted-foreground: oklch(0.65 0.012 230);
+  --accent: oklch(0.25 0.007 230);
+  --accent-foreground: oklch(0.96 0.003 230);
+  --destructive: oklch(0.6 0.22 27);
+  --destructive-foreground: oklch(0.145 0.02 27);
+  --border: oklch(0.27 0.007 230);
+  --input: oklch(0.27 0.007 230);
+  --ring: oklch(0.5 0.02 230);
+  --chart-1: oklch(0.75 0.02 230);
+  --chart-2: oklch(0.6 0.02 230);
+  --chart-3: oklch(0.45 0.02 230);
+  --chart-4: oklch(0.32 0.02 230);
+  --chart-5: oklch(0.2 0.02 230);
+  --sidebar: oklch(0.17 0.006 230);
+  --sidebar-foreground: oklch(0.96 0.003 230);
+  --sidebar-primary: oklch(0.65 0.19 29);
+  --sidebar-primary-foreground: oklch(0.145 0.02 29);
+  --sidebar-accent: oklch(0.25 0.007 230);
+  --sidebar-accent-foreground: oklch(0.96 0.003 230);
+  --sidebar-border: oklch(0.27 0.007 230);
+  --sidebar-ring: oklch(0.5 0.02 230);
+  --gold: oklch(0.8 0.15 88);
+  --silver: oklch(0.78 0.006 230);
+  --bronze: oklch(0.62 0.12 55);
 }
 
 @theme inline {
   --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-racing: 'Racing Sans One', ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -78,6 +120,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-gold: var(--gold);
+  --color-silver: var(--silver);
+  --color-bronze: var(--bronze);
 }
 
 html,

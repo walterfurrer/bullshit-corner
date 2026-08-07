@@ -13,9 +13,11 @@ import ConvexProvider from '../integrations/convex/provider'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import type { ConvexReactClient } from 'convex/react'
 
 interface MyRouterContext {
   queryClient: QueryClient
+  convexClient: ConvexReactClient
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
@@ -45,6 +47,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
       {
         rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap',
+      },
+      {
+        rel: 'stylesheet',
         href: appCss,
       },
     ],
@@ -53,13 +59,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { convexClient } = Route.useRouteContext()
+
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere selection:bg-primary/20">
-        <ConvexProvider>
+        <ConvexProvider client={convexClient}>
           {children}
           <TanStackDevtools
             config={{
