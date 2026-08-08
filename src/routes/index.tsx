@@ -31,9 +31,18 @@ function Home() {
             The Bullshit Corner Leaderboard
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Every week on High Performance Racing, the crew argues about
-            something ridiculous — and it earns a spot here. This is the
-            all-time ranking, from the most bullshit down.
+            Every week the audience of the{" "}
+            <a
+              href="https://www.thehighperformancepodcast.com/high-performance-racing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              High Performance Racing
+            </a>
+            {" "}podcast gets to nominate things in the world of Formula One to go into Bullshit Corner.
+          </p>
+          <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+            It can be a bullshit opinion, a bullshit race, a part of a car, a season, a person, a thing...anything you like! Jake, Rob, and Otmar will then debate them, decide if they deserve to enter Bullshit Corner, and finally rank them (as of episode 16).
           </p>
         </div>
         <Leaderboard entries={entries} />

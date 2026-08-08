@@ -18,7 +18,7 @@ export function SiteHeader() {
               Bullshit Corner
             </span>
             <span className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
-              High Performance Racing
+              A fan made project for High Performance Racing
             </span>
           </div>
         </div>
