@@ -1,10 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { convexQuery } from '@convex-dev/react-query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Leaderboard } from '#/components/leaderboard.tsx'
 import { SiteFooter } from '#/components/site-footer.tsx'
 import { SiteHeader } from '#/components/site-header.tsx'
+import { Button } from '#/components/ui/button.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 
 import { api } from '../../convex/_generated/api'
@@ -51,6 +52,11 @@ function Home() {
           </div>
         </div>
         <Leaderboard topics={topics} />
+        <div className="flex justify-center">
+          <Button asChild size="lg">
+            <Link to="/submit">Nominate a Topic</Link>
+          </Button>
+        </div>
         <SiteFooter />
       </main>
     </div>
