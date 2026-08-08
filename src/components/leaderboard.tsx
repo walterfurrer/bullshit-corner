@@ -1,6 +1,8 @@
 import { YoutubeLogoIcon } from '@phosphor-icons/react'
+import { Link } from '@tanstack/react-router'
 
 import type { Doc } from '../../convex/_generated/dataModel'
+import { Button } from '#/components/ui/button.tsx'
 import { PositionBadge } from './position-badge'
 
 export function Leaderboard({ topics }: { topics: Array<Doc<'topics'>> }) {
@@ -61,7 +63,12 @@ export function Leaderboard({ topics }: { topics: Array<Doc<'topics'>> }) {
             )
           })}
         </ol>
+        <div className="flex justify-center border-t border-border px-4 py-4 sm:px-5">
+          <Button asChild>
+            <Link to="/submit">Nominate a Topic</Link>
+          </Button>
+        </div>
       </div>
-    </div >
+    </div>
   )
 }
