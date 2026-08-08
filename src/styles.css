@@ -141,7 +141,10 @@ body,
     @apply bg-background text-foreground;
   }
   a {
-    @apply font-bold transition-colors duration-200 hover:text-primary;
+    @apply font-bold transition-colors duration-200;
+  }
+  a:not(#logo) {
+    @apply hover:text-primary;
   }
 
   h1, h2, h3, h4, h5, h6 {
