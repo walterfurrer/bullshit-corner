@@ -1,15 +1,13 @@
-import { FlagCheckeredIcon } from '@phosphor-icons/react'
-
-import { Badge } from '#/components/ui/badge.tsx'
+import { CaretDoubleUpIcon } from '@phosphor-icons/react'
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-10 border-b border-border/60 bg-background/80 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <div className="mx-auto max-w-4xl items-center px-4 py-4 sm:px-6">
         <div className="flex items-center gap-2.5">
-          <FlagCheckeredIcon
-            size={20}
-            weight="fill"
+          <CaretDoubleUpIcon
+            size={24}
+            weight="bold"
             className="text-primary"
             aria-hidden="true"
           />
@@ -22,12 +20,6 @@ export function SiteHeader() {
             </span>
           </div>
         </div>
-        <Badge
-          variant="outline"
-          className="hidden text-xs tracking-wide text-muted-foreground sm:inline-flex"
-        >
-          Fan Rankings — Coming Soon
-        </Badge>
       </div>
     </header>
   )

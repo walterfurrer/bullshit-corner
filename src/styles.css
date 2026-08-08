@@ -141,6 +141,34 @@ body,
     @apply bg-background text-foreground;
   }
   a {
-    @apply font-bold  transition-colors duration-200 hover:text-primary;
+    @apply font-bold transition-colors duration-200 hover:text-primary;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground;
+  }
+
+  h1 {
+    @apply font-racing text-3xl tracking-wide sm:text-4xl;
+  }
+
+  h2 {
+    @apply font-racing text-2xl tracking-wide sm:text-3xl;
+  }
+
+  h3 {
+    @apply font-bold text-xl tracking-normal sm:text-2xl;
+  }
+
+  h4 {
+    @apply font-bold text-lg tracking-normal sm:text-xl;
+  }
+
+  h5 {
+    @apply font-bold text-base tracking-tight sm:text-lg;
+  }
+
+  h6 {
+    @apply font-bold text-sm tracking-tight sm:text-base text-muted-foreground;
   }
 }

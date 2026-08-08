@@ -27,7 +27,7 @@ function Home() {
       <SiteHeader />
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="mb-8 sm:mb-10">
-          <h1 className="font-racing text-3xl tracking-wide text-foreground sm:text-4xl">
+          <h1>
             The Bullshit Corner Leaderboard
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
