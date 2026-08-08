@@ -21,13 +21,15 @@ export function Leaderboard({ topics }: { topics: Array<Doc<'topics'>> }) {
                 <div className="grid grid-cols-[3rem_1fr_2.5rem] items-center gap-x-3 px-4 py-4 sm:gap-x-4 sm:px-5">
                   <PositionBadge position={position} />
 
-                  <div className="min-w-0">
-                    <p className="font-semibold text-foreground">{topic.title}</p>
-                    {topic.description ? (
-                      <p className="mt-0.5 line-clamp-2 text-sm text-muted-foreground">
-                        {topic.description}
-                      </p>
-                    ) : null}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex min-w-0 flex-col">
+                      <p className="font-semibold text-foreground">{topic.title}</p>
+                      {topic.description ? (
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          "{topic.description}"
+                        </p>
+                      ) : null}
+                    </div>
                     {topic.submittedBy ? (
                       <p className="mt-1.5 font-mono text-xs text-muted-foreground">
                         Submitted by {topic.submittedBy}
@@ -39,7 +41,8 @@ export function Leaderboard({ topics }: { topics: Array<Doc<'topics'>> }) {
                     <a
                       href={topic.youtubeUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noreferrer noopener"
+                      title="Watch on YouTube"
                       className="flex size-10 shrink-0 items-center justify-center justify-self-end rounded-full border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
                       aria-label={`Watch "${topic.title}" on YouTube`}
                     >
@@ -59,6 +62,6 @@ export function Leaderboard({ topics }: { topics: Array<Doc<'topics'>> }) {
           })}
         </ol>
       </div>
-    </div>
+    </div >
   )
 }

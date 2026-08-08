@@ -25,25 +25,30 @@ function Home() {
   return (
     <div className="min-h-dvh">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-        <div className="mb-8 sm:mb-10">
+      <main className="mx-auto max-w-4xl px-4 py-10 flex flex-col gap-8 sm:px-6 sm:py-14 sm:gap-10">
+        <div className="flex flex-col">
           <h1>
             The Bullshit Corner Leaderboard
           </h1>
-          <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Every week the audience of the{" "}
-            <a
-              href="https://www.thehighperformancepodcast.com/high-performance-racing"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              High Performance Racing
-            </a>
-            {" "}podcast gets to nominate things in the world of Formula One to go into Bullshit Corner.
-          </p>
-          <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-            It can be a bullshit opinion, a bullshit race, a part of a car, a season, a person, a thing...anything you like! Jake, Rob, and Otmar will then debate them, decide if they deserve to enter Bullshit Corner, and finally rank them (as of episode 16).
-          </p>
+          <div className='flex flex-col gap-2'>
+            <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
+              Every week the audience of the{" "}
+              <a
+                href="https://www.thehighperformancepodcast.com/high-performance-racing"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                High Performance Racing
+              </a>
+              {" "}podcast gets to nominate things in the world of Formula 1 to go into Bullshit Corner.
+            </p>
+            <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
+              It can be a bullshit opinion, a bullshit race, a part of a car, a season, a person, a thing...anything you like!
+            </p>
+            <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
+              Co-hosts Jake Humphrey, Otmar Szafnauer, and Rob Smedley will then debate them, decide if they deserve to enter Bullshit Corner, and finally rank them (as of episode 16).
+            </p>
+          </div>
         </div>
         <Leaderboard topics={topics} />
         <SiteFooter />
