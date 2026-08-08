@@ -38,6 +38,7 @@ function Home() {
                 href="https://www.thehighperformancepodcast.com/high-performance-racing"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="font-bold transition-colors duration-200 hover:text-primary"
               >
                 High Performance Racing
               </a>
@@ -52,10 +53,14 @@ function Home() {
           </div>
         </div>
         <Leaderboard topics={topics} />
-        <div className="flex justify-center">
-          <Button asChild size="lg">
-            <Link to="/submit">Nominate a Topic</Link>
-          </Button>
+        <div className="flex flex-col gap-2">
+          <h2>Have some bullshit to share?</h2>
+          <div className="flex flex-start">
+
+            <Button asChild size="lg">
+              <Link to="/submit">Nominate a Topic</Link>
+            </Button>
+          </div>
         </div>
         <SiteFooter />
       </main>

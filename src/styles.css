@@ -140,13 +140,6 @@ body,
   body {
     @apply bg-background text-foreground;
   }
-  a {
-    @apply font-bold transition-colors duration-200;
-  }
-  a:not(#logo) {
-    @apply hover:text-primary;
-  }
-
   h1, h2, h3, h4, h5, h6 {
     @apply text-foreground;
   }
@@ -173,5 +166,17 @@ body,
 
   h6 {
     @apply font-bold text-sm tracking-tight sm:text-base text-muted-foreground;
+  }
+}
+
+@layer components {
+  .nav-link-desktop {
+    @apply text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;
+  }
+  .nav-link-mobile {
+    @apply block px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;
+  }
+  .nav-link-active {
+    @apply text-sm font-medium text-foreground;
   }
 }

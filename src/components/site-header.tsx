@@ -9,10 +9,6 @@ const navLinks = [
   { to: '/submit' as const, label: 'Nominate a Topic' },
 ]
 
-const linkClass =
-  'text-sm font-medium text-muted-foreground transition-colors hover:text-foreground'
-const activeLinkClass = 'text-sm font-medium text-foreground'
-
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
@@ -46,8 +42,8 @@ export function SiteHeader() {
               <li key={to}>
                 <Link
                   to={to}
-                  className={linkClass}
-                  activeProps={{ className: activeLinkClass }}
+                  className="nav-link-desktop"
+                  activeProps={{ className: 'nav-link-active' }}
                   activeOptions={exact ? { exact: true } : undefined}
                 >
                   {label}
@@ -85,8 +81,8 @@ export function SiteHeader() {
                   <li key={to}>
                     <Link
                       to={to}
-                      className={`block px-4 py-2.5 ${linkClass}`}
-                      activeProps={{ className: `block px-4 py-2.5 ${activeLinkClass}` }}
+                      className="nav-link-mobile"
+                      activeProps={{ className: 'nav-link-mobile nav-link-active' }}
                       activeOptions={exact ? { exact: true } : undefined}
                       onClick={() => setMobileOpen(false)}
                     >
