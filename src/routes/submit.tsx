@@ -5,10 +5,10 @@ import { SiteFooter } from '#/components/site-footer.tsx'
 import { SiteHeader } from '#/components/site-header.tsx'
 
 export const Route = createFileRoute('/submit')({
-  component: SubmitPage,
+  component: NominateTopicPage,
 })
 
-function SubmitPage() {
+function NominateTopicPage() {
   return (
     <div className="min-h-dvh">
       <SiteHeader />

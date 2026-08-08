@@ -40,13 +40,13 @@ function Home() {
               >
                 High Performance Racing
               </a>
-              {" "}podcast gets to nominate things in the world of Formula 1 to go into Bullshit Corner.
+              {" "}podcast gets to nominate things from the world of Formula 1 to go into Bullshit Corner.
             </p>
             <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
               It can be a bullshit opinion, a bullshit race, a part of a car, a season, a person, a thing...anything you like!
             </p>
             <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-              Co-hosts Jake Humphrey, Otmar Szafnauer, and Rob Smedley will then debate them, decide if they deserve to enter Bullshit Corner, and finally rank them (as of episode 16).
+              Co-hosts Jake Humphrey, Otmar Szafnauer, and Rob Smedley will then debate them, decide if they deserve to enter Bullshit Corner, and rank them.
             </p>
           </div>
         </div>
