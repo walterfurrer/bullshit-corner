@@ -9,7 +9,7 @@ import { Skeleton } from '#/components/ui/skeleton.tsx'
 
 import { api } from '../../convex/_generated/api'
 
-const leaderboardQuery = convexQuery(api.entries.listRanked, { limit: 50 })
+const leaderboardQuery = convexQuery(api.topics.listRanked, { limit: 50 })
 
 export const Route = createFileRoute('/')({
   loader: async ({ context }) => {
@@ -20,7 +20,7 @@ export const Route = createFileRoute('/')({
 })
 
 function Home() {
-  const { data: entries } = useSuspenseQuery(leaderboardQuery)
+  const { data: topics } = useSuspenseQuery(leaderboardQuery)
 
   return (
     <div className="min-h-dvh">
@@ -45,7 +45,7 @@ function Home() {
             It can be a bullshit opinion, a bullshit race, a part of a car, a season, a person, a thing...anything you like! Jake, Rob, and Otmar will then debate them, decide if they deserve to enter Bullshit Corner, and finally rank them (as of episode 16).
           </p>
         </div>
-        <Leaderboard entries={entries} />
+        <Leaderboard topics={topics} />
         <SiteFooter />
       </main>
     </div>
