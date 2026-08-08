@@ -9,6 +9,7 @@
  */
 
 import type * as seed from "../seed.js";
+import type * as submissions from "../submissions.js";
 import type * as topics from "../topics.js";
 
 import type {
@@ -19,6 +20,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   seed: typeof seed;
+  submissions: typeof submissions;
   topics: typeof topics;
 }>;
 

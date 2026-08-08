@@ -1,0 +1,255 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Extend the Convex schema and install shadcn/ui components": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314222
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198439070
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198509957
+      }
+    ],
+    "2.1 Create `src/lib/submission-constants.ts` exporting `SUBMISSION_LIMITS` with `topic: 200`, `evidence: 2000`, `alias: 100`": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314255
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198319288
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198344827
+      }
+    ],
+    "2.2 Create `src/lib/submission-utils.ts` exporting `validateTopic`, `validateLength`, and `normalizeSubmission`": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314281
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198347364
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198426763
+      }
+    ],
+    "3. Checkpoint — verify pure utility tests pass": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314321
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198518563
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198550955
+      }
+    ],
+    "4.1 Create `convex/submissions.ts` with the `submit` public mutation": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314347
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198348165
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198427561
+      }
+    ],
+    "5. Checkpoint — verify Convex mutation tests pass": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314371
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198519371
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198551654
+      }
+    ],
+    "6.1 Create `src/components/submission-form.tsx` with the TanStack Form instance and field wiring": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314394
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198554354
+      },
+      {
+        "executionId": "99711022-7269-420f-93f1-60ff7c9c39f3",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198920334
+      },
+      {
+        "executionId": "99711022-7269-420f-93f1-60ff7c9c39f3",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198928345
+      },
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199221440
+      }
+    ],
+    "6.2 Install `@tanstack/react-form` dependency if not already present": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314421
+      },
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198555198
+      },
+      {
+        "executionId": "99711022-7269-420f-93f1-60ff7c9c39f3",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198920377
+      },
+      {
+        "executionId": "99711022-7269-420f-93f1-60ff7c9c39f3",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198927519
+      },
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199220350
+      }
+    ],
+    "7.1 Create `src/routes/submit.tsx` as a TanStack Router file route": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314445
+      },
+      {
+        "executionId": "99711022-7269-420f-93f1-60ff7c9c39f3",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198920403
+      },
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199228108
+      },
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199266924
+      }
+    ],
+    "7.2 Regenerate the route tree": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314469
+      },
+      {
+        "executionId": "99711022-7269-420f-93f1-60ff7c9c39f3",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198920436
+      },
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199273797
+      },
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199296795
+      }
+    ],
+    "8. Final checkpoint — verify the full feature end-to-end": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198314495
+      },
+      {
+        "executionId": "99711022-7269-420f-93f1-60ff7c9c39f3",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198920465
+      },
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199299315
+      },
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199348255
+      }
+    ],
+    "2. Create the shared constants module and pure utility functions": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198426787
+      }
+    ],
+    "4. Implement the Convex `submissions.submit` public mutation": [
+      {
+        "executionId": "552001fc-a31c-43b3-80de-b8c94ef5b061",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786198427592
+      }
+    ],
+    "6. Implement the `SubmissionForm` component": [
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199221473
+      }
+    ],
+    "7. Create the `/submit` route": [
+      {
+        "executionId": "864d424d-2e0f-4260-996e-49ae77c66ecb",
+        "chatSessionId": "sess_611acfe6-9a5e-461f-8c78-e74026e0fc9a",
+        "timestamp": 1786199296827
+      }
+    ]
+  }
+}

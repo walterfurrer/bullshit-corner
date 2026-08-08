@@ -10,4 +10,11 @@ export default defineSchema({
     youtubeUrl: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
   }).index('by_ranking', ['ranking']),
+
+  submissions: defineTable({
+    topic: v.string(),
+    evidence: v.optional(v.string()),
+    submittedBy: v.string(),
+    submittedAt: v.number(),
+  }).index('by_submittedAt', ['submittedAt']),
 })
