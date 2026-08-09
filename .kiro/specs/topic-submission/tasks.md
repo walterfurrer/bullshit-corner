@@ -1,5 +1,7 @@
 # Implementation Plan: topic-submission
 
+> **Authentication revision (2026-08-09):** This task history describes the original anonymous MVP. The implemented feature now keeps the form public but requires Clerk authentication to submit, omits blank aliases instead of storing `"Anonymous Viewer"`, removes submission email, requires `submissions.userId`, and rate-limits by the authenticated Convex user. See `requirements.md` and `design.md` for the current contract.
+
 ## Overview
 
 Implement a public topic submission form on the Bullshit Corner site. The work touches three layers: the Convex backend (schema + mutation), shared constants and pure utility functions, and the React UI (route + form component). Tasks are ordered so each step can be verified before building on top of it.

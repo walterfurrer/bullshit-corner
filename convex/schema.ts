@@ -2,6 +2,15 @@ import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 
 export default defineSchema({
+  users: defineTable({
+    tokenIdentifier: v.string(),
+    clerkId: v.string(),
+    email: v.optional(v.string()),
+    name: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
+    updatedAt: v.number(),
+  }).index('by_tokenIdentifier', ['tokenIdentifier']),
+
   topics: defineTable({
     title: v.string(),
     description: v.optional(v.string()),
@@ -12,12 +21,12 @@ export default defineSchema({
   }).index('by_ranking', ['ranking']),
 
   submissions: defineTable({
+    userId: v.id('users'),
     topic: v.string(),
     evidence: v.optional(v.string()),
-    email: v.string(),
-    submittedBy: v.string(),
+    submittedBy: v.optional(v.string()),
     submittedAt: v.number(),
   })
     .index('by_submittedAt', ['submittedAt'])
-    .index('by_email', ['email']),
+    .index('by_userId', ['userId']),
 })

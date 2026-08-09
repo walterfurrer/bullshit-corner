@@ -1,20 +1,28 @@
 import { useState } from 'react'
+import { useClerk } from '@clerk/tanstack-react-start'
+import { useConvexMutation } from '@convex-dev/react-query'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { useConvexMutation } from '@convex-dev/react-query'
+import { useConvexAuth } from 'convex/react'
 import { ConvexError } from 'convex/values'
 
 import { api } from '../../convex/_generated/api'
-import { validateTopic, validateEmail, validateLength, normalizeSubmission } from '#/lib/submission-utils'
-import { SUBMISSION_LIMITS } from '#/lib/submission-constants'
-import { Input } from '#/components/ui/input'
-import { Textarea } from '#/components/ui/textarea'
 import { Button } from '#/components/ui/button'
+import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
+import { Textarea } from '#/components/ui/textarea'
+import { SUBMISSION_LIMITS } from '#/lib/submission-constants'
+import {
+  normalizeSubmission,
+  validateLength,
+  validateTopic,
+} from '#/lib/submission-utils'
 
-type SubmitStatus = 'idle' | 'success' | 'error'
+type SubmitStatus = 'idle' | 'auth-required' | 'success' | 'error'
 
 export function SubmissionForm() {
+  const { openSignIn } = useClerk()
+  const { isAuthenticated, isLoading, isRefreshing } = useConvexAuth()
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle')
   const [submitError, setSubmitError] = useState<string | null>(null)
 
@@ -25,32 +33,51 @@ export function SubmissionForm() {
   const form = useForm({
     defaultValues: {
       topic: '',
-      email: '',
       evidence: '',
       alias: '',
     },
     onSubmit: async ({ value }) => {
       setSubmitStatus('idle')
       setSubmitError(null)
+
+      if (!isAuthenticated) {
+        setSubmitStatus('auth-required')
+        openSignIn()
+        return
+      }
+
       try {
-        const normalized = normalizeSubmission(value)
-        await mutateAsync(normalized)
+        await mutateAsync(normalizeSubmission(value))
         form.reset()
         setSubmitStatus('success')
-      } catch (err) {
+      } catch (error) {
         let message = 'Something went wrong. Please try again.'
-        if (err instanceof ConvexError) {
-          const data = err.data
+
+        if (error instanceof ConvexError) {
+          const data = error.data
+
           if (typeof data === 'string') {
             message = data
-          } else if (data && typeof data === 'object' && 'message' in data && typeof data.message === 'string') {
+          } else if (
+            data &&
+            typeof data === 'object' &&
+            'message' in data &&
+            typeof data.message === 'string'
+          ) {
             message = data.message
-          } else if (data && typeof data === 'object' && 'kind' in data && 'retryAfter' in data) {
-            message = 'You\u2019ve reached the submission limit (6 per week). Please try again later.'
+          } else if (
+            data &&
+            typeof data === 'object' &&
+            'kind' in data &&
+            'retryAfter' in data
+          ) {
+            message =
+              'You’ve reached the submission limit (6 per week). Please try again later.'
           }
-        } else if (err instanceof Error && err.message) {
-          message = err.message
+        } else if (error instanceof Error && error.message) {
+          message = error.message
         }
+
         setSubmitStatus('error')
         setSubmitError(message)
       }
@@ -59,24 +86,22 @@ export function SubmissionForm() {
 
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
+      onSubmit={(event) => {
+        event.preventDefault()
+        event.stopPropagation()
         void form.handleSubmit()
       }}
       className="flex flex-col gap-6"
       noValidate
     >
-      {/* Two-column layout: inputs left, evidence right */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {/* Left column: Topic, Email, Alias */}
         <div className="flex flex-col gap-6">
-          {/* Topic field */}
           <form.Field
             name="topic"
             validators={{
               onChange: ({ value }) =>
-                validateTopic(value) ?? validateLength(value, SUBMISSION_LIMITS.topic),
+                validateTopic(value) ??
+                validateLength(value, SUBMISSION_LIMITS.topic),
               onBlur: ({ value }) => validateTopic(value),
             }}
           >
@@ -84,81 +109,48 @@ export function SubmissionForm() {
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor={field.name}>
                   Bullshit Corner Topic
-                  <span className="ms-1 text-destructive" aria-hidden="true">*</span>
+                  <span
+                    className="ms-1 text-destructive"
+                    aria-hidden="true"
+                  >
+                    *
+                  </span>
                 </Label>
                 <Input
                   id={field.name}
                   name={field.name}
                   value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(event) => field.handleChange(event.target.value)}
                   onBlur={field.handleBlur}
                   placeholder="What deserves a spot in Bullshit Corner?"
                   aria-required="true"
                   aria-describedby={
-                    field.state.meta.isTouched && field.state.meta.errors.length > 0
+                    field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
                       ? `${field.name}-error`
                       : undefined
                   }
                   aria-invalid={
-                    field.state.meta.isTouched && field.state.meta.errors.length > 0
+                    field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
                       ? true
                       : undefined
                   }
                 />
-                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                  <p id={`${field.name}-error`} className="text-sm text-destructive" role="alert">
-                    {field.state.meta.errors[0]}
-                  </p>
-                )}
+                {field.state.meta.isTouched &&
+                  field.state.meta.errors.length > 0 && (
+                    <p
+                      id={`${field.name}-error`}
+                      className="text-sm text-destructive"
+                      role="alert"
+                    >
+                      {field.state.meta.errors[0]}
+                    </p>
+                  )}
               </div>
             )}
           </form.Field>
 
-          {/* Email field */}
-          <form.Field
-            name="email"
-            validators={{
-              onChange: ({ value }) =>
-                validateEmail(value) ?? validateLength(value, SUBMISSION_LIMITS.email),
-              onBlur: ({ value }) => validateEmail(value),
-            }}
-          >
-            {(field) => (
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor={field.name}>
-                  Email
-                  <span className="ms-1 text-destructive" aria-hidden="true">*</span>
-                </Label>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  type="email"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onBlur={field.handleBlur}
-                  placeholder="your@email.com"
-                  aria-required="true"
-                  aria-describedby={
-                    field.state.meta.isTouched && field.state.meta.errors.length > 0
-                      ? `${field.name}-error`
-                      : undefined
-                  }
-                  aria-invalid={
-                    field.state.meta.isTouched && field.state.meta.errors.length > 0
-                      ? true
-                      : undefined
-                  }
-                />
-                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                  <p id={`${field.name}-error`} className="text-sm text-destructive" role="alert">
-                    {field.state.meta.errors[0]}
-                  </p>
-                )}
-              </div>
-            )}
-          </form.Field>
-
-          {/* Alias field */}
           <form.Field
             name="alias"
             validators={{
@@ -168,36 +160,42 @@ export function SubmissionForm() {
           >
             {(field) => (
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor={field.name}>Name/Alias</Label>
+                <Label htmlFor={field.name}>Name/Alias (optional)</Label>
                 <Input
                   id={field.name}
                   name={field.name}
                   value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(event) => field.handleChange(event.target.value)}
                   onBlur={field.handleBlur}
-                  placeholder="Leave blank to submit anonymously"
+                  placeholder="The pseudonym shown with your submission"
                   aria-describedby={
-                    field.state.meta.isTouched && field.state.meta.errors.length > 0
+                    field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
                       ? `${field.name}-error`
                       : undefined
                   }
                   aria-invalid={
-                    field.state.meta.isTouched && field.state.meta.errors.length > 0
+                    field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
                       ? true
                       : undefined
                   }
                 />
-                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                  <p id={`${field.name}-error`} className="text-sm text-destructive" role="alert">
-                    {field.state.meta.errors[0]}
-                  </p>
-                )}
+                {field.state.meta.isTouched &&
+                  field.state.meta.errors.length > 0 && (
+                    <p
+                      id={`${field.name}-error`}
+                      className="text-sm text-destructive"
+                      role="alert"
+                    >
+                      {field.state.meta.errors[0]}
+                    </p>
+                  )}
               </div>
             )}
           </form.Field>
         </div>
 
-        {/* Right column: Evidence textarea */}
         <form.Field
           name="evidence"
           validators={{
@@ -207,38 +205,56 @@ export function SubmissionForm() {
         >
           {(field) => (
             <div className="flex flex-col gap-1.5 sm:h-full">
-              <Label htmlFor={field.name}>Evidence</Label>
+              <Label htmlFor={field.name}>Evidence (optional)</Label>
               <Textarea
                 id={field.name}
                 name={field.name}
                 value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
+                onChange={(event) => field.handleChange(event.target.value)}
                 onBlur={field.handleBlur}
                 placeholder="Plead your case here."
                 className="sm:flex-1 sm:resize-none"
                 rows={6}
                 aria-describedby={
-                  field.state.meta.isTouched && field.state.meta.errors.length > 0
+                  field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
                     ? `${field.name}-error`
                     : undefined
                 }
                 aria-invalid={
-                  field.state.meta.isTouched && field.state.meta.errors.length > 0
+                  field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
                     ? true
                     : undefined
                 }
               />
-              {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p id={`${field.name}-error`} className="text-sm text-destructive" role="alert">
-                  {field.state.meta.errors[0]}
-                </p>
-              )}
+              {field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0 && (
+                  <p
+                    id={`${field.name}-error`}
+                    className="text-sm text-destructive"
+                    role="alert"
+                  >
+                    {field.state.meta.errors[0]}
+                  </p>
+                )}
             </div>
           )}
         </form.Field>
       </div>
 
-      {/* Success banner */}
+      {submitStatus === 'auth-required' && (
+        <div
+          className="rounded-sm border border-primary/30 bg-primary/5 px-4 py-3 text-sm"
+          role="status"
+          aria-live="polite"
+        >
+          {isAuthenticated
+            ? 'You’re signed in. Click “Submit Topic” again to confirm your nomination.'
+            : 'Sign in or create an account to continue. Your draft will stay here.'}
+        </div>
+      )}
+
       {submitStatus === 'success' && (
         <div
           className="rounded-sm border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800/40 dark:bg-green-950/30 dark:text-green-300"
@@ -249,7 +265,6 @@ export function SubmissionForm() {
         </div>
       )}
 
-      {/* Error banner */}
       {submitStatus === 'error' && submitError && (
         <div
           className="rounded-sm border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
@@ -260,30 +275,34 @@ export function SubmissionForm() {
         </div>
       )}
 
-      {/* Submit button */}
-      <form.Subscribe
-        selector={(state) => state.isSubmitting}
-      >
-        {(isSubmitting) => (
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="self-start"
-            aria-busy={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                <span
-                  className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-                  aria-hidden="true"
-                />
-                <span>Submitting…</span>
-              </>
-            ) : (
-              'Submit Topic'
-            )}
-          </Button>
-        )}
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => {
+          const authIsPending = isLoading || isRefreshing
+          const disabled = isSubmitting || authIsPending
+
+          return (
+            <Button
+              type="submit"
+              disabled={disabled}
+              className="self-start"
+              aria-busy={disabled}
+            >
+              {isSubmitting ? (
+                <>
+                  <span
+                    className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                    aria-hidden="true"
+                  />
+                  <span>Submitting…</span>
+                </>
+              ) : authIsPending ? (
+                'Checking account…'
+              ) : (
+                'Submit Topic'
+              )}
+            </Button>
+          )
+        }}
       </form.Subscribe>
     </form>
   )
