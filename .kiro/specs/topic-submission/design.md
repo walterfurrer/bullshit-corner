@@ -10,11 +10,11 @@ The form is built with **TanStack Form v1** (native field validators, no schema 
 
 ## Architecture
 
-The feature is entirely client-side from a routing perspective: a new route (`/submit`) renders the `SubmissionForm` component, which calls the Convex `submissions.submit` mutation through TanStack Query's `useMutation`. No server functions or SSR loader are needed — the form has no initial data to load.
+The feature is entirely client-side from a routing perspective: a new route (`/nominate`) renders the `SubmissionForm` component, which calls the Convex `submissions.submit` mutation through TanStack Query's `useMutation`. No server functions or SSR loader are needed — the form has no initial data to load.
 
 ```mermaid
 graph TD
-    A["/submit route"] --> B["SubmissionForm component"]
+    A["/nominate route"] --> B["SubmissionForm component"]
     B --> C["TanStack Form useForm"]
     C --> D["form.Field (topic)"]
     C --> E["form.Field (evidence)"]
@@ -36,13 +36,13 @@ graph TD
 
 ## Components and Interfaces
 
-### New route: `src/routes/submit.tsx`
+### New route: `src/routes/nominate.tsx`
 
 A TanStack Router file route. No loader needed (no data to prefetch). Renders a page shell (`SiteHeader`, `SiteFooter`) and the `SubmissionForm` component.
 
 ```typescript
-export const Route = createFileRoute('/submit')({
-  component: SubmitPage,
+export const Route = createFileRoute('/nominate')({
+  component: NominateTopicPage,
 })
 ```
 
@@ -287,6 +287,6 @@ Using `convex-test` with `@edge-runtime/vm`:
 
 ### Manual / smoke tests
 
-- Verify form renders on `/submit` route.
+- Verify form renders on `/nominate` route.
 - Verify success banner appears and form resets after submission.
 - Verify error banner appears and fields are preserved on network failure.

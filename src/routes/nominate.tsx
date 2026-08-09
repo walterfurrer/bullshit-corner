@@ -4,7 +4,7 @@ import { SubmissionForm } from '#/components/submission-form.tsx'
 import { SiteFooter } from '#/components/site-footer.tsx'
 import { SiteHeader } from '#/components/site-header.tsx'
 
-export const Route = createFileRoute('/submit')({
+export const Route = createFileRoute('/nominate')({
   component: NominateTopicPage,
 })
 

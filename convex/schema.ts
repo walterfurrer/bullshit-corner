@@ -14,7 +14,10 @@ export default defineSchema({
   submissions: defineTable({
     topic: v.string(),
     evidence: v.optional(v.string()),
+    email: v.string(),
     submittedBy: v.string(),
     submittedAt: v.number(),
-  }).index('by_submittedAt', ['submittedAt']),
+  })
+    .index('by_submittedAt', ['submittedAt'])
+    .index('by_email', ['email']),
 })

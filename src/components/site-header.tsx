@@ -6,7 +6,7 @@ import { Button } from '#/components/ui/button.tsx'
 
 const navLinks = [
   { to: '/' as const, label: 'Home', exact: true },
-  { to: '/submit' as const, label: 'Nominate a Topic' },
+  { to: '/nominate' as const, label: 'Nominate a Topic' },
 ]
 
 export function SiteHeader() {

@@ -97,22 +97,22 @@ Implement a public topic submission form on the Bullshit Corner site. The work t
     - Verify the import resolves in `src/components/submission-form.tsx`
     - _Requirements: 1.1–1.6, 2.1–2.5_
 
-- [x] 7. Create the `/submit` route
-  - [x] 7.1 Create `src/routes/submit.tsx` as a TanStack Router file route
-    - Export `Route = createFileRoute('/submit')({ component: SubmitPage })`
+- [x] 7. Create the `/nominate` route
+  - [x] 7.1 Create `src/routes/nominate.tsx` as a TanStack Router file route
+    - Export `Route = createFileRoute('/nominate')({ component: NominateTopicPage })`
     - `SubmitPage` renders the same page shell used on the home route (`SiteHeader`, `SiteFooter`) with `min-h-dvh` on the outer wrapper and a centred `max-w-2xl` content column
     - Import and render `SubmissionForm` from `#/components/submission-form`
     - No loader needed — the form has no initial data to prefetch
     - _Requirements: 1.1–1.6, 4.3_
 
   - [x] 7.2 Regenerate the route tree
-    - Run `pnpm generate-routes` to update `src/routeTree.gen.ts` so TanStack Router picks up the new `/submit` route
+    - Run `pnpm generate-routes` to update `src/routeTree.gen.ts` so TanStack Router picks up the new `/nominate` route
     - _Requirements: 1.1–1.6_
 
 - [x] 8. Final checkpoint — verify the full feature end-to-end
   - Ensure all tests pass, ask the user if questions arise.
   - Smoke-test checklist (manual):
-    - `/submit` renders with all three fields and a submit button
+    - `/nominate` renders with all three fields and a submit button
     - Submitting with an empty topic shows an inline error and does not call the mutation
     - Submitting with a valid topic inserts a document in the Convex `submissions` table, shows the success banner, and resets the form
     - Submitting with a 201-character topic triggers both the client validator and (if bypassed) the server guard

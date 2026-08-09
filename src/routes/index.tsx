@@ -52,16 +52,16 @@ function Home() {
             </p>
           </div>
         </div>
-        <Leaderboard topics={topics} />
         <div className="flex flex-col gap-2">
-          <h2>Have some bullshit to share?</h2>
+          <h2>Have some bullshit to nominate?</h2>
           <div className="flex flex-start">
 
             <Button asChild size="lg">
-              <Link to="/submit">Nominate a Topic</Link>
+              <Link to="/nominate">Nominate a Topic</Link>
             </Button>
           </div>
         </div>
+        <Leaderboard topics={topics} />
         <SiteFooter />
       </main>
     </div>
