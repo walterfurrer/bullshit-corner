@@ -28,12 +28,19 @@ interface MyRouterContext {
 
 const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
   const { getToken, sessionClaims } = await auth()
-  const token =
-    sessionClaims?.aud === 'convex'
-      ? await getToken()
-      : await getToken({ template: 'convex' })
 
-  return { token }
+  try {
+    const token =
+      sessionClaims?.aud === 'convex'
+        ? await getToken()
+        : await getToken({ template: 'convex' })
+
+    return { token }
+  } catch {
+    // If the JWT template fetch fails (e.g. "convex" template not configured),
+    // degrade gracefully instead of crashing the entire page render.
+    return { token: null }
+  }
 })
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

@@ -15,6 +15,16 @@ export function getRouter() {
     scrollRestoration: true,
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
+    defaultErrorComponent: ({ error }) => {
+      return (
+        <div className="flex min-h-[200px] flex-col items-center justify-center gap-2 p-4">
+          <p className="text-destructive font-medium">Something went wrong</p>
+          <pre className="text-xs text-muted-foreground max-w-md overflow-auto">
+            {error.message}
+          </pre>
+        </div>
+      )
+    },
   })
 
   setupRouterSsrQueryIntegration({ router, queryClient: context.queryClient })
