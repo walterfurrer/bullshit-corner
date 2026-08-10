@@ -8,6 +8,7 @@ import { CaretDoubleUpIcon, ListIcon, XIcon } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 
 import { Button } from '#/components/ui/button.tsx'
+import { ENABLE_AUTH } from '#/lib/feature-flags'
 
 const navLinks = [
   { to: '/' as const, label: 'Home', exact: true },
@@ -57,16 +58,20 @@ export function SiteHeader() {
             </ul>
           </nav>
 
-          <Show when="signed-out">
-            <SignInButton mode="modal">
-              <Button variant="outline" size="sm">
-                Sign in
-              </Button>
-            </SignInButton>
-          </Show>
-          <Show when="signed-in">
-            <UserButton />
-          </Show>
+          {ENABLE_AUTH && (
+            <>
+              <Show when="signed-out">
+                <SignInButton mode="modal">
+                  <Button variant="outline" size="sm">
+                    Sign in
+                  </Button>
+                </SignInButton>
+              </Show>
+              <Show when="signed-in">
+                <UserButton />
+              </Show>
+            </>
+          )}
         </div>
 
         <div className="relative sm:hidden">
@@ -105,26 +110,28 @@ export function SiteHeader() {
                     </Link>
                   </li>
                 ))}
-                <li className="border-t border-border/60 px-4 py-2.5">
-                  <Show when="signed-out">
-                    <SignInButton mode="modal">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        Sign in or create account
-                      </Button>
-                    </SignInButton>
-                  </Show>
-                  <Show when="signed-in">
-                    <div className="flex items-center gap-2 text-sm font-medium">
-                      <UserButton />
-                      <span>Account</span>
-                    </div>
-                  </Show>
-                </li>
+                {ENABLE_AUTH && (
+                  <li className="border-t border-border/60 px-4 py-2.5">
+                    <Show when="signed-out">
+                      <SignInButton mode="modal">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          Sign in or create account
+                        </Button>
+                      </SignInButton>
+                    </Show>
+                    <Show when="signed-in">
+                      <div className="flex items-center gap-2 text-sm font-medium">
+                        <UserButton />
+                        <span>Account</span>
+                      </div>
+                    </Show>
+                  </li>
+                )}
               </ul>
             </nav>
           )}

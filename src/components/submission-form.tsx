@@ -11,6 +11,7 @@ import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 import { Textarea } from '#/components/ui/textarea'
+import { ENABLE_AUTH } from '#/lib/feature-flags'
 import { SUBMISSION_LIMITS } from '#/lib/submission-constants'
 import {
   normalizeSubmission,
@@ -41,6 +42,11 @@ export function SubmissionForm() {
       setSubmitError(null)
 
       if (!isAuthenticated) {
+        if (!ENABLE_AUTH) {
+          setSubmitStatus('error')
+          setSubmitError('Submissions are currently closed.')
+          return
+        }
         setSubmitStatus('auth-required')
         openSignIn()
         return
