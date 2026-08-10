@@ -1,5 +1,7 @@
 node_modules
 .pnpm-store
+.claude
+.cursorrules
 .DS_Store
 dist
 dist-ssr
