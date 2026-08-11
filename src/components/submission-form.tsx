@@ -213,7 +213,7 @@ export function SubmissionForm() {
 
       {submitStatus === 'success' && (
         <div
-          className="rounded-sm border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800/40 dark:bg-green-950/30 dark:text-green-300"
+          className="rounded-sm border border-green-800/40 bg-green-950/30 px-4 py-3 text-sm text-green-300"
           role="status"
           aria-live="polite"
         >
