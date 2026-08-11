@@ -53,10 +53,15 @@ export const submit = mutation({
       throws: true,
     })
 
+    // Server-side enforcement: override client value if user is always anonymous
+    const user = await ctx.db.get(userId)
+    const finalSubmittedBy =
+      user?.alwaysAnonymous === true ? 'Anonymous' : submittedBy
+
     return ctx.db.insert('submissions', {
       userId,
       topic,
-      submittedBy,
+      submittedBy: finalSubmittedBy,
       submittedAt: Date.now(),
     })
   },

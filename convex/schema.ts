@@ -8,6 +8,7 @@ export default defineSchema({
     email: v.optional(v.string()),
     name: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
+    alwaysAnonymous: v.optional(v.boolean()),
     updatedAt: v.number(),
   }).index('by_tokenIdentifier', ['tokenIdentifier']),
 

@@ -2,6 +2,7 @@
 
 import rateLimiterTest from '@convex-dev/rate-limiter/test'
 import { convexTest } from 'convex-test'
+import * as fc from 'fast-check'
 import { describe, expect, test } from 'vitest'
 
 import { api } from './_generated/api'
@@ -96,5 +97,109 @@ describe('submissions', () => {
     ).rejects.toMatchObject({
       data: expect.objectContaining({ kind: 'RateLimited' }),
     })
+  })
+})
+
+/**
+ * Property 7: Backend anonymity enforcement on submission
+ * Validates: Requirements 8.1, 8.2
+ *
+ * For any submission where the submitting user has alwaysAnonymous === true,
+ * regardless of the submittedBy value provided by the client, the persisted
+ * submission document SHALL have submittedBy === "Anonymous".
+ * Conversely, for any submission where alwaysAnonymous === false, the persisted
+ * submittedBy SHALL equal the client-provided value (trimmed, or undefined if empty).
+ */
+describe('Property 7: Backend anonymity enforcement on submission', () => {
+  const baseIdentity = {
+    subject: 'user_anon_prop_123',
+    issuer: 'https://nice-sailfish-32.clerk.accounts.dev',
+    tokenIdentifier:
+      'https://nice-sailfish-32.clerk.accounts.dev|user_anon_prop_123',
+    email: 'anonprop@example.com',
+  }
+
+  test('alwaysAnonymous === true forces submittedBy to "Anonymous" regardless of client input', async () => {
+    await fc.assert(
+      fc.asyncProperty(
+        fc.string({ minLength: 1, maxLength: 100 }),
+        async (clientAlias) => {
+          const t = setup()
+          const asUser = t.withIdentity(baseIdentity)
+
+          // Create the user via sync
+          await asUser.mutation(api.users.sync, {})
+
+          // Patch alwaysAnonymous to true directly
+          await t.run(async (ctx) => {
+            const user = await ctx.db
+              .query('users')
+              .withIndex('by_tokenIdentifier', (q) =>
+                q.eq('tokenIdentifier', baseIdentity.tokenIdentifier),
+              )
+              .unique()
+            if (user) {
+              await ctx.db.patch(user._id, { alwaysAnonymous: true })
+            }
+          })
+
+          // Submit with the generated alias
+          const submissionId = await asUser.mutation(api.submissions.submit, {
+            topic: 'Property test topic',
+            submittedBy: clientAlias,
+          })
+
+          // Read back and verify server enforced "Anonymous"
+          const submission = await t.run((ctx) =>
+            ctx.db.get('submissions', submissionId),
+          )
+
+          expect(submission?.submittedBy).toBe('Anonymous')
+        },
+      ),
+      { numRuns: 25 },
+    )
+  })
+
+  test('alwaysAnonymous === false preserves client-provided submittedBy (trimmed, or undefined if empty)', async () => {
+    await fc.assert(
+      fc.asyncProperty(
+        fc.oneof(
+          // Non-empty strings (with possible leading/trailing whitespace)
+          fc.string({ minLength: 1, maxLength: 100 }),
+          // Whitespace-only strings (should result in undefined)
+          fc
+            .array(fc.constantFrom(' ', '\t', '\n'), {
+              minLength: 1,
+              maxLength: 10,
+            })
+            .map((chars) => chars.join('')),
+        ),
+        async (clientAlias) => {
+          const t = setup()
+          const asUser = t.withIdentity(baseIdentity)
+
+          // Create the user via sync (starts with alwaysAnonymous: false)
+          await asUser.mutation(api.users.sync, {})
+
+          // Submit with the generated alias
+          const submissionId = await asUser.mutation(api.submissions.submit, {
+            topic: 'Property test topic',
+            submittedBy: clientAlias,
+          })
+
+          // Read back and verify
+          const submission = await t.run((ctx) =>
+            ctx.db.get('submissions', submissionId),
+          )
+
+          const trimmed = clientAlias.trim()
+          const expected = trimmed.length > 0 ? trimmed : undefined
+
+          expect(submission?.submittedBy).toBe(expected)
+        },
+      ),
+      { numRuns: 25 },
+    )
   })
 })

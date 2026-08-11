@@ -10,12 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SubmitTopicRouteImport } from './routes/submit-topic'
 import { Route as YourSubmissionsRouteImport } from './routes/your-submissions'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubmitTopicRoute = SubmitTopicRouteImport.update({
@@ -31,30 +43,45 @@ const YourSubmissionsRoute = YourSubmissionsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRoute
+  '/settings': typeof SettingsRoute
   '/submit-topic': typeof SubmitTopicRoute
   '/your-submissions': typeof YourSubmissionsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRoute
+  '/settings': typeof SettingsRoute
   '/submit-topic': typeof SubmitTopicRoute
   '/your-submissions': typeof YourSubmissionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRoute
+  '/settings': typeof SettingsRoute
   '/submit-topic': typeof SubmitTopicRoute
   '/your-submissions': typeof YourSubmissionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/submit-topic' | '/your-submissions'
+  fullPaths:
+    '/' | '/onboarding' | '/settings' | '/submit-topic' | '/your-submissions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/submit-topic' | '/your-submissions'
-  id: '__root__' | '/' | '/submit-topic' | '/your-submissions'
+  to: '/' | '/onboarding' | '/settings' | '/submit-topic' | '/your-submissions'
+  id:
+    | '__root__'
+    | '/'
+    | '/onboarding'
+    | '/settings'
+    | '/submit-topic'
+    | '/your-submissions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OnboardingRoute: typeof OnboardingRoute
+  SettingsRoute: typeof SettingsRoute
   SubmitTopicRoute: typeof SubmitTopicRoute
   YourSubmissionsRoute: typeof YourSubmissionsRoute
 }
@@ -66,6 +93,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/submit-topic': {
@@ -87,6 +128,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OnboardingRoute: OnboardingRoute,
+  SettingsRoute: SettingsRoute,
   SubmitTopicRoute: SubmitTopicRoute,
   YourSubmissionsRoute: YourSubmissionsRoute,
 }

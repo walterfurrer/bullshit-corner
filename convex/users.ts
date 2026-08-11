@@ -1,6 +1,7 @@
-import { ConvexError } from 'convex/values'
+import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
+import { DISPLAY_NAME_MAX_LENGTH } from './constants'
 
 import type { Id } from './_generated/dataModel'
 import type { MutationCtx } from './_generated/server'
@@ -51,11 +52,13 @@ export async function getOrCreateUserId(
   const profile = profileFromIdentity(identity)
 
   if (existing) {
+    // Patch profile fields from Clerk — never overwrite alwaysAnonymous
     await ctx.db.patch(existing._id, profile)
     return existing._id
   }
 
-  return ctx.db.insert('users', profile)
+  // New user — initialize alwaysAnonymous to false
+  return ctx.db.insert('users', { ...profile, alwaysAnonymous: false })
 }
 
 export const sync = mutation({
@@ -86,5 +89,68 @@ export const getMe = query({
         query.eq('tokenIdentifier', identity.tokenIdentifier),
       )
       .unique()
+  },
+})
+
+export const updateProfile = mutation({
+  args: {
+    name: v.optional(v.string()),
+    alwaysAnonymous: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) throw new ConvexError('Authentication required.')
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_tokenIdentifier', (q) =>
+        q.eq('tokenIdentifier', identity.tokenIdentifier),
+      )
+      .unique()
+
+    if (!user) throw new ConvexError('User not found.')
+
+    const patch: Record<string, unknown> = { updatedAt: Date.now() }
+
+    if (args.name !== undefined) {
+      const trimmed = args.name.trim()
+      if (trimmed.length === 0 && args.alwaysAnonymous !== true) {
+        throw new ConvexError(
+          'Display name cannot be empty unless you choose to stay anonymous.',
+        )
+      }
+      if (trimmed.length > DISPLAY_NAME_MAX_LENGTH) {
+        throw new ConvexError(
+          `Display name must be ${DISPLAY_NAME_MAX_LENGTH} characters or fewer.`,
+        )
+      }
+      patch.name = trimmed.length > 0 ? trimmed : undefined
+    }
+
+    if (args.alwaysAnonymous !== undefined) {
+      patch.alwaysAnonymous = args.alwaysAnonymous
+    }
+
+    await ctx.db.patch(user._id, patch)
+
+    // Retroactively update submittedBy on all existing submissions to match
+    // the new identity preference.
+    const newSubmittedBy =
+      (args.alwaysAnonymous ?? user.alwaysAnonymous) === true
+        ? 'Anonymous'
+        : (patch.name as string | undefined) ?? user.name ?? undefined
+
+    const submissions = await ctx.db
+      .query('submissions')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .collect()
+
+    for (const submission of submissions) {
+      if (submission.submittedBy !== newSubmittedBy) {
+        await ctx.db.patch(submission._id, { submittedBy: newSubmittedBy })
+      }
+    }
+
+    return user._id
   },
 })

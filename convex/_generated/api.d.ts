@@ -8,6 +8,8 @@
  * @module
  */
 
+import type * as constants from "../constants.js";
+import type * as migrations from "../migrations.js";
 import type * as seed from "../seed.js";
 import type * as submissions from "../submissions.js";
 import type * as topics from "../topics.js";
@@ -20,6 +22,8 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  constants: typeof constants;
+  migrations: typeof migrations;
   seed: typeof seed;
   submissions: typeof submissions;
   topics: typeof topics;

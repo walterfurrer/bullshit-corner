@@ -50,6 +50,7 @@
     "@vitejs/plugin-react": "^6.0.5",
     "concurrently": "^10.0.4",
     "convex-test": "0.0.55",
+    "fast-check": "^4.9.0",
     "typescript": "^6.0.2",
     "vite": "^8.2.0",
     "vitest": "4.1.10"

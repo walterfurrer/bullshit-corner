@@ -1,6 +1,6 @@
 import { useClerk, useUser } from '@clerk/tanstack-react-start'
 import { Link } from '@tanstack/react-router'
-import { ListBulletsIcon, SignOutIcon, UserCircleIcon } from '@phosphor-icons/react'
+import { GearSixIcon, ListBulletsIcon, SignOutIcon, UserCircleIcon } from '@phosphor-icons/react'
 
 import {
   DropdownMenu,
@@ -38,6 +38,12 @@ export function UserMenu() {
           <Link to="/your-submissions">
             <ListBulletsIcon className="me-2 size-4" aria-hidden="true" />
             Your Submissions
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/settings">
+            <GearSixIcon className="me-2 size-4" aria-hidden="true" />
+            Settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => openUserProfile()}>

@@ -11,6 +11,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import { createServerFn } from '@tanstack/react-start'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 
+import { OnboardingGuard } from '../components/onboarding-guard'
 import { SyncUser } from '../components/sync-user'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
@@ -119,6 +120,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <ClerkProvider>
           <ConvexProviderWithClerk client={convexClient} useAuth={useAuth}>
             <SyncUser />
+            <OnboardingGuard />
             {children}
             <TanStackDevtools
               config={{

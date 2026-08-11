@@ -1,0 +1,336 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Add `alwaysAnonymous` field to schema and modify `users.sync`": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415300944
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415317155
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415469118
+      }
+    ],
+    "1.2 Create `convex/constants.ts` and `users.updateProfile` mutation": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415300979
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415474894
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415632742
+      }
+    ],
+    "1.3 Modify `submissions.submit` to enforce anonymity": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301016
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415475745
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415633606
+      }
+    ],
+    "1.4 Create backfill migration for existing users": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301057
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415476456
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415634630
+      }
+    ],
+    "1.5 Write property tests for sync and updateProfile": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301094
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415639456
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415878568
+      }
+    ],
+    "1.6 Write property test for backend anonymity enforcement": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301130
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415640204
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415879458
+      }
+    ],
+    "2. Checkpoint — Backend complete": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301164
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416149368
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416164400
+      }
+    ],
+    "3.1 Create `useCurrentUser` hook": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301194
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415318133
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415469908
+      }
+    ],
+    "3.2 Write property test for needsOnboarding derivation": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301227
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415477280
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415635587
+      }
+    ],
+    "4.1 Create `/onboarding` route (`src/routes/onboarding.tsx`)": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301259
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415641017
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415880355
+      }
+    ],
+    "4.2 Create `OnboardingGuard` component and add to `__root.tsx`": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301296
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415641863
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415881357
+      }
+    ],
+    "5.1 Install required shadcn components (Switch, Tooltip)": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301332
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415319293
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415467868
+      }
+    ],
+    "5.2 Create `/settings` route (`src/routes/settings.tsx`)": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301369
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415885676
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416039474
+      }
+    ],
+    "6.1 Modify `submission-form.tsx` to auto-populate and lock alias": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301406
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415886583
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416040494
+      }
+    ],
+    "6.2 Write property test for alias field derivation": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301455
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416044652
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416142796
+      }
+    ],
+    "7.1 Add \"Settings\" link to user menu": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301480
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415887506
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416038578
+      }
+    ],
+    "8. Checkpoint — Feature complete": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415301507
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416167278
+      },
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416175267
+      }
+    ],
+    "3. Client hooks and utilities": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415635613
+      }
+    ],
+    "1. Schema extension & backend mutations": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415879486
+      }
+    ],
+    "4. Onboarding route and guard": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786415881383
+      }
+    ],
+    "7. Navigation: Settings link in user menu": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416038609
+      }
+    ],
+    "5. Settings route": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416039502
+      }
+    ],
+    "6. Submission form integration": [
+      {
+        "executionId": "ac82fef9-8793-40c3-a8b2-8557539dd4bd",
+        "chatSessionId": "sess_b67fa70e-cc96-442f-9902-779c83abda4d",
+        "timestamp": 1786416142827
+      }
+    ]
+  }
+}

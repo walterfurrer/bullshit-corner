@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useClerk } from '@clerk/tanstack-react-start'
 import { useConvexMutation } from '@convex-dev/react-query'
 import { useForm } from '@tanstack/react-form'
@@ -10,6 +10,13 @@ import { api } from '../../convex/_generated/api'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '#/components/ui/tooltip'
+import { useCurrentUser } from '#/hooks/use-current-user'
 import { ENABLE_AUTH } from '#/lib/feature-flags'
 import { SUBMISSION_LIMITS } from '#/lib/submission-constants'
 import {
@@ -23,8 +30,12 @@ type SubmitStatus = 'idle' | 'auth-required' | 'success' | 'error'
 export function SubmissionForm() {
   const { openSignIn } = useClerk()
   const { isAuthenticated, isLoading, isRefreshing } = useConvexAuth()
+  const { user } = useCurrentUser()
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle')
   const [submitError, setSubmitError] = useState<string | null>(null)
+
+  // Derive alias field behavior from user profile
+  const aliasLocked = ENABLE_AUTH && isAuthenticated && user?.alwaysAnonymous === true
 
   const { mutateAsync } = useMutation({
     mutationFn: useConvexMutation(api.submissions.submit),
@@ -87,6 +98,21 @@ export function SubmissionForm() {
       }
     },
   })
+
+  // Pre-populate alias from user profile (once, when user data first loads)
+  const hasPrePopulated = useRef(false)
+  useEffect(() => {
+    if (hasPrePopulated.current) return
+    if (!ENABLE_AUTH || !isAuthenticated || !user) return
+
+    if (user.alwaysAnonymous) {
+      form.setFieldValue('alias', 'Anonymous')
+      hasPrePopulated.current = true
+    } else if (user.name) {
+      form.setFieldValue('alias', user.name)
+      hasPrePopulated.current = true
+    }
+  }, [user, isAuthenticated, form])
 
   return (
     <form
@@ -158,42 +184,68 @@ export function SubmissionForm() {
           name="alias"
           validators={{
             onChange: ({ value }) =>
-              validateLength(value, SUBMISSION_LIMITS.alias),
+              aliasLocked
+                ? undefined
+                : validateLength(value, SUBMISSION_LIMITS.alias),
           }}
         >
           {(field) => (
             <div className="flex flex-col gap-1.5">
               <Label htmlFor={field.name}>Name/Alias (optional)</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onChange={(event) => field.handleChange(event.target.value)}
-                onBlur={field.handleBlur}
-                placeholder="Anonymous if left blank."
-                aria-describedby={
-                  field.state.meta.isTouched &&
-                    field.state.meta.errors.length > 0
-                    ? `${field.name}-error`
-                    : undefined
-                }
-                aria-invalid={
-                  field.state.meta.isTouched &&
-                    field.state.meta.errors.length > 0
-                    ? true
-                    : undefined
-                }
-              />
-              {field.state.meta.isTouched &&
-                field.state.meta.errors.length > 0 && (
-                  <p
-                    id={`${field.name}-error`}
-                    className="text-sm text-destructive"
-                    role="alert"
-                  >
-                    {field.state.meta.errors[0]}
-                  </p>
-                )}
+              {aliasLocked ? (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span tabIndex={0} className="w-full">
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          value="Anonymous"
+                          disabled
+                          placeholder="Anonymous if left blank."
+                          aria-describedby={`${field.name}-tooltip`}
+                        />
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent id={`${field.name}-tooltip`}>
+                      Change this in Settings to use a display name.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : (
+                <>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    onBlur={field.handleBlur}
+                    placeholder="Anonymous if left blank."
+                    aria-describedby={
+                      field.state.meta.isTouched &&
+                        field.state.meta.errors.length > 0
+                        ? `${field.name}-error`
+                        : undefined
+                    }
+                    aria-invalid={
+                      field.state.meta.isTouched &&
+                        field.state.meta.errors.length > 0
+                        ? true
+                        : undefined
+                    }
+                  />
+                  {field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0 && (
+                      <p
+                        id={`${field.name}-error`}
+                        className="text-sm text-destructive"
+                        role="alert"
+                      >
+                        {field.state.meta.errors[0]}
+                      </p>
+                    )}
+                </>
+              )}
             </div>
           )}
         </form.Field>
