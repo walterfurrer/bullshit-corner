@@ -42,7 +42,7 @@ function Home() {
               >
                 High Performance Racing
               </a>
-              {" "}podcast gets to nominate things from the world of Formula 1 to go into Bullshit Corner.
+              {" "}podcast gets to submit things from the world of Formula 1 to go into Bullshit Corner.
             </p>
             <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
               It can be a bullshit opinion, a bullshit race, a part of a car, a season, a person, a thing...anything you like!
@@ -53,11 +53,11 @@ function Home() {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <h2>Have some bullshit to nominate?</h2>
+          <h2>Have some bullshit to submit?</h2>
           <div className="flex flex-start">
 
             <Button asChild size="lg">
-              <Link to="/nominate">Nominate a Topic</Link>
+              <Link to="/submit-topic">Submit a Topic</Link>
             </Button>
           </div>
         </div>

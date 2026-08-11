@@ -1,13 +1,11 @@
 type SubmissionCardProps = {
   topic: string
-  evidence?: string
   submittedBy?: string
   submittedAt: number
 }
 
 export function SubmissionCard({
   topic,
-  evidence,
   submittedBy,
   submittedAt,
 }: SubmissionCardProps) {
@@ -16,9 +14,6 @@ export function SubmissionCard({
   return (
     <article className="rounded-lg border border-border p-4 text-start">
       <h3 className="text-base font-semibold">{topic}</h3>
-      {evidence && (
-        <p className="mt-2 text-sm text-muted-foreground">{evidence}</p>
-      )}
       <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
         {submittedBy && <span>by {submittedBy}</span>}
         <span>{relativeTime}</span>

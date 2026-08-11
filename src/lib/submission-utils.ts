@@ -16,25 +16,21 @@ export function validateLength(value: string, max: number): string | undefined {
 
 export interface SubmissionInput {
   topic: string
-  evidence: string
   alias: string
 }
 
 export interface NormalizedSubmission {
   topic: string
-  evidence: string | undefined
   submittedBy: string | undefined
 }
 
 export function normalizeSubmission(
   values: SubmissionInput,
 ): NormalizedSubmission {
-  const evidence = values.evidence.trim()
   const alias = values.alias.trim()
 
   return {
     topic: values.topic.trim(),
-    evidence: evidence.length > 0 ? evidence : undefined,
     submittedBy: alias.length > 0 ? alias : undefined,
   }
 }

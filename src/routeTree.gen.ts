@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as NominateRouteImport } from './routes/nominate'
+import { Route as SubmitTopicRouteImport } from './routes/submit-topic'
 import { Route as YourSubmissionsRouteImport } from './routes/your-submissions'
 
 const IndexRoute = IndexRouteImport.update({
@@ -18,9 +18,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NominateRoute = NominateRouteImport.update({
-  id: '/nominate',
-  path: '/nominate',
+const SubmitTopicRoute = SubmitTopicRouteImport.update({
+  id: '/submit-topic',
+  path: '/submit-topic',
   getParentRoute: () => rootRouteImport,
 } as any)
 const YourSubmissionsRoute = YourSubmissionsRouteImport.update({
@@ -31,31 +31,31 @@ const YourSubmissionsRoute = YourSubmissionsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/nominate': typeof NominateRoute
+  '/submit-topic': typeof SubmitTopicRoute
   '/your-submissions': typeof YourSubmissionsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/nominate': typeof NominateRoute
+  '/submit-topic': typeof SubmitTopicRoute
   '/your-submissions': typeof YourSubmissionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/nominate': typeof NominateRoute
+  '/submit-topic': typeof SubmitTopicRoute
   '/your-submissions': typeof YourSubmissionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/nominate' | '/your-submissions'
+  fullPaths: '/' | '/submit-topic' | '/your-submissions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/nominate' | '/your-submissions'
-  id: '__root__' | '/' | '/nominate' | '/your-submissions'
+  to: '/' | '/submit-topic' | '/your-submissions'
+  id: '__root__' | '/' | '/submit-topic' | '/your-submissions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  NominateRoute: typeof NominateRoute
+  SubmitTopicRoute: typeof SubmitTopicRoute
   YourSubmissionsRoute: typeof YourSubmissionsRoute
 }
 
@@ -68,11 +68,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/nominate': {
-      id: '/nominate'
-      path: '/nominate'
-      fullPath: '/nominate'
-      preLoaderRoute: typeof NominateRouteImport
+    '/submit-topic': {
+      id: '/submit-topic'
+      path: '/submit-topic'
+      fullPath: '/submit-topic'
+      preLoaderRoute: typeof SubmitTopicRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/your-submissions': {
@@ -87,7 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  NominateRoute: NominateRoute,
+  SubmitTopicRoute: SubmitTopicRoute,
   YourSubmissionsRoute: YourSubmissionsRoute,
 }
 export const routeTree = rootRouteImport

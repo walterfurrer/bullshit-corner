@@ -40,7 +40,6 @@ describe('submissions', () => {
 
     const submissionId = await asUser.mutation(api.submissions.submit, {
       topic: '  Team radio over-analysis  ',
-      evidence: '  Every post-race show does it.  ',
       submittedBy: '  Paddock Sleuth  ',
     })
 
@@ -60,7 +59,6 @@ describe('submissions', () => {
     expect(submission).toMatchObject({
       userId: user?._id,
       topic: 'Team radio over-analysis',
-      evidence: 'Every post-race show does it.',
       submittedBy: 'Paddock Sleuth',
     })
     expect(submission).not.toHaveProperty('email')

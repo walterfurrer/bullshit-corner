@@ -23,7 +23,6 @@ export default defineSchema({
   submissions: defineTable({
     userId: v.id('users'),
     topic: v.string(),
-    evidence: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
     submittedAt: v.number(),
   })

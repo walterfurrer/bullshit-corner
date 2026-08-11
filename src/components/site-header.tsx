@@ -12,7 +12,7 @@ import { ENABLE_AUTH } from '#/lib/feature-flags'
 
 const navLinks = [
   { to: '/' as const, label: 'Home', exact: true },
-  { to: '/nominate' as const, label: 'Nominate a Topic' },
+  { to: '/submit-topic' as const, label: 'Submit a Topic' },
 ]
 
 export function SiteHeader() {

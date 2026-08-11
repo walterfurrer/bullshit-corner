@@ -10,7 +10,6 @@ import { api } from '../../convex/_generated/api'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
-import { Textarea } from '#/components/ui/textarea'
 import { ENABLE_AUTH } from '#/lib/feature-flags'
 import { SUBMISSION_LIMITS } from '#/lib/submission-constants'
 import {
@@ -34,7 +33,6 @@ export function SubmissionForm() {
   const form = useForm({
     defaultValues: {
       topic: '',
-      evidence: '',
       alias: '',
     },
     onSubmit: async ({ value }) => {
@@ -78,7 +76,7 @@ export function SubmissionForm() {
             'retryAfter' in data
           ) {
             message =
-              'You’ve reached the submission limit (6 per week). Please try again later.'
+              'You\u2019ve reached the submission limit (6 per week). Please try again later.'
           }
         } else if (error instanceof Error && error.message) {
           message = error.message
@@ -101,126 +99,78 @@ export function SubmissionForm() {
       noValidate
     >
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div className="flex flex-col gap-6">
-          <form.Field
-            name="topic"
-            validators={{
-              onChange: ({ value }) =>
-                validateTopic(value) ??
-                validateLength(value, SUBMISSION_LIMITS.topic),
-              onBlur: ({ value }) => validateTopic(value),
-            }}
-          >
-            {(field) => (
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor={field.name}>
-                  Bullshit Corner Topic
-                  <span
-                    className="ms-1 text-destructive"
-                    aria-hidden="true"
-                  >
-                    *
-                  </span>
-                </Label>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onChange={(event) => field.handleChange(event.target.value)}
-                  onBlur={field.handleBlur}
-                  placeholder="What deserves a spot in Bullshit Corner?"
-                  aria-required="true"
-                  aria-describedby={
-                    field.state.meta.isTouched &&
-                      field.state.meta.errors.length > 0
-                      ? `${field.name}-error`
-                      : undefined
-                  }
-                  aria-invalid={
-                    field.state.meta.isTouched &&
-                      field.state.meta.errors.length > 0
-                      ? true
-                      : undefined
-                  }
-                />
-                {field.state.meta.isTouched &&
-                  field.state.meta.errors.length > 0 && (
-                    <p
-                      id={`${field.name}-error`}
-                      className="text-sm text-destructive"
-                      role="alert"
-                    >
-                      {field.state.meta.errors[0]}
-                    </p>
-                  )}
-              </div>
-            )}
-          </form.Field>
-
-          <form.Field
-            name="alias"
-            validators={{
-              onChange: ({ value }) =>
-                validateLength(value, SUBMISSION_LIMITS.alias),
-            }}
-          >
-            {(field) => (
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor={field.name}>Name/Alias (optional)</Label>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onChange={(event) => field.handleChange(event.target.value)}
-                  onBlur={field.handleBlur}
-                  placeholder="The pseudonym shown with your submission"
-                  aria-describedby={
-                    field.state.meta.isTouched &&
-                      field.state.meta.errors.length > 0
-                      ? `${field.name}-error`
-                      : undefined
-                  }
-                  aria-invalid={
-                    field.state.meta.isTouched &&
-                      field.state.meta.errors.length > 0
-                      ? true
-                      : undefined
-                  }
-                />
-                {field.state.meta.isTouched &&
-                  field.state.meta.errors.length > 0 && (
-                    <p
-                      id={`${field.name}-error`}
-                      className="text-sm text-destructive"
-                      role="alert"
-                    >
-                      {field.state.meta.errors[0]}
-                    </p>
-                  )}
-              </div>
-            )}
-          </form.Field>
-        </div>
-
         <form.Field
-          name="evidence"
+          name="topic"
           validators={{
             onChange: ({ value }) =>
-              validateLength(value, SUBMISSION_LIMITS.evidence),
+              validateTopic(value) ??
+              validateLength(value, SUBMISSION_LIMITS.topic),
+            onBlur: ({ value }) => validateTopic(value),
           }}
         >
           {(field) => (
-            <div className="flex flex-col gap-1.5 sm:h-full">
-              <Label htmlFor={field.name}>Evidence (optional)</Label>
-              <Textarea
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor={field.name}>
+                Bullshit Corner Topic
+                <span
+                  className="ms-1 text-destructive"
+                  aria-hidden="true"
+                >
+                  *
+                </span>
+              </Label>
+              <Input
                 id={field.name}
                 name={field.name}
                 value={field.state.value}
                 onChange={(event) => field.handleChange(event.target.value)}
                 onBlur={field.handleBlur}
-                placeholder="Plead your case here."
-                className="sm:flex-1 sm:resize-none"
-                rows={6}
+                placeholder="What deserves a spot in Bullshit Corner?"
+                aria-required="true"
+                aria-describedby={
+                  field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                    ? `${field.name}-error`
+                    : undefined
+                }
+                aria-invalid={
+                  field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                    ? true
+                    : undefined
+                }
+              />
+              {field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0 && (
+                  <p
+                    id={`${field.name}-error`}
+                    className="text-sm text-destructive"
+                    role="alert"
+                  >
+                    {field.state.meta.errors[0]}
+                  </p>
+                )}
+            </div>
+          )}
+        </form.Field>
+
+        <form.Field
+          name="alias"
+          validators={{
+            onChange: ({ value }) =>
+              validateLength(value, SUBMISSION_LIMITS.alias),
+          }}
+        >
+          {(field) => (
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor={field.name}>Name/Alias (optional)</Label>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onChange={(event) => field.handleChange(event.target.value)}
+                onBlur={field.handleBlur}
+                placeholder="Anonymous if left blank."
                 aria-describedby={
                   field.state.meta.isTouched &&
                     field.state.meta.errors.length > 0
@@ -256,7 +206,7 @@ export function SubmissionForm() {
           aria-live="polite"
         >
           {isAuthenticated
-            ? 'You’re signed in. Click “Submit Topic” again to confirm your nomination.'
+            ? 'You\u2019re signed in. Click \u201cSubmit Topic\u201d again to confirm your submission.'
             : 'Sign in or create an account to continue. Your draft will stay here.'}
         </div>
       )}

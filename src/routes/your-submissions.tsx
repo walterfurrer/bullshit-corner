@@ -52,7 +52,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col gap-2">
           <h1>Your Submissions</h1>
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Topics you've nominated for Bullshit Corner.
+            Topics you've submitted to Bullshit Corner.
           </p>
         </div>
         {children}
@@ -91,7 +91,7 @@ function SubmissionsList() {
           You haven't submitted any topics yet.
         </p>
         <Button asChild>
-          <Link to="/nominate">Nominate a Topic</Link>
+          <Link to="/submit-topic">Submit a Topic</Link>
         </Button>
       </div>
     )
@@ -103,7 +103,6 @@ function SubmissionsList() {
         <SubmissionCard
           key={submission._id}
           topic={submission.topic}
-          evidence={submission.evidence}
           submittedBy={submission.submittedBy}
           submittedAt={submission.submittedAt}
         />
