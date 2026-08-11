@@ -50,6 +50,6 @@ export function UserMenu() {
           Sign Out
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </DropdownMenu >
   )
 }

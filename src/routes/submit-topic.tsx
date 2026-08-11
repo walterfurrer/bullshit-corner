@@ -30,14 +30,18 @@ function SubmitTopicPage() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
-          <p className="font-medium">A free account is required to submit.</p>
-          <p className="mt-1 text-muted-foreground">
-            You can fill out the form first. If you are signed out, we will ask
-            you to sign in or create an account when you submit. This helps keep
-            submissions fair and limits spam.
-          </p>
-        </div>
+        {ENABLE_AUTH && (
+          <Show when="signed-out">
+            <div className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
+              <p className="font-medium">A free account is required to submit.</p>
+              <p className="mt-1 text-muted-foreground">
+                Fill out the form first — when you hit submit, we'll ask you to
+                sign in or create a free account. This helps keep submissions fair
+                and limits spam.
+              </p>
+            </div>
+          </Show>
+        )}
 
         <SubmissionForm />
 

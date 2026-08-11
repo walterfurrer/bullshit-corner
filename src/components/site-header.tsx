@@ -74,7 +74,12 @@ export function SiteHeader() {
           )}
         </div>
 
-        <div className="relative sm:hidden">
+        <div className="flex items-center gap-2 sm:hidden">
+          {ENABLE_AUTH && (
+            <Show when="signed-in">
+              <UserMenu />
+            </Show>
+          )}
           <Button
             variant="ghost"
             size="icon-sm"
@@ -84,9 +89,9 @@ export function SiteHeader() {
             onClick={() => setMobileOpen((value) => !value)}
           >
             {mobileOpen ? (
-              <XIcon size={20} aria-hidden="true" />
+              <XIcon size={24} aria-hidden="true" />
             ) : (
-              <ListIcon size={20} aria-hidden="true" />
+              <ListIcon size={24} aria-hidden="true" />
             )}
           </Button>
 
@@ -123,9 +128,6 @@ export function SiteHeader() {
                           Sign in or create account
                         </Button>
                       </SignInButton>
-                    </Show>
-                    <Show when="signed-in">
-                      <UserMenu />
                     </Show>
                   </li>
                 )}
