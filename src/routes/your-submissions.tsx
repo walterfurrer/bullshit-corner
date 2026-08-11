@@ -1,0 +1,123 @@
+import { Suspense } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { convexQuery } from '@convex-dev/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { useConvexAuth } from 'convex/react'
+
+import { SubmissionCard } from '#/components/submission-card.tsx'
+import { SiteFooter } from '#/components/site-footer.tsx'
+import { SiteHeader } from '#/components/site-header.tsx'
+import { Button } from '#/components/ui/button.tsx'
+import { Skeleton } from '#/components/ui/skeleton.tsx'
+
+import { api } from '../../convex/_generated/api'
+
+export const Route = createFileRoute('/your-submissions')({
+  component: YourSubmissionsPage,
+})
+
+function YourSubmissionsPage() {
+  const { isAuthenticated, isLoading } = useConvexAuth()
+
+  if (isLoading) {
+    return (
+      <PageShell>
+        <LoadingSkeleton />
+      </PageShell>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <PageShell>
+        <AuthGate />
+      </PageShell>
+    )
+  }
+
+  return (
+    <PageShell>
+      <Suspense fallback={<LoadingSkeleton />}>
+        <SubmissionsList />
+      </Suspense>
+    </PageShell>
+  )
+}
+
+function PageShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-dvh">
+      <SiteHeader />
+      <main className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-14">
+        <div className="flex flex-col gap-2">
+          <h1>Your Submissions</h1>
+          <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
+            Topics you've nominated for Bullshit Corner.
+          </p>
+        </div>
+        {children}
+        <SiteFooter />
+      </main>
+    </div>
+  )
+}
+
+function AuthGate() {
+  return (
+    <div
+      className="flex flex-col items-start gap-4"
+      role="status"
+      aria-live="polite"
+    >
+      <p className="text-sm text-muted-foreground sm:text-base">
+        You must be logged in to see this page.
+      </p>
+      <Button asChild variant="outline">
+        <Link to="/">Go to Home</Link>
+      </Button>
+    </div>
+  )
+}
+
+function SubmissionsList() {
+  const { data: submissions } = useSuspenseQuery(
+    convexQuery(api.submissions.listMine, {}),
+  )
+
+  if (submissions.length === 0) {
+    return (
+      <div className="flex flex-col items-start gap-4">
+        <p className="text-sm text-muted-foreground sm:text-base">
+          You haven't submitted any topics yet.
+        </p>
+        <Button asChild>
+          <Link to="/nominate">Nominate a Topic</Link>
+        </Button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {submissions.map((submission) => (
+        <SubmissionCard
+          key={submission._id}
+          topic={submission.topic}
+          evidence={submission.evidence}
+          submittedBy={submission.submittedBy}
+          submittedAt={submission.submittedAt}
+        />
+      ))}
+    </div>
+  )
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <Skeleton key={index} className="h-24 w-full rounded-lg" />
+      ))}
+    </div>
+  )
+}

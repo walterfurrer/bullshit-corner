@@ -2,12 +2,12 @@ import * as React from 'react'
 import {
   Show,
   SignInButton,
-  UserButton,
 } from '@clerk/tanstack-react-start'
 import { CaretDoubleUpIcon, ListIcon, XIcon } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 
 import { Button } from '#/components/ui/button.tsx'
+import { UserMenu } from '#/components/user-menu.tsx'
 import { ENABLE_AUTH } from '#/lib/feature-flags'
 
 const navLinks = [
@@ -68,7 +68,7 @@ export function SiteHeader() {
                 </SignInButton>
               </Show>
               <Show when="signed-in">
-                <UserButton />
+                <UserMenu />
               </Show>
             </>
           )}
@@ -94,7 +94,7 @@ export function SiteHeader() {
             <nav
               id="mobile-dropdown"
               aria-label="Mobile navigation"
-              className="absolute end-0 top-full z-20 mt-2 w-52 overflow-hidden rounded-xl border border-border bg-background/95 shadow-sm backdrop-blur-sm"
+              className="absolute inset-e-0 top-full z-20 mt-2 w-52 overflow-hidden rounded-xl border border-border bg-background/95 shadow-sm backdrop-blur-sm"
             >
               <ul className="flex flex-col py-1">
                 {navLinks.map(({ to, label, exact }) => (
@@ -125,10 +125,7 @@ export function SiteHeader() {
                       </SignInButton>
                     </Show>
                     <Show when="signed-in">
-                      <div className="flex items-center gap-2 text-sm font-medium">
-                        <UserButton />
-                        <span>Account</span>
-                      </div>
+                      <UserMenu />
                     </Show>
                   </li>
                 )}

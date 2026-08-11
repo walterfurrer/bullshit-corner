@@ -2,7 +2,7 @@ import { RateLimiter } from '@convex-dev/rate-limiter'
 import { ConvexError, v } from 'convex/values'
 
 import { components } from './_generated/api'
-import { mutation } from './_generated/server'
+import { mutation, query } from './_generated/server'
 import { getOrCreateUserId } from './users'
 
 // Inline constants — cannot import from src/ across the Convex boundary
@@ -69,5 +69,32 @@ export const submit = mutation({
       submittedBy,
       submittedAt: Date.now(),
     })
+  },
+})
+
+export const listMine = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) {
+      return []
+    }
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_tokenIdentifier', (q) =>
+        q.eq('tokenIdentifier', identity.tokenIdentifier),
+      )
+      .unique()
+
+    if (!user) {
+      return []
+    }
+
+    return ctx.db
+      .query('submissions')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .order('desc')
+      .take(50)
   },
 })

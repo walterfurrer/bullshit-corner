@@ -1,8 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Show } from '@clerk/tanstack-react-start'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 import { SubmissionForm } from '#/components/submission-form.tsx'
 import { SiteFooter } from '#/components/site-footer.tsx'
 import { SiteHeader } from '#/components/site-header.tsx'
+import { ENABLE_AUTH } from '#/lib/feature-flags.ts'
 
 export const Route = createFileRoute('/nominate')({
   component: NominateTopicPage,
@@ -38,6 +40,20 @@ function NominateTopicPage() {
         </div>
 
         <SubmissionForm />
+
+        {ENABLE_AUTH && (
+          <Show when="signed-in">
+            <p className="text-sm text-muted-foreground">
+              <Link
+                to="/your-submissions"
+                className="font-medium transition-colors duration-200 hover:text-primary"
+              >
+                View your past submissions →
+              </Link>
+            </p>
+          </Show>
+        )}
+
         <SiteFooter />
       </main>
     </div>
