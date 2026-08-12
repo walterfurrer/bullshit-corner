@@ -10,6 +10,7 @@ import { api } from '../../convex/_generated/api'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
+import { Textarea } from '#/components/ui/textarea'
 import {
   Tooltip,
   TooltipContent,
@@ -45,6 +46,7 @@ export function SubmissionForm() {
     defaultValues: {
       topic: '',
       alias: '',
+      details: '',
     },
     onSubmit: async ({ value }) => {
       setSubmitStatus('idle')
@@ -246,6 +248,50 @@ export function SubmissionForm() {
                     )}
                 </>
               )}
+            </div>
+          )}
+        </form.Field>
+
+        <form.Field
+          name="details"
+          validators={{
+            onChange: ({ value }) =>
+              validateLength(value, SUBMISSION_LIMITS.details),
+          }}
+        >
+          {(field) => (
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor={field.name}>Details (optional)</Label>
+              <Textarea
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onChange={(event) => field.handleChange(event.target.value)}
+                onBlur={field.handleBlur}
+                placeholder="Why does this deserve a spot?"
+                aria-describedby={
+                  field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                    ? `${field.name}-error`
+                    : undefined
+                }
+                aria-invalid={
+                  field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                    ? true
+                    : undefined
+                }
+              />
+              {field.state.meta.isTouched &&
+                field.state.meta.errors.length > 0 && (
+                  <p
+                    id={`${field.name}-error`}
+                    className="text-sm text-destructive"
+                    role="alert"
+                  >
+                    {field.state.meta.errors[0]}
+                  </p>
+                )}
             </div>
           )}
         </form.Field>

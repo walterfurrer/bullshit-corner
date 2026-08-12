@@ -24,6 +24,7 @@ export default defineSchema({
   submissions: defineTable({
     userId: v.id('users'),
     topic: v.string(),
+    details: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
     submittedAt: v.number(),
   })

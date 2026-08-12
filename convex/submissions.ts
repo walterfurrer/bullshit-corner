@@ -8,6 +8,7 @@ import { getOrCreateUserId } from './users'
 // Inline constants — cannot import from src/ across the Convex boundary
 const TOPIC_MAX = 200
 const ALIAS_MAX = 100
+const DETAILS_MAX = 1000
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000
 
@@ -18,6 +19,7 @@ const rateLimiter = new RateLimiter(components.rateLimiter, {
 export const submit = mutation({
   args: {
     topic: v.string(),
+    details: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -28,6 +30,7 @@ export const submit = mutation({
     }
 
     const topic = args.topic.trim()
+    const details = args.details?.trim() || undefined
     const submittedBy = args.submittedBy?.trim() || undefined
 
     if (topic.length === 0) {
@@ -37,6 +40,12 @@ export const submit = mutation({
     if (topic.length > TOPIC_MAX) {
       throw new ConvexError(
         `Topic must be ${TOPIC_MAX} characters or fewer (received ${topic.length}).`,
+      )
+    }
+
+    if (details !== undefined && details.length > DETAILS_MAX) {
+      throw new ConvexError(
+        `Details must be ${DETAILS_MAX} characters or fewer (received ${details.length}).`,
       )
     }
 
@@ -61,6 +70,7 @@ export const submit = mutation({
     return ctx.db.insert('submissions', {
       userId,
       topic,
+      details,
       submittedBy: finalSubmittedBy,
       submittedAt: Date.now(),
     })
