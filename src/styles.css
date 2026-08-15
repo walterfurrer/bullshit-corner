@@ -6,6 +6,36 @@
 
 :root {
   color-scheme: dark;
+
+  /* Typography Scale — minor-third (1.2), base 16px */
+  --font-size-xs: 0.6944rem;
+  --font-size-sm: 0.8333rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.2rem;
+  --font-size-xl: 1.44rem;
+  --font-size-2xl: 1.728rem;
+  --font-size-3xl: 2.0736rem;
+  --font-size-4xl: 2.4883rem;
+  --line-height-xs: 1.6;
+  --line-height-sm: 1.6;
+  --line-height-base: 1.5;
+  --line-height-lg: 1.45;
+  --line-height-xl: 1.35;
+  --line-height-2xl: 1.25;
+  --line-height-3xl: 1.15;
+  --line-height-4xl: 1.1;
+  --letter-spacing-xs: 0.01em;
+  --letter-spacing-sm: 0.01em;
+  --letter-spacing-base: 0em;
+  --letter-spacing-lg: -0.005em;
+  --letter-spacing-xl: -0.01em;
+  --letter-spacing-2xl: -0.015em;
+  --letter-spacing-3xl: -0.02em;
+  --letter-spacing-4xl: -0.025em;
+  --measure-narrow: 45ch;
+  --measure-base: 65ch;
+  --measure-wide: 75ch;
+
   --background: oklch(0.14 0.005 230);
   --foreground: oklch(0.96 0.003 230);
   --card: oklch(0.19 0.006 230);
@@ -45,7 +75,7 @@
 }
 
 @theme inline {
-  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif,
+  --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, 'Liberation Mono', 'Courier New', monospace;
@@ -106,33 +136,54 @@ body,
   }
   body {
     @apply bg-background text-foreground;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-base);
   }
   h1, h2, h3, h4, h5, h6 {
     @apply text-foreground;
   }
 
   h1 {
-    @apply font-racing text-3xl tracking-wide sm:text-4xl;
+    @apply font-racing;
+    font-size: var(--font-size-4xl);
+    line-height: var(--line-height-4xl);
+    letter-spacing: var(--letter-spacing-4xl);
   }
 
   h2 {
-    @apply font-racing text-2xl tracking-wide sm:text-3xl;
+    @apply font-racing;
+    font-size: var(--font-size-3xl);
+    line-height: var(--line-height-3xl);
+    letter-spacing: var(--letter-spacing-3xl);
   }
 
   h3 {
-    @apply font-bold text-xl tracking-normal sm:text-2xl;
+    @apply font-bold;
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-2xl);
+    letter-spacing: var(--letter-spacing-2xl);
   }
 
   h4 {
-    @apply font-bold text-lg tracking-normal sm:text-xl;
+    @apply font-bold;
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xl);
+    letter-spacing: var(--letter-spacing-xl);
   }
 
   h5 {
-    @apply font-bold text-base tracking-tight sm:text-lg;
+    @apply font-bold;
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-lg);
+    letter-spacing: var(--letter-spacing-lg);
   }
 
   h6 {
-    @apply font-bold text-sm tracking-tight sm:text-base text-muted-foreground;
+    @apply font-bold text-muted-foreground;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-base);
   }
 }
 
