@@ -14,6 +14,33 @@ const colors = {
   border: '#232729', // oklch(0.27 0.007 230)
 }
 
+// Generate oversized waving checkered flag squares for background texture.
+// Larger grid that bleeds off the top-right edge of the image.
+function buildCheckerSquares() {
+  const squareSize = 44
+  const cols = 18
+  const rows = 12
+  const squares: Array<{
+    top: number
+    left: number
+    isDark: boolean
+  }> = []
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      // Sine wave offset per column creates a waving flag effect
+      const waveOffset = Math.sin(col * 0.35) * 30
+      squares.push({
+        top: row * squareSize + waveOffset,
+        left: col * squareSize,
+        isDark: (row + col) % 2 === 0,
+      })
+    }
+  }
+
+  return { squares, squareSize, cols, rows }
+}
+
 export const Route = createFileRoute('/api/og')({
   server: {
     handlers: {
@@ -32,6 +59,8 @@ export const Route = createFileRoute('/api/og')({
           ).then((res) => res.arrayBuffer()),
         ])
 
+        const { squares, squareSize, cols, rows } = buildCheckerSquares()
+
         return new ImageResponse(
           (
             <div
@@ -44,8 +73,40 @@ export const Route = createFileRoute('/api/og')({
                 padding: '60px',
                 backgroundColor: colors.background,
                 fontFamily: 'IBM Plex Sans',
+                position: 'relative',
+                overflow: 'hidden',
               }}
             >
+              {/* Waving checkered flag texture — oversized, bleeds off top-right */}
+              <div
+                style={{
+                  display: 'flex',
+                  position: 'absolute',
+                  top: '-80px',
+                  right: '-100px',
+                  width: `${cols * squareSize}px`,
+                  height: `${rows * squareSize + 80}px`,
+                  opacity: 0.04,
+                  transform: 'rotate(-12deg)',
+                }}
+              >
+                {squares.map((sq, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      position: 'absolute',
+                      top: `${sq.top}px`,
+                      left: `${sq.left}px`,
+                      width: `${squareSize}px`,
+                      height: `${squareSize}px`,
+                      backgroundColor: sq.isDark
+                        ? '#ffffff'
+                        : colors.background,
+                    }}
+                  />
+                ))}
+              </div>
+
               {/* Top accent bar */}
               <div
                 style={{
