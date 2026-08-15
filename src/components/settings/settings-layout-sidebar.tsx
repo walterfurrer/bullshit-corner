@@ -2,7 +2,7 @@ import { useState, useEffect, type ReactNode } from 'react'
 
 import { cn } from '#/lib/utils.ts'
 
-interface SettingsSection {
+export interface SettingsSection {
   id: string
   label: string
   content: ReactNode

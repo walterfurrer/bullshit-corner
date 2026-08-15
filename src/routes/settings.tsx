@@ -18,9 +18,9 @@ import { Label } from '#/components/ui/label.tsx'
 import { Switch } from '#/components/ui/switch.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 import {
-  SettingsLayoutSwitcher,
+  SettingsLayoutSidebar,
   type SettingsSection,
-} from '#/components/settings/settings-layout-switcher.tsx'
+} from '#/components/settings/settings-layout-sidebar.tsx'
 import { EmailSection } from '#/components/settings/email-section.tsx'
 import { PasswordSection } from '#/components/settings/password-section.tsx'
 import { ConnectionsSection } from '#/components/settings/connections-section.tsx'
@@ -273,7 +273,7 @@ function SettingsPage() {
       <SiteHeader />
       <div className="mx-auto w-full max-w-3xl px-4 py-10">
         <h1 className="mb-6 text-2xl font-bold">Settings</h1>
-        <SettingsLayoutSwitcher sections={sections} />
+        <SettingsLayoutSidebar sections={sections} />
       </div>
     </>
   )
