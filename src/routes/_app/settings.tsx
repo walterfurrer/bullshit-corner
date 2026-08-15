@@ -32,6 +32,9 @@ import type { AccountDetails } from '#/server/account.ts'
 const DISPLAY_NAME_MAX_LENGTH = 50
 
 export const Route = createFileRoute('/_app/settings')({
+  head: () => ({
+    meta: [{ title: 'Settings | Bullshit Corner' }],
+  }),
   beforeLoad: async () => {
     if (!ENABLE_AUTH) {
       throw redirect({ to: '/' })

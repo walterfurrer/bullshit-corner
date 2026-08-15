@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#07090b"/>
+  <!-- Double chevron up (CaretDoubleUp bold) -->
+  <polyline points="7,19 16,10 25,19" fill="none" stroke="#ec5545" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="7,28 16,19 25,28" fill="none" stroke="#ec5545" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

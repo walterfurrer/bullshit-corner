@@ -136,6 +136,29 @@ body,
   }
 }
 
+/* Initial load: subtle upward drift + fade for the content area. */
+@keyframes content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-content-enter {
+  animation: content-enter 500ms ease-out both;
+}
+
+/* View Transitions: suppress root-level crossfade so only the named
+   app-content region animates during in-app navigations. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
 @layer components {
   .nav-link-desktop {
     @apply text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;

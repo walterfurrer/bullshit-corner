@@ -22,7 +22,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-10 border-b border-border/60 bg-background/80 backdrop-blur-sm">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
-        <Link to="/" title="Home" aria-label="Home" id="logo">
+        <Link to="/" title="Home" aria-label="Home" id="logo" viewTransition>
           <div className="flex items-center gap-2.5">
             <CaretDoubleUpIcon
               size={24}
@@ -51,6 +51,7 @@ export function SiteHeader() {
                     className="nav-link-desktop"
                     activeProps={{ className: 'nav-link-active' }}
                     activeOptions={exact ? { exact: true } : undefined}
+                    viewTransition
                   >
                     {label}
                   </Link>
@@ -116,6 +117,7 @@ export function SiteHeader() {
                       activeProps={{ className: 'nav-link-mobile nav-link-active' }}
                       activeOptions={exact ? { exact: true } : undefined}
                       onClick={() => setMobileOpen(false)}
+                      viewTransition
                     >
                       {label}
                     </Link>

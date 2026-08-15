@@ -21,6 +21,9 @@ import { api } from '../../convex/_generated/api'
 const DISPLAY_NAME_MAX_LENGTH = 50
 
 export const Route = createFileRoute('/onboarding')({
+  head: () => ({
+    meta: [{ title: 'Welcome | Bullshit Corner' }],
+  }),
   component: OnboardingPage,
 })
 

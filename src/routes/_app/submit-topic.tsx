@@ -3,13 +3,23 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 
 import { SubmissionForm } from '#/components/submission-form.tsx'
 import { SiteFooter } from '#/components/site-footer.tsx'
+import { currentUserQuery } from '#/hooks/use-current-user.ts'
 import { ENABLE_AUTH } from '#/lib/feature-flags.ts'
 
 export const Route = createFileRoute('/_app/submit-topic')({
+  head: () => ({
+    meta: [{ title: 'Submit a Topic | Bullshit Corner' }],
+  }),
+  loader: async ({ context }) => {
+    const user = await context.queryClient.ensureQueryData(currentUserQuery)
+    return { user }
+  },
   component: SubmitTopicPage,
 })
 
 function SubmitTopicPage() {
+  const { user } = Route.useLoaderData()
+
   return (
     <div className="flex flex-col gap-8 sm:gap-10">
       <div className="flex flex-col gap-2">
@@ -40,7 +50,7 @@ function SubmitTopicPage() {
         </Show>
       )}
 
-      <SubmissionForm />
+      <SubmissionForm user={user} />
 
       {ENABLE_AUTH && (
         <Show when="signed-in">
@@ -48,6 +58,7 @@ function SubmitTopicPage() {
             <Link
               to="/your-submissions"
               className="font-medium transition-colors duration-200 hover:text-primary"
+              viewTransition
             >
               View your past submissions →
             </Link>

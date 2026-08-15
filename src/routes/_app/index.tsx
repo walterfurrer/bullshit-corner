@@ -12,6 +12,9 @@ import { api } from '../../../convex/_generated/api'
 const leaderboardQuery = convexQuery(api.topics.listRanked, { limit: 50 })
 
 export const Route = createFileRoute('/_app/')({
+  head: () => ({
+    meta: [{ title: 'Home | Bullshit Corner' }],
+  }),
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(leaderboardQuery)
   },
@@ -52,7 +55,7 @@ function Home() {
       <div className="flex flex-col gap-2">
         <h2>Have some bullshit to submit?</h2>
         <div className="flex flex-start">
-          <Button render={<Link to="/submit-topic" />} nativeButton={false} size="lg">Submit a Topic</Button>
+          <Button render={<Link to="/submit-topic" viewTransition />} nativeButton={false} size="lg">Submit a Topic</Button>
         </div>
       </div>
       <Leaderboard topics={topics} />

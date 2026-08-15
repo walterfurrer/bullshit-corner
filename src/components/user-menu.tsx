@@ -27,11 +27,11 @@ export function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem render={<Link to="/your-submissions" />}>
+        <DropdownMenuItem render={<Link to="/your-submissions" viewTransition />}>
           <ListBulletsIcon className="me-2 size-4" aria-hidden="true" />
           Your Submissions
         </DropdownMenuItem>
-        <DropdownMenuItem render={<Link to="/settings" />}>
+        <DropdownMenuItem render={<Link to="/settings" viewTransition />}>
           <GearSixIcon className="me-2 size-4" aria-hidden="true" />
           Settings
         </DropdownMenuItem>

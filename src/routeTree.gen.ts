@@ -15,6 +15,7 @@ import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppSubmitTopicRouteImport } from './routes/_app/submit-topic'
 import { Route as AppYourSubmissionsRouteImport } from './routes/_app/your-submissions'
+import { Route as ApiOgRouteImport } from './routes/api/og'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -45,6 +46,11 @@ const AppYourSubmissionsRoute = AppYourSubmissionsRouteImport.update({
   path: '/your-submissions',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiOgRoute = ApiOgRouteImport.update({
+  id: '/api/og',
+  path: '/api/og',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -52,12 +58,14 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/your-submissions': typeof AppYourSubmissionsRoute
+  '/api/og': typeof ApiOgRoute
 }
 export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/settings': typeof AppSettingsRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/your-submissions': typeof AppYourSubmissionsRoute
+  '/api/og': typeof ApiOgRoute
   '/': typeof AppIndexRoute
 }
 export interface FileRoutesById {
@@ -67,14 +75,26 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRoute
   '/_app/submit-topic': typeof AppSubmitTopicRoute
   '/_app/your-submissions': typeof AppYourSubmissionsRoute
+  '/api/og': typeof ApiOgRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/onboarding' | '/settings' | '/submit-topic' | '/your-submissions'
+    | '/'
+    | '/onboarding'
+    | '/settings'
+    | '/submit-topic'
+    | '/your-submissions'
+    | '/api/og'
   fileRoutesByTo: FileRoutesByTo
-  to: '/onboarding' | '/settings' | '/submit-topic' | '/your-submissions' | '/'
+  to:
+    | '/onboarding'
+    | '/settings'
+    | '/submit-topic'
+    | '/your-submissions'
+    | '/api/og'
+    | '/'
   id:
     | '__root__'
     | '/_app'
@@ -82,12 +102,14 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/submit-topic'
     | '/_app/your-submissions'
+    | '/api/og'
     | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
+  ApiOgRoute: typeof ApiOgRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -134,6 +156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppYourSubmissionsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/og': {
+      id: '/api/og'
+      path: '/api/og'
+      fullPath: '/api/og'
+      preLoaderRoute: typeof ApiOgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -156,6 +185,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
+  ApiOgRoute: ApiOgRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

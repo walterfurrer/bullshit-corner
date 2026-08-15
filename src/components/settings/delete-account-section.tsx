@@ -54,7 +54,7 @@ export function DeleteAccountSection() {
       await deleteClerkAccount()
 
       // Step 3: Redirect to home (session is now invalid)
-      void navigate({ to: '/' })
+      void navigate({ to: '/', viewTransition: true })
     } catch (e) {
       const message =
         e instanceof Error

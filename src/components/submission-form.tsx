@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useClerk } from '@clerk/tanstack-react-start'
 import { useConvexMutation } from '@convex-dev/react-query'
 import { useForm } from '@tanstack/react-form'
@@ -17,7 +17,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '#/components/ui/tooltip'
-import { useCurrentUser } from '#/hooks/use-current-user'
 import { ENABLE_AUTH } from '#/lib/feature-flags'
 import { SUBMISSION_LIMITS } from '#/lib/submission-constants'
 import {
@@ -26,17 +25,25 @@ import {
   validateTopic,
 } from '#/lib/submission-utils'
 
+import type { Doc } from '../../convex/_generated/dataModel'
+
 type SubmitStatus = 'idle' | 'auth-required' | 'success' | 'error'
 
-export function SubmissionForm() {
+interface SubmissionFormProps {
+  /** Prefetched user from the route loader. `null` means signed out. */
+  user: Doc<'users'> | null
+}
+
+export function SubmissionForm({ user }: SubmissionFormProps) {
   const { openSignIn } = useClerk()
-  const { isAuthenticated, isLoading, isRefreshing } = useConvexAuth()
-  const { user } = useCurrentUser()
+  // useConvexAuth still needed for real-time auth changes (e.g. user signs in
+  // via the auth-required flow while the form is open)
+  const { isAuthenticated } = useConvexAuth()
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle')
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   // Derive alias field behavior from user profile
-  const aliasLocked = ENABLE_AUTH && isAuthenticated && user?.alwaysAnonymous === true
+  const aliasLocked = ENABLE_AUTH && !!user && user.alwaysAnonymous === true
 
   const { mutateAsync } = useMutation({
     mutationFn: useConvexMutation(api.submissions.submit),
@@ -45,7 +52,9 @@ export function SubmissionForm() {
   const form = useForm({
     defaultValues: {
       topic: '',
-      alias: '',
+      alias: user?.alwaysAnonymous
+        ? 'Anonymous'
+        : (user?.name ?? ''),
       details: '',
     },
     onSubmit: async ({ value }) => {
@@ -100,21 +109,6 @@ export function SubmissionForm() {
       }
     },
   })
-
-  // Pre-populate alias from user profile (once, when user data first loads)
-  const hasPrePopulated = useRef(false)
-  useEffect(() => {
-    if (hasPrePopulated.current) return
-    if (!ENABLE_AUTH || !isAuthenticated || !user) return
-
-    if (user.alwaysAnonymous) {
-      form.setFieldValue('alias', 'Anonymous')
-      hasPrePopulated.current = true
-    } else if (user.name) {
-      form.setFieldValue('alias', user.name)
-      hasPrePopulated.current = true
-    }
-  }, [user, isAuthenticated, form])
 
   return (
     <form
@@ -328,36 +322,27 @@ export function SubmissionForm() {
       )}
 
       <form.Subscribe selector={(state) => state.isSubmitting}>
-        {(isSubmitting) => {
-          const authIsPending = isLoading || isRefreshing
-          const disabled = isSubmitting || authIsPending
-
-          return (
-            <Button
-              type="submit"
-              disabled={disabled}
-              className="self-start"
-              aria-busy={disabled}
-            >
-              {isSubmitting ? (
-                <>
-                  <span
-                    className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-                    aria-hidden="true"
-                  />
-                  <span>Submitting…</span>
-                </>
-              ) : authIsPending ? (
-                'Checking account…'
-              ) : (
-                'Submit Topic'
-              )}
-            </Button>
-          )
-        }}
+        {(isSubmitting) => (
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="self-start"
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <span
+                  className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                  aria-hidden="true"
+                />
+                <span>Submitting…</span>
+              </>
+            ) : (
+              'Submit Topic'
+            )}
+          </Button>
+        )}
       </form.Subscribe>
     </form>
   )
 }
-
-export default SubmissionForm
