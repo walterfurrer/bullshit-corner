@@ -9,6 +9,7 @@ export default defineSchema({
     name: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
     alwaysAnonymous: v.optional(v.boolean()),
+    deletedAt: v.optional(v.number()),
     updatedAt: v.number(),
   }).index('by_tokenIdentifier', ['tokenIdentifier']),
 

@@ -154,3 +154,47 @@ export const updateProfile = mutation({
     return user._id
   },
 })
+
+/**
+ * Soft-delete: anonymizes the user's submissions and marks the user record
+ * as deleted. Call this BEFORE deleting the user from Clerk so that the
+ * Convex auth identity is still valid during the mutation.
+ */
+export const softDelete = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) throw new ConvexError('Authentication required.')
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_tokenIdentifier', (q) =>
+        q.eq('tokenIdentifier', identity.tokenIdentifier),
+      )
+      .unique()
+
+    if (!user) throw new ConvexError('User not found.')
+
+    // Anonymize all submissions
+    const submissions = await ctx.db
+      .query('submissions')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .collect()
+
+    for (const submission of submissions) {
+      await ctx.db.patch(submission._id, { submittedBy: 'Deleted User' })
+    }
+
+    // Mark user as deleted (keep the record for referential integrity)
+    await ctx.db.patch(user._id, {
+      deletedAt: Date.now(),
+      name: undefined,
+      email: undefined,
+      imageUrl: undefined,
+      alwaysAnonymous: undefined,
+      updatedAt: Date.now(),
+    })
+
+    return user._id
+  },
+})

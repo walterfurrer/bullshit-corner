@@ -15,6 +15,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@clerk/backend": "^3.16.5",
     "@clerk/tanstack-react-start": "^1.4.29",
     "@convex-dev/rate-limiter": "^0.3.2",
     "@convex-dev/react-query": "0.1.0",
