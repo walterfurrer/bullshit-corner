@@ -9,15 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as SubmitTopicRouteImport } from './routes/submit-topic'
-import { Route as YourSubmissionsRouteImport } from './routes/your-submissions'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppSubmitTopicRouteImport } from './routes/_app/submit-topic'
+import { Route as AppYourSubmissionsRouteImport } from './routes/_app/your-submissions'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -25,74 +25,78 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SettingsRoute = SettingsRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const SubmitTopicRoute = SubmitTopicRouteImport.update({
+const AppSubmitTopicRoute = AppSubmitTopicRouteImport.update({
   id: '/submit-topic',
   path: '/submit-topic',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const YourSubmissionsRoute = YourSubmissionsRouteImport.update({
+const AppYourSubmissionsRoute = AppYourSubmissionsRouteImport.update({
   id: '/your-submissions',
   path: '/your-submissions',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
   '/onboarding': typeof OnboardingRoute
-  '/settings': typeof SettingsRoute
-  '/submit-topic': typeof SubmitTopicRoute
-  '/your-submissions': typeof YourSubmissionsRoute
+  '/settings': typeof AppSettingsRoute
+  '/submit-topic': typeof AppSubmitTopicRoute
+  '/your-submissions': typeof AppYourSubmissionsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/onboarding': typeof OnboardingRoute
-  '/settings': typeof SettingsRoute
-  '/submit-topic': typeof SubmitTopicRoute
-  '/your-submissions': typeof YourSubmissionsRoute
+  '/settings': typeof AppSettingsRoute
+  '/submit-topic': typeof AppSubmitTopicRoute
+  '/your-submissions': typeof AppYourSubmissionsRoute
+  '/': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
-  '/settings': typeof SettingsRoute
-  '/submit-topic': typeof SubmitTopicRoute
-  '/your-submissions': typeof YourSubmissionsRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/submit-topic': typeof AppSubmitTopicRoute
+  '/_app/your-submissions': typeof AppYourSubmissionsRoute
+  '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     '/' | '/onboarding' | '/settings' | '/submit-topic' | '/your-submissions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/onboarding' | '/settings' | '/submit-topic' | '/your-submissions'
+  to: '/onboarding' | '/settings' | '/submit-topic' | '/your-submissions' | '/'
   id:
     | '__root__'
-    | '/'
+    | '/_app'
     | '/onboarding'
-    | '/settings'
-    | '/submit-topic'
-    | '/your-submissions'
+    | '/_app/settings'
+    | '/_app/submit-topic'
+    | '/_app/your-submissions'
+    | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
-  SettingsRoute: typeof SettingsRoute
-  SubmitTopicRoute: typeof SubmitTopicRoute
-  YourSubmissionsRoute: typeof YourSubmissionsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -102,36 +106,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/settings': {
-      id: '/settings'
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/submit-topic': {
-      id: '/submit-topic'
+    '/_app/submit-topic': {
+      id: '/_app/submit-topic'
       path: '/submit-topic'
       fullPath: '/submit-topic'
-      preLoaderRoute: typeof SubmitTopicRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppSubmitTopicRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/your-submissions': {
-      id: '/your-submissions'
+    '/_app/your-submissions': {
+      id: '/_app/your-submissions'
       path: '/your-submissions'
       fullPath: '/your-submissions'
-      preLoaderRoute: typeof YourSubmissionsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppYourSubmissionsRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
+interface AppRouteChildren {
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppSubmitTopicRoute: typeof AppSubmitTopicRoute
+  AppYourSubmissionsRoute: typeof AppYourSubmissionsRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppSettingsRoute: AppSettingsRoute,
+  AppSubmitTopicRoute: AppSubmitTopicRoute,
+  AppYourSubmissionsRoute: AppYourSubmissionsRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
-  SettingsRoute: SettingsRoute,
-  SubmitTopicRoute: SubmitTopicRoute,
-  YourSubmissionsRoute: YourSubmissionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

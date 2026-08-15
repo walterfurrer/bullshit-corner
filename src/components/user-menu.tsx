@@ -9,23 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu.tsx'
-import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar.tsx'
-import { useCurrentUser } from '#/hooks/use-current-user.ts'
+import { Avatar, AvatarFallback } from '#/components/ui/avatar.tsx'
 
 export function UserMenu() {
-  const { user } = useCurrentUser()
   const { signOut } = useClerk()
-
-  if (!user) return null
-
-  const initials = user.name
-    ? user.name
-      .split(' ')
-      .map((part) => part[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2)
-    : null
 
   return (
     <DropdownMenu>
@@ -34,11 +21,8 @@ export function UserMenu() {
         aria-label="User menu"
       >
         <Avatar>
-          {user.imageUrl && (
-            <AvatarImage src={user.imageUrl} alt="" />
-          )}
           <AvatarFallback>
-            {initials ?? <UserIcon className="size-4" aria-hidden="true" />}
+            <UserIcon className="size-6 text-primary" aria-hidden="true" />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

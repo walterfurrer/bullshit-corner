@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
+import { auth } from '@clerk/tanstack-react-start/server'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useConvexAuth, useMutation } from 'convex/react'
-import { auth } from '@clerk/tanstack-react-start/server'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 
-import { useCurrentUser } from '#/hooks/use-current-user.ts'
-import { ENABLE_AUTH } from '#/lib/feature-flags.ts'
-import { SiteHeader } from '#/components/site-header.tsx'
+import { ConnectionsSection } from '#/components/settings/connections-section.tsx'
+import { DeleteAccountSection } from '#/components/settings/delete-account-section.tsx'
+import { EmailSection } from '#/components/settings/email-section.tsx'
+import { PasswordSection } from '#/components/settings/password-section.tsx'
 import { Button } from '#/components/ui/button.tsx'
 import {
   Card,
@@ -16,26 +17,21 @@ import {
 } from '#/components/ui/card.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
-import { Switch } from '#/components/ui/switch.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
-import {
-  SettingsLayoutSidebar,
-  type SettingsSection,
-} from '#/components/settings/settings-layout-sidebar.tsx'
-import { EmailSection } from '#/components/settings/email-section.tsx'
-import { PasswordSection } from '#/components/settings/password-section.tsx'
-import { ConnectionsSection } from '#/components/settings/connections-section.tsx'
-import { DeleteAccountSection } from '#/components/settings/delete-account-section.tsx'
+import { Switch } from '#/components/ui/switch.tsx'
+import { useCurrentUser } from '#/hooks/use-current-user.ts'
+import { ENABLE_AUTH } from '#/lib/feature-flags.ts'
+import { cn } from '#/lib/utils.ts'
 import { getAccountDetails } from '#/server/account.ts'
 
-import { api } from '../../convex/_generated/api'
+import { api } from '../../../convex/_generated/api'
 
 import type { AccountDetails } from '#/server/account.ts'
 
 /** Client-side mirror of convex/constants.ts (can't import across runtime boundary). */
 const DISPLAY_NAME_MAX_LENGTH = 50
 
-export const Route = createFileRoute('/settings')({
+export const Route = createFileRoute('/_app/settings')({
   beforeLoad: async () => {
     if (!ENABLE_AUTH) {
       throw redirect({ to: '/' })
@@ -50,6 +46,66 @@ export const Route = createFileRoute('/settings')({
   },
   component: SettingsPage,
 })
+
+// ---------------------------------------------------------------------------
+// Settings Layout (sidebar nav + content panel)
+// ---------------------------------------------------------------------------
+
+interface SettingsSection {
+  id: string
+  label: string
+  content: ReactNode
+}
+
+function SettingsLayout({ sections }: { sections: SettingsSection[] }) {
+  const [activeSection, setActiveSection] = useState(sections[0]?.id ?? '')
+
+  // Sync activeSection if sections change and current is gone
+  useEffect(() => {
+    if (sections.length > 0 && !sections.some((s) => s.id === activeSection)) {
+      setActiveSection(sections[0].id)
+    }
+  }, [sections, activeSection])
+
+  const activeContent = sections.find((s) => s.id === activeSection)?.content
+
+  return (
+    <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+      {/* Sidebar — vertical on desktop, horizontal scroll on mobile */}
+      <nav
+        aria-label="Settings sections"
+        className="shrink-0 md:w-48 lg:w-56"
+      >
+        <ul className="flex gap-1 overflow-x-auto pb-2 md:flex-col md:gap-0.5 md:overflow-x-visible md:pb-0">
+          {sections.map((section) => (
+            <li key={section.id}>
+              <button
+                type="button"
+                onClick={() => setActiveSection(section.id)}
+                className={cn(
+                  'w-full whitespace-nowrap rounded-sm px-3 py-2 text-start text-sm font-medium transition-colors',
+                  activeSection === section.id
+                    ? 'bg-accent text-accent-foreground'
+                    : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
+                )}
+                aria-current={activeSection === section.id ? 'page' : undefined}
+              >
+                {section.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Content area */}
+      <div className="min-w-0 flex-1">{activeContent}</div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Settings Page
+// ---------------------------------------------------------------------------
 
 function SettingsPage() {
   const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth()
@@ -102,7 +158,7 @@ function SettingsPage() {
     }
   }, [user?.name])
 
-  // --- Identity & Privacy handlers (unchanged) ---
+  // --- Identity & Privacy handlers ---
 
   async function handleSaveName() {
     setNameError(null)
@@ -195,7 +251,7 @@ function SettingsPage() {
     return null
   }
 
-  // --- Build sections array for the layout switcher ---
+  // --- Build sections array for the layout ---
 
   const sections: SettingsSection[] = [
     {
@@ -266,16 +322,15 @@ function SettingsPage() {
 
   return (
     <>
-      <SiteHeader />
-      <div className="mx-auto w-full max-w-3xl px-4 py-10">
-        <h1 className="mb-6 text-2xl font-bold">Settings</h1>
-        <SettingsLayoutSidebar sections={sections} />
-      </div>
+      <h1 className="mb-4">Settings</h1>
+      <SettingsLayout sections={sections} />
     </>
   )
 }
 
-// --- Sub-components extracted for readability ---
+// ---------------------------------------------------------------------------
+// Sub-components
+// ---------------------------------------------------------------------------
 
 interface IdentitySectionProps {
   user: { alwaysAnonymous?: boolean; name?: string }
