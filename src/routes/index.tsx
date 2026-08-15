@@ -56,9 +56,7 @@ function Home() {
           <h2>Have some bullshit to submit?</h2>
           <div className="flex flex-start">
 
-            <Button asChild size="lg">
-              <Link to="/submit-topic">Submit a Topic</Link>
-            </Button>
+            <Button render={<Link to="/submit-topic" />} nativeButton={false} size="lg">Submit a Topic</Button>
           </div>
         </div>
         <Leaderboard topics={topics} />

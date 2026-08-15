@@ -30,7 +30,7 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="rounded-full outline-hidden ring-2 ring-transparent transition-all hover:ring-border focus-visible:ring-ring data-[state=open]:ring-border"
+        className="rounded-full outline-hidden ring-2 ring-transparent transition-all hover:ring-border focus-visible:ring-ring data-popup-open:ring-border"
         aria-label="User menu"
       >
         <Avatar>
@@ -43,17 +43,13 @@ export function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem asChild>
-          <Link to="/your-submissions">
-            <ListBulletsIcon className="me-2 size-4" aria-hidden="true" />
-            Your Submissions
-          </Link>
+        <DropdownMenuItem render={<Link to="/your-submissions" />}>
+          <ListBulletsIcon className="me-2 size-4" aria-hidden="true" />
+          Your Submissions
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/settings">
-            <GearSixIcon className="me-2 size-4" aria-hidden="true" />
-            Settings
-          </Link>
+        <DropdownMenuItem render={<Link to="/settings" />}>
+          <GearSixIcon className="me-2 size-4" aria-hidden="true" />
+          Settings
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>

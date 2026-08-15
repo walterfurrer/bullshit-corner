@@ -47,15 +47,17 @@ export function SiteFooter() {
             </a>
 
             <Tooltip open={copied || undefined}>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => copy(DISCORD_USERNAME)}
-                  aria-label="Copy Discord username to clipboard"
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  <DiscordLogoIcon size={24} weight="regular" />
-                </button>
+              <TooltipTrigger
+                render={
+                  <button
+                    type="button"
+                    onClick={() => copy(DISCORD_USERNAME)}
+                    aria-label="Copy Discord username to clipboard"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  />
+                }
+              >
+                <DiscordLogoIcon size={24} weight="regular" />
               </TooltipTrigger>
               <TooltipContent>{copied ? 'Copied!' : DISCORD_USERNAME}</TooltipContent>
             </Tooltip>

@@ -91,18 +91,20 @@ export function DeleteAccountSection() {
         </div>
 
         <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <AlertDialogTrigger asChild>
-            <Button
-              variant="destructive"
-              className="self-start"
-              onClick={() => {
-                setConfirmInput('')
-                setError(null)
-              }}
-            >
-              <TrashIcon className="size-4" aria-hidden="true" />
-              Delete my account
-            </Button>
+          <AlertDialogTrigger
+            render={
+              <Button
+                variant="destructive"
+                className="self-start"
+                onClick={() => {
+                  setConfirmInput('')
+                  setError(null)
+                }}
+              />
+            }
+          >
+            <TrashIcon className="size-4" aria-hidden="true" />
+            Delete my account
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -161,6 +163,6 @@ export function DeleteAccountSection() {
           </AlertDialogContent>
         </AlertDialog>
       </CardContent>
-    </Card>
+    </Card >
   )
 }

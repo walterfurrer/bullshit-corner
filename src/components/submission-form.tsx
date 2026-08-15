@@ -197,17 +197,15 @@ export function SubmissionForm() {
               {aliasLocked ? (
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span tabIndex={0} className="w-full">
-                        <Input
-                          id={field.name}
-                          name={field.name}
-                          value="Anonymous"
-                          disabled
-                          placeholder="Anonymous if left blank."
-                          aria-describedby={`${field.name}-tooltip`}
-                        />
-                      </span>
+                    <TooltipTrigger render={<span tabIndex={0} className="w-full" />}>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        value="Anonymous"
+                        disabled
+                        placeholder="Anonymous if left blank."
+                        aria-describedby={`${field.name}-tooltip`}
+                      />
                     </TooltipTrigger>
                     <TooltipContent id={`${field.name}-tooltip`}>
                       Change this in Settings to use a display name.

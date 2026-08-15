@@ -72,9 +72,7 @@ function AuthGate() {
       <p className="text-sm text-muted-foreground sm:text-base">
         You must be logged in to see this page.
       </p>
-      <Button asChild variant="outline">
-        <Link to="/">Go to Home</Link>
-      </Button>
+      <Button render={<Link to="/" />} nativeButton={false} variant="outline">Go to Home</Button>
     </div>
   )
 }
@@ -90,9 +88,7 @@ function SubmissionsList() {
         <p className="text-sm text-muted-foreground sm:text-base">
           You haven't submitted any topics yet.
         </p>
-        <Button asChild>
-          <Link to="/submit-topic">Submit a Topic</Link>
-        </Button>
+        <Button render={<Link to="/submit-topic" />} nativeButton={false}>Submit a Topic</Button>
       </div>
     )
   }

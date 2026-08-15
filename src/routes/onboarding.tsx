@@ -65,9 +65,7 @@ function OnboardingPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild className="w-full">
-              <Link to="/">Continue to Home</Link>
-            </Button>
+            <Button render={<Link to="/" />} nativeButton={false} className="w-full">Continue to Home</Button>
           </CardContent>
         </Card>
       </div>
