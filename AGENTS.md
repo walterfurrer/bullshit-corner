@@ -46,7 +46,7 @@ pnpm add nitro@npm:nitro-nightly@latest
 | Data fetching | TanStack Query, wired to Convex via `@convex-dev/react-query` |
 | Backend / DB | Convex (real-time document DB + serverless functions in `convex/`) |
 | Styling | Tailwind CSS v4 (`@tailwindcss/vite`) |
-| Components | shadcn/ui (`components.json`, `new-york` style, icons via `lucide-react`) |
+| Components | shadcn/ui (`components.json`, `base-vega` style, Base UI primitives via `@base-ui/react`, icons via `@phosphor-icons/react`) |
 | Build | Vite 8 |
 | Server runtime / deploy target | Nitro (added manually — see Deployment) |
 | Package manager | pnpm (`pnpm-workspace.yaml` present; enforced via `packageManager` in package.json if pinned later) |
