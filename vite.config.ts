@@ -8,6 +8,7 @@ import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
+  logLevel: 'warn', // only warnings and errors, no info
   resolve: { tsconfigPaths: true },
   plugins: [devtools(), tailwindcss(), tanstackStart(), nitro(), viteReact()],
 })
