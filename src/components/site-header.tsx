@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {
-  Show,
   SignInButton,
+  useAuth,
 } from '@clerk/tanstack-react-start'
 import { CaretDoubleUpIcon, ListIcon, XIcon } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
@@ -17,6 +17,7 @@ const navLinks = [
 
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const { isLoaded, isSignedIn } = useAuth()
 
   return (
     <header className="sticky top-0 z-10 border-b border-border/60 bg-background/80 backdrop-blur-sm">
@@ -60,25 +61,30 @@ export function SiteHeader() {
 
           {ENABLE_AUTH && (
             <>
-              <Show when="signed-out">
+              {!isLoaded ? (
+                <div className="size-8 rounded-full bg-muted animate-pulse" />
+              ) : isSignedIn ? (
+                <UserMenu />
+              ) : (
                 <SignInButton mode="modal">
                   <Button variant="outline" size="sm">
                     Sign in
                   </Button>
                 </SignInButton>
-              </Show>
-              <Show when="signed-in">
-                <UserMenu />
-              </Show>
+              )}
             </>
           )}
         </div>
 
         <div className="flex items-center gap-2 sm:hidden">
           {ENABLE_AUTH && (
-            <Show when="signed-in">
-              <UserMenu />
-            </Show>
+            <>
+              {!isLoaded ? (
+                <div className="size-8 rounded-full bg-muted animate-pulse" />
+              ) : isSignedIn ? (
+                <UserMenu />
+              ) : null}
+            </>
           )}
           <Button
             variant="ghost"
@@ -117,7 +123,7 @@ export function SiteHeader() {
                 ))}
                 {ENABLE_AUTH && (
                   <li className="border-t border-border/60 px-4 py-2.5">
-                    <Show when="signed-out">
+                    {isLoaded && !isSignedIn && (
                       <SignInButton mode="modal">
                         <Button
                           variant="outline"
@@ -128,7 +134,7 @@ export function SiteHeader() {
                           Sign in or create account
                         </Button>
                       </SignInButton>
-                    </Show>
+                    )}
                   </li>
                 )}
               </ul>

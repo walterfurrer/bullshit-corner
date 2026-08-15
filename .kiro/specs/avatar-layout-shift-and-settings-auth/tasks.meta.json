@@ -1,0 +1,145 @@
+{
+  "pbtResults": {
+    "1. Write bug condition exploration test": {
+      "status": "passed",
+      "failingExample": "Bug 1 Counterexamples:\n- Test \"SiteHeader uses useAuth() for conditional rendering instead of <Show>\": useAuthCalled=false (expected true). The unfixed code uses <Show> from Clerk which renders nothing during auth loading, never calling useAuth().\n- Property test counterexample: {\"isLoaded\":false,\"isSignedIn\":undefined,\"userId\":undefined} → renderDecision='nothing' (expected 'placeholder'). <Show> swallows content during loading state.\n\nBug 2 Counterexamples:\n- Test \"beforeLoad completes without throwing\": TypeError: Cannot read properties of undefined (reading 'auth') — auth() is called without server context on client-side navigation.\n- Property test counterexample: {\"userId\":\" \"} → beforeLoad threw TypeError in client-side context: Cannot read properties of undefined (reading 'auth'). Shrunk from 3 attempts, fails on first generated input regardless of userId value.",
+      "lastRunTimestamp": 1786802183756
+    },
+    "2. Write preservation property tests (BEFORE implementing fix)": {
+      "status": "passed",
+      "lastRunTimestamp": 1786802529236
+    },
+    "3.3 Verify bug condition exploration test now passes": {
+      "status": "passed",
+      "lastRunTimestamp": 1786802848268
+    }
+  },
+  "executionHistory": {
+    "1. Write bug condition exploration test": [
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802033783
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802039034
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802197616
+      }
+    ],
+    "2. Write preservation property tests (BEFORE implementing fix)": [
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802033811
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802200338
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802548448
+      }
+    ],
+    "3.1 Fix site-header.tsx — Replace `<Show>` with `useAuth()`-driven rendering": [
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802033838
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802554215
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802615988
+      }
+    ],
+    "3.2 Fix settings.tsx — Wrap `auth()` in server-only guard": [
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802033864
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802618795
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802656615
+      }
+    ],
+    "3.3 Verify bug condition exploration test now passes": [
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802033901
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802659583
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802864428
+      }
+    ],
+    "3.4 Verify preservation tests still pass": [
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802033936
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802867269
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786803035052
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786802033968
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786803038582
+      },
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786803051605
+      }
+    ],
+    "3. Fix for Avatar Layout Shift & Settings Auth Crash": [
+      {
+        "executionId": "8a1ddb8e-3a6a-4229-9232-89a206d6652e",
+        "chatSessionId": "sess_e8a6be09-6f71-485b-b592-537d0481d185",
+        "timestamp": 1786803035089
+      }
+    ]
+  }
+}

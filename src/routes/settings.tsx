@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useConvexAuth, useMutation } from 'convex/react'
+import { auth } from '@clerk/tanstack-react-start/server'
 
 import { useCurrentUser } from '#/hooks/use-current-user.ts'
 import { ENABLE_AUTH } from '#/lib/feature-flags.ts'
@@ -35,11 +36,22 @@ import type { AccountDetails } from '#/server/account.ts'
 const DISPLAY_NAME_MAX_LENGTH = 50
 
 export const Route = createFileRoute('/settings')({
+  beforeLoad: async () => {
+    if (!ENABLE_AUTH) {
+      throw redirect({ to: '/' })
+    }
+
+    if (typeof window === 'undefined') {
+      const { userId } = await auth()
+      if (!userId) {
+        throw redirect({ to: '/' })
+      }
+    }
+  },
   component: SettingsPage,
 })
 
 function SettingsPage() {
-  const navigate = useNavigate()
   const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth()
   const { user, isLoading: isUserLoading } = useCurrentUser()
   const updateProfile = useMutation(api.users.updateProfile)
@@ -89,18 +101,6 @@ function SettingsPage() {
       setDisplayName(user.name)
     }
   }, [user?.name])
-
-  // Route guard: redirect if auth disabled or not authenticated
-  useEffect(() => {
-    if (!ENABLE_AUTH) {
-      void navigate({ to: '/' })
-      return
-    }
-
-    if (!isAuthLoading && !isAuthenticated) {
-      void navigate({ to: '/' })
-    }
-  }, [isAuthLoading, isAuthenticated, navigate])
 
   // --- Identity & Privacy handlers (unchanged) ---
 
@@ -186,10 +186,6 @@ function SettingsPage() {
   }
 
   // --- Early returns ---
-
-  if (!ENABLE_AUTH) {
-    return null
-  }
 
   if (isLoading) {
     return null
