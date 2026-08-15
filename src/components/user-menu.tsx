@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu.tsx'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar.tsx'
-import { Button } from '#/components/ui/button.tsx'
 import { useCurrentUser } from '#/hooks/use-current-user.ts'
 
 export function UserMenu() {
@@ -30,22 +29,18 @@ export function UserMenu() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="rounded-full ring-2 ring-transparent transition-all hover:ring-border focus-visible:ring-ring data-[state=open]:ring-border"
-          aria-label="User menu"
-        >
-          <Avatar>
-            {user.imageUrl && (
-              <AvatarImage src={user.imageUrl} alt="" />
-            )}
-            <AvatarFallback>
-              {initials ?? <UserIcon className="size-4" aria-hidden="true" />}
-            </AvatarFallback>
-          </Avatar>
-        </Button>
+      <DropdownMenuTrigger
+        className="rounded-full outline-hidden ring-2 ring-transparent transition-all hover:ring-border focus-visible:ring-ring data-[state=open]:ring-border"
+        aria-label="User menu"
+      >
+        <Avatar>
+          {user.imageUrl && (
+            <AvatarImage src={user.imageUrl} alt="" />
+          )}
+          <AvatarFallback>
+            {initials ?? <UserIcon className="size-4" aria-hidden="true" />}
+          </AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem asChild>
