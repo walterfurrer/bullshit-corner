@@ -2,6 +2,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 import { TopicListItem } from '#/components/admin/topicListItem'
+import { cn } from '#/lib/utils'
 
 interface SortableTopicItemProps {
   id: string
@@ -10,6 +11,7 @@ interface SortableTopicItemProps {
   description?: string
   isFirst: boolean
   isLast: boolean
+  moveDirection?: 'up' | 'down' | null
   onEdit: (id: string) => void
   onRemove: (id: string) => void
   onMoveUp: (id: string) => void
@@ -32,7 +34,15 @@ export function SortableTopicItem(props: SortableTopicItemProps) {
   }
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        props.moveDirection === 'up' && 'animate-bump-up',
+        props.moveDirection === 'down' && 'animate-bump-down',
+      )}
+      {...attributes}
+    >
       <TopicListItem
         {...props}
         isDragging={isDragging}

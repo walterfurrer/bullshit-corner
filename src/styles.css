@@ -203,6 +203,27 @@ body,
   animation: content-enter 500ms ease-out both;
 }
 
+/* Button-based reorder: subtle vertical slide with a small overshoot. */
+@keyframes bump-up {
+  0% { transform: translateY(100%); }
+  60% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes bump-down {
+  0% { transform: translateY(-100%); }
+  60% { transform: translateY(4px); }
+  100% { transform: translateY(0); }
+}
+
+@utility animate-bump-up {
+  animation: bump-up 250ms ease-out;
+}
+
+@utility animate-bump-down {
+  animation: bump-down 250ms ease-out;
+}
+
 /* View Transitions: suppress root-level crossfade so only the named
    app-content region animates during in-app navigations. */
 ::view-transition-old(root),

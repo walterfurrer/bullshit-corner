@@ -18,7 +18,7 @@ import { Route as AppUserSettingsRouteImport } from './routes/_app/userSettings'
 import { Route as AppYourSubmissionsRouteImport } from './routes/_app/your-submissions'
 import { Route as ApiOgRouteImport } from './routes/api/og'
 import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
-import { Route as AppAdminLeaderboardRouteImport } from './routes/_app/admin/leaderboard'
+import { Route as AppAdminLeaderboardManagementRouteImport } from './routes/_app/admin/leaderboardManagement'
 import { Route as AppAdminSubmissionsRouteImport } from './routes/_app/admin/submissions'
 
 const AppRoute = AppRouteImport.update({
@@ -65,11 +65,12 @@ const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppAdminRoute,
 } as any)
-const AppAdminLeaderboardRoute = AppAdminLeaderboardRouteImport.update({
-  id: '/leaderboard',
-  path: '/leaderboard',
-  getParentRoute: () => AppAdminRoute,
-} as any)
+const AppAdminLeaderboardManagementRoute =
+  AppAdminLeaderboardManagementRouteImport.update({
+    id: '/leaderboardManagement',
+    path: '/leaderboardManagement',
+    getParentRoute: () => AppAdminRoute,
+  } as any)
 const AppAdminSubmissionsRoute = AppAdminSubmissionsRouteImport.update({
   id: '/submissions',
   path: '/submissions',
@@ -84,7 +85,7 @@ export interface FileRoutesByFullPath {
   '/userSettings': typeof AppUserSettingsRoute
   '/your-submissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
-  '/admin/leaderboard': typeof AppAdminLeaderboardRoute
+  '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
   '/admin/': typeof AppAdminIndexRoute
 }
@@ -95,7 +96,7 @@ export interface FileRoutesByTo {
   '/your-submissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
   '/': typeof AppIndexRoute
-  '/admin/leaderboard': typeof AppAdminLeaderboardRoute
+  '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
   '/admin': typeof AppAdminIndexRoute
 }
@@ -109,7 +110,7 @@ export interface FileRoutesById {
   '/_app/your-submissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/admin/leaderboard': typeof AppAdminLeaderboardRoute
+  '/_app/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/_app/admin/submissions': typeof AppAdminSubmissionsRoute
   '/_app/admin/': typeof AppAdminIndexRoute
 }
@@ -123,7 +124,7 @@ export interface FileRouteTypes {
     | '/userSettings'
     | '/your-submissions'
     | '/api/og'
-    | '/admin/leaderboard'
+    | '/admin/leaderboardManagement'
     | '/admin/submissions'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -134,7 +135,7 @@ export interface FileRouteTypes {
     | '/your-submissions'
     | '/api/og'
     | '/'
-    | '/admin/leaderboard'
+    | '/admin/leaderboardManagement'
     | '/admin/submissions'
     | '/admin'
   id:
@@ -147,7 +148,7 @@ export interface FileRouteTypes {
     | '/_app/your-submissions'
     | '/api/og'
     | '/_app/'
-    | '/_app/admin/leaderboard'
+    | '/_app/admin/leaderboardManagement'
     | '/_app/admin/submissions'
     | '/_app/admin/'
   fileRoutesById: FileRoutesById
@@ -223,11 +224,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminIndexRouteImport
       parentRoute: typeof AppAdminRoute
     }
-    '/_app/admin/leaderboard': {
-      id: '/_app/admin/leaderboard'
-      path: '/leaderboard'
-      fullPath: '/admin/leaderboard'
-      preLoaderRoute: typeof AppAdminLeaderboardRouteImport
+    '/_app/admin/leaderboardManagement': {
+      id: '/_app/admin/leaderboardManagement'
+      path: '/leaderboardManagement'
+      fullPath: '/admin/leaderboardManagement'
+      preLoaderRoute: typeof AppAdminLeaderboardManagementRouteImport
       parentRoute: typeof AppAdminRoute
     }
     '/_app/admin/submissions': {
@@ -241,13 +242,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppAdminRouteChildren {
-  AppAdminLeaderboardRoute: typeof AppAdminLeaderboardRoute
+  AppAdminLeaderboardManagementRoute: typeof AppAdminLeaderboardManagementRoute
   AppAdminSubmissionsRoute: typeof AppAdminSubmissionsRoute
   AppAdminIndexRoute: typeof AppAdminIndexRoute
 }
 
 const AppAdminRouteChildren: AppAdminRouteChildren = {
-  AppAdminLeaderboardRoute: AppAdminLeaderboardRoute,
+  AppAdminLeaderboardManagementRoute: AppAdminLeaderboardManagementRoute,
   AppAdminSubmissionsRoute: AppAdminSubmissionsRoute,
   AppAdminIndexRoute: AppAdminIndexRoute,
 }

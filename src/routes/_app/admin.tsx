@@ -15,8 +15,8 @@ import { cn } from '#/lib/utils'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 const adminSections = [
-  { to: '/admin/leaderboard', label: 'Leaderboard' },
-  { to: '/admin/submissions', label: 'Submissions' },
+  { to: '/admin/leaderboardManagement', label: 'Leaderboard Management' },
+  { to: '/admin/submissions', label: 'View Submissions' },
 ] as const
 
 const clerkClient = createClerkClient({
