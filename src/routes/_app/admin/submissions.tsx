@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
-import { SubmissionCard } from '#/components/admin/submissionCard'
+import { SubmissionCard } from '#/components/submissionCard'
 import {
   SubmissionFilters,
   type SubmissionFilter,
@@ -106,6 +106,7 @@ function SubmissionsReview() {
           {submissions.map((submission) => (
             <SubmissionCard
               key={submission._id}
+              variant="actionable"
               id={submission._id}
               topic={submission.topic}
               details={submission.details}

@@ -35,7 +35,7 @@ export function UserMenu() {
           <ListBulletsIcon className="me-2 size-4" aria-hidden="true" />
           Your Submissions
         </DropdownMenuItem>
-        <DropdownMenuItem render={<Link to="/settings" viewTransition />}>
+        <DropdownMenuItem render={<Link to="/userSettings" viewTransition />}>
           <GearSixIcon className="me-2 size-4" aria-hidden="true" />
           Settings
         </DropdownMenuItem>

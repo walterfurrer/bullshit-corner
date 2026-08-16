@@ -31,7 +31,7 @@ import type { AccountDetails } from '#/server/account.ts'
 /** Client-side mirror of convex/constants.ts (can't import across runtime boundary). */
 const DISPLAY_NAME_MAX_LENGTH = 50
 
-export const Route = createFileRoute('/_app/settings')({
+export const Route = createFileRoute('/_app/userSettings')({
   head: () => ({
     meta: [{ title: 'Settings | Bullshit Corner' }],
   }),

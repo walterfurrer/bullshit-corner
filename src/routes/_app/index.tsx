@@ -29,11 +29,11 @@ function Home() {
     <div className="flex flex-col gap-8 sm:gap-10">
       <div className="flex flex-col">
         <h1>
-          The Bullshit Corner Leaderboard
+          Welcome to Bullshit Corner
         </h1>
         <div className="flex flex-col gap-2">
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Every week the audience of the{" "}
+            Bullshit Corner is a segment on the Formula 1 podcast, {" "}
             <a
               href="https://www.thehighperformancepodcast.com/high-performance-racing"
               target="_blank"
@@ -42,13 +42,10 @@ function Home() {
             >
               High Performance Racing
             </a>
-            {" "}podcast gets to submit things from the world of Formula 1 to go into Bullshit Corner.
+            {" "} where co-hosts Jake Humphrey, Otmar Szafnauer, and Rob Smedley discuss, debate, and rank various fan-submitted topics surrounding Formula 1.
           </p>
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-            It can be a bullshit opinion, a bullshit race, a part of a car, a season, a person, a thing...anything you like!
-          </p>
-          <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Co-hosts Jake Humphrey, Otmar Szafnauer, and Rob Smedley will then debate them, decide if they deserve to enter Bullshit Corner, and rank them.
+            Here you can view the offical HPR Leaderboard, submit your own entires for a future episode, and even provide your own rankings to the community-based leaderboard.
           </p>
         </div>
       </div>

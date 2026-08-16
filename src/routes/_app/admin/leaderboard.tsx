@@ -12,7 +12,6 @@ import {
   type DragEndEvent,
 } from '@dnd-kit/core'
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
@@ -136,7 +135,7 @@ function LeaderboardManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Leaderboard Management</h1>
-        <Button onClick={() => setShowCreate(true)}>Add Topic</Button>
+        <Button onClick={() => setShowCreate(true)}>Add Leaderboard Entry</Button>
       </div>
 
       {topics.length === 0 ? (
