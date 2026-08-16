@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '#/components/ui/tooltip.tsx'
-import { useCopyToClipboard } from '#/hooks/use-copy-to-clipboard.ts'
+import { useCopyToClipboard } from '#/hooks/useCopyToClipboard'
 
 const DISCORD_USERNAME = 'walterfurrer'
 

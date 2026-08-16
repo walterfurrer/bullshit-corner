@@ -2,12 +2,27 @@ import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 
 import {
   TopicForm,
   type TopicFormValues,
-} from '#/components/admin/topic-form.tsx'
-import { TopicListItem } from '#/components/admin/topic-list-item.tsx'
+} from '#/components/admin/topicForm'
+import { SortableTopicItem } from '#/components/admin/sortableTopicItem'
 import { Button } from '#/components/ui/button.tsx'
 import {
   Dialog,
@@ -32,6 +47,15 @@ function LeaderboardManagement() {
   const { data: topics } = useSuspenseQuery(topicsQuery)
   const [editingId, setEditingId] = useState<Id<'topics'> | null>(null)
   const [showCreate, setShowCreate] = useState(false)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  )
 
   const createMutation = useMutation({
     mutationFn: useConvexMutation(api.admin.topics.create),
@@ -90,6 +114,24 @@ function LeaderboardManagement() {
     removeMutation.mutate({ id: id as Id<'topics'> })
   }
 
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = topics.findIndex((t) => t._id === active.id)
+    const newIndex = topics.findIndex((t) => t._id === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    // The new ranking is the position (1-indexed) at the drop target
+    const newRanking = newIndex + 1
+    reorderMutation.mutate({
+      id: active.id as Id<'topics'>,
+      newRanking,
+    })
+  }
+
+  const topicIds = topics.map((t) => t._id)
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -102,23 +144,34 @@ function LeaderboardManagement() {
           No topics yet. Add one to get started.
         </p>
       ) : (
-        <div className="space-y-2">
-          {topics.map((topic, index) => (
-            <TopicListItem
-              key={topic._id}
-              id={topic._id}
-              ranking={topic.ranking}
-              title={topic.title}
-              description={topic.description}
-              isFirst={index === 0}
-              isLast={index === topics.length - 1}
-              onEdit={(id) => setEditingId(id as Id<'topics'>)}
-              onRemove={handleRemove}
-              onMoveUp={handleMoveUp}
-              onMoveDown={handleMoveDown}
-            />
-          ))}
-        </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={topicIds}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-2">
+              {topics.map((topic, index) => (
+                <SortableTopicItem
+                  key={topic._id}
+                  id={topic._id}
+                  ranking={topic.ranking}
+                  title={topic.title}
+                  description={topic.description}
+                  isFirst={index === 0}
+                  isLast={index === topics.length - 1}
+                  onEdit={(id) => setEditingId(id as Id<'topics'>)}
+                  onRemove={handleRemove}
+                  onMoveUp={handleMoveUp}
+                  onMoveDown={handleMoveDown}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
 
       {/* Create Dialog */}

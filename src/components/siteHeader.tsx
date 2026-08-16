@@ -2,14 +2,13 @@ import * as React from 'react'
 import {
   SignInButton,
   useAuth,
-  useUser,
 } from '@clerk/tanstack-react-start'
 import { CaretDoubleUpIcon, ListIcon, XIcon } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 
 import { Button } from '#/components/ui/button.tsx'
-import { UserMenu } from '#/components/user-menu.tsx'
-import { ENABLE_AUTH } from '#/lib/feature-flags'
+import { UserMenu } from '#/components/userMenu'
+import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 const navLinks = [
   { to: '/' as const, label: 'Home', exact: true },
@@ -19,8 +18,6 @@ const navLinks = [
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const { isLoaded, isSignedIn } = useAuth()
-  const { user } = useUser()
-  const isAdmin = ENABLE_AUTH && (user?.publicMetadata as any)?.role === 'admin'
 
   return (
     <header className="sticky top-0 z-10 border-b border-border/60 bg-background/80 backdrop-blur-sm">
@@ -60,18 +57,6 @@ export function SiteHeader() {
                   </Link>
                 </li>
               ))}
-              {isAdmin && (
-                <li>
-                  <Link
-                    to="/admin"
-                    className="nav-link-desktop"
-                    activeProps={{ className: 'nav-link-active' }}
-                    viewTransition
-                  >
-                    Admin
-                  </Link>
-                </li>
-              )}
             </ul>
           </nav>
 
@@ -138,19 +123,6 @@ export function SiteHeader() {
                     </Link>
                   </li>
                 ))}
-                {isAdmin && (
-                  <li>
-                    <Link
-                      to="/admin"
-                      className="nav-link-mobile"
-                      activeProps={{ className: 'nav-link-mobile nav-link-active' }}
-                      onClick={() => setMobileOpen(false)}
-                      viewTransition
-                    >
-                      Admin
-                    </Link>
-                  </li>
-                )}
                 {ENABLE_AUTH && (
                   <li className="border-t border-border/60 px-4 py-2.5">
                     {isLoaded && !isSignedIn && (

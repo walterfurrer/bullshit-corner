@@ -12,8 +12,8 @@ import { createServerFn } from '@tanstack/react-start'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { Analytics } from '@vercel/analytics/react'
 
-import { OnboardingGuard } from '../components/onboarding-guard'
-import { SyncUser } from '../components/sync-user'
+import { OnboardingGuard } from '../components/onboardingGuard'
+import { SyncUser } from '../components/syncUser'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'

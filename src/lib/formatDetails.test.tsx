@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-import { FormatDetails } from './format-details'
+import { FormatDetails } from './formatDetails'
 
 function render(text: string, className?: string) {
   return renderToStaticMarkup(<FormatDetails text={text} className={className} />)

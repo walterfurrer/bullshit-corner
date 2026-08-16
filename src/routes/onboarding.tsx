@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useMutation } from 'convex/react'
 
-import { useCurrentUser } from '#/hooks/use-current-user.ts'
-import { ENABLE_AUTH } from '#/lib/feature-flags.ts'
+import { useCurrentUser } from '#/hooks/useCurrentUser.ts'
+import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { Button } from '#/components/ui/button.tsx'
 import {
   Card,

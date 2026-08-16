@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
-import { SiteHeader } from '#/components/site-header.tsx'
+import { SiteHeader } from '#/components/siteHeader'
 
 export const Route = createFileRoute('/_app')({
   component: AppLayout,

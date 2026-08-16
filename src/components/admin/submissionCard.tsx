@@ -1,3 +1,9 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '#/components/ui/accordion.tsx'
 import { Button } from '#/components/ui/button.tsx'
 
 interface SubmissionCardProps {
@@ -45,9 +51,6 @@ export function SubmissionCard({
           <p className="font-medium text-foreground">
             {truncateText(topic, 200)}
           </p>
-          {details && (
-            <p className="mt-1 text-sm text-muted-foreground">{details}</p>
-          )}
         </div>
         <Button
           variant={isChosen ? 'outline' : 'default'}
@@ -58,6 +61,20 @@ export function SubmissionCard({
           {isChosen ? 'Undo' : 'Choose'}
         </Button>
       </div>
+
+      {details && (
+        <Accordion>
+          <AccordionItem value="details" className="border-none">
+            <AccordionTrigger className="py-1 text-xs text-muted-foreground hover:no-underline">
+              Details
+            </AccordionTrigger>
+            <AccordionContent className="text-sm text-muted-foreground">
+              {details}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      )}
+
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
         {submittedBy && <span>{submittedBy}</span>}
         <span>{formatDate(submittedAt)}</span>

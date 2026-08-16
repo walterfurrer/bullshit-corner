@@ -1,10 +1,10 @@
 import { Show } from '@clerk/tanstack-react-start'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
-import { SubmissionForm } from '#/components/submission-form.tsx'
-import { SiteFooter } from '#/components/site-footer.tsx'
-import { currentUserQuery } from '#/hooks/use-current-user.ts'
-import { ENABLE_AUTH } from '#/lib/feature-flags.ts'
+import { SubmissionForm } from '#/components/submissionForm'
+import { SiteFooter } from '#/components/siteFooter'
+import { currentUserQuery } from '#/hooks/useCurrentUser.ts'
+import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 export const Route = createFileRoute('/_app/submit-topic')({
   head: () => ({

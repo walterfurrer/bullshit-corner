@@ -1,10 +1,12 @@
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  DotsSixVerticalIcon,
   PencilSimpleIcon,
   TrashIcon,
 } from '@phosphor-icons/react'
 
+import { PositionBadge } from '#/components/positionBadge'
 import { Button } from '#/components/ui/button.tsx'
 
 interface TopicListItemProps {
@@ -14,6 +16,8 @@ interface TopicListItemProps {
   description?: string
   isFirst: boolean
   isLast: boolean
+  isDragging?: boolean
+  dragHandleProps?: React.HTMLAttributes<HTMLButtonElement>
   onEdit: (id: string) => void
   onRemove: (id: string) => void
   onMoveUp: (id: string) => void
@@ -27,16 +31,29 @@ export function TopicListItem({
   description,
   isFirst,
   isLast,
+  isDragging,
+  dragHandleProps,
   onEdit,
   onRemove,
   onMoveUp,
   onMoveDown,
 }: TopicListItemProps) {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-border px-4 py-3">
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold text-muted-foreground">
-        {ranking}
-      </span>
+    <div
+      className={`flex items-center gap-3 rounded-lg border border-border px-4 py-3 ${isDragging ? 'opacity-50' : ''}`}
+    >
+      {dragHandleProps && (
+        <button
+          type="button"
+          className="shrink-0 cursor-grab touch-none text-muted-foreground hover:text-foreground active:cursor-grabbing"
+          aria-label="Drag to reorder"
+          {...dragHandleProps}
+        >
+          <DotsSixVerticalIcon size={20} aria-hidden="true" />
+        </button>
+      )}
+
+      <PositionBadge position={ranking} className="shrink-0" />
 
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium text-foreground">{title}</p>

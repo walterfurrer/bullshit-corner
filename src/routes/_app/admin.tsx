@@ -8,8 +8,8 @@ import {
 } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
-import { AdminNav } from '#/components/admin/admin-nav.tsx'
-import { ENABLE_AUTH } from '#/lib/feature-flags.ts'
+import { AdminNav } from '#/components/admin/adminNav'
+import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 export const Route = createFileRoute('/_app/admin')({
   beforeLoad: async () => {

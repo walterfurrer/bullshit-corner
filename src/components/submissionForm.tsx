@@ -17,13 +17,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '#/components/ui/tooltip'
-import { ENABLE_AUTH } from '#/lib/feature-flags'
-import { SUBMISSION_LIMITS } from '#/lib/submission-constants'
+import { ENABLE_AUTH } from '#/lib/featureFlags'
+import { SUBMISSION_LIMITS } from '#/lib/submissionConstants'
 import {
   normalizeSubmission,
   validateLength,
   validateTopic,
-} from '#/lib/submission-utils'
+} from '#/lib/submissionUtils'
 
 import type { Doc } from '../../convex/_generated/dataModel'
 

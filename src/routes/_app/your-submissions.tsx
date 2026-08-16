@@ -4,8 +4,8 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useConvexAuth } from 'convex/react'
 
-import { SubmissionCard } from '#/components/submission-card.tsx'
-import { SiteFooter } from '#/components/site-footer.tsx'
+import { SubmissionCard } from '#/components/submissionCard'
+import { SiteFooter } from '#/components/siteFooter'
 import { Button } from '#/components/ui/button.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 

@@ -3,7 +3,7 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Leaderboard } from '#/components/leaderboard.tsx'
-import { SiteFooter } from '#/components/site-footer.tsx'
+import { SiteFooter } from '#/components/siteFooter'
 import { Button } from '#/components/ui/button.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 

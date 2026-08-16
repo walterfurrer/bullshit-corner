@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '#/components/ui/accordion'
-import { FormatDetails } from '#/lib/format-details'
+import { FormatDetails } from '#/lib/formatDetails'
 
 type SubmissionCardProps = {
   topic: string

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
 
-import { deriveNeedsOnboarding } from './use-current-user'
+import { deriveNeedsOnboarding } from './useCurrentUser'
 
 /**
  * **Validates: Requirements 2.1, 2.2**

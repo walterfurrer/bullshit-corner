@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 
-import { useCurrentUser } from '#/hooks/use-current-user'
-import { ENABLE_AUTH } from '#/lib/feature-flags'
+import { useCurrentUser } from '#/hooks/useCurrentUser'
+import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 /**
  * Client-side redirect guard that navigates new users to `/onboarding`

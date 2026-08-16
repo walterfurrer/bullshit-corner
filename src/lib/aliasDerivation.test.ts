@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
 
-import { deriveAliasField } from './alias-derivation'
+import { deriveAliasField } from './aliasDerivation'
 
 /**
  * **Validates: Requirements 6.1, 6.2, 7.1, 7.2**

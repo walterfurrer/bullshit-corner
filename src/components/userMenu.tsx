@@ -1,6 +1,8 @@
-import { useClerk } from '@clerk/tanstack-react-start'
+import { useClerk, useUser } from '@clerk/tanstack-react-start'
 import { Link } from '@tanstack/react-router'
-import { GearSixIcon, ListBulletsIcon, SignOutIcon, UserIcon } from '@phosphor-icons/react'
+import { GaugeIcon, GearSixIcon, ListBulletsIcon, SignOutIcon, UserIcon } from '@phosphor-icons/react'
+
+import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 import {
   DropdownMenu,
@@ -8,11 +10,13 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '#/components/ui/dropdown-menu.tsx'
+} from '#/components/ui/dropdownMenu'
 import { Avatar, AvatarFallback } from '#/components/ui/avatar.tsx'
 
 export function UserMenu() {
   const { signOut } = useClerk()
+  const { user } = useUser()
+  const isAdmin = ENABLE_AUTH && (user?.publicMetadata as any)?.role === 'admin'
 
   return (
     <DropdownMenu>
@@ -35,6 +39,15 @@ export function UserMenu() {
           <GearSixIcon className="me-2 size-4" aria-hidden="true" />
           Settings
         </DropdownMenuItem>
+        {isAdmin && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem render={<Link to="/admin" viewTransition />}>
+              <GaugeIcon className="me-2 size-4" aria-hidden="true" />
+              Admin Dashboard
+            </DropdownMenuItem>
+          </>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>
           <SignOutIcon className="me-2 size-4" aria-hidden="true" />

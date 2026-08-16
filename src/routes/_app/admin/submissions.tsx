@@ -3,11 +3,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
-import { SubmissionCard } from '#/components/admin/submission-card.tsx'
+import { SubmissionCard } from '#/components/admin/submissionCard'
 import {
   SubmissionFilters,
   type SubmissionFilter,
-} from '#/components/admin/submission-filters.tsx'
+} from '#/components/admin/submissionFilters'
 
 import { api } from '../../../../convex/_generated/api'
 import type { Id } from '../../../../convex/_generated/dataModel'
