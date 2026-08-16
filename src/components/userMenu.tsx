@@ -1,8 +1,9 @@
 import { useClerk, useUser } from '@clerk/tanstack-react-start'
 import { Link } from '@tanstack/react-router'
-import { GaugeIcon, GearSixIcon, ListBulletsIcon, SignOutIcon, UserIcon } from '@phosphor-icons/react'
+import { SignOutIcon, UserIcon } from '@phosphor-icons/react'
 
 import { ENABLE_AUTH } from '#/lib/featureFlags'
+import { adminNavLinks, userNavLinks } from '#/lib/navigation'
 
 import {
   DropdownMenu,
@@ -31,21 +32,21 @@ export function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem render={<Link to="/your-submissions" viewTransition />}>
-          <ListBulletsIcon className="me-2 size-4" aria-hidden="true" />
-          Your Submissions
-        </DropdownMenuItem>
-        <DropdownMenuItem render={<Link to="/userSettings" viewTransition />}>
-          <GearSixIcon className="me-2 size-4" aria-hidden="true" />
-          Settings
-        </DropdownMenuItem>
+        {userNavLinks.map((link) => (
+          <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
+            <link.icon className="me-2 size-4" aria-hidden="true" />
+            {link.label}
+          </DropdownMenuItem>
+        ))}
         {isAdmin && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link to="/admin" viewTransition />}>
-              <GaugeIcon className="me-2 size-4" aria-hidden="true" />
-              Admin Dashboard
-            </DropdownMenuItem>
+            {adminNavLinks.map((link) => (
+              <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
+                <link.icon className="me-2 size-4" aria-hidden="true" />
+                {link.label}
+              </DropdownMenuItem>
+            ))}
           </>
         )}
         <DropdownMenuSeparator />

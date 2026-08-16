@@ -11,6 +11,7 @@ interface SortableTopicItemProps {
   description?: string
   isFirst: boolean
   isLast: boolean
+  reorderMode?: boolean
   moveDirection?: 'up' | 'down' | null
   onEdit: (id: string) => void
   onRemove: (id: string) => void

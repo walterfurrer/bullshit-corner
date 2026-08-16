@@ -48,6 +48,12 @@ function LeaderboardManagement() {
   const [editingId, setEditingId] = useState<Id<'topics'> | null>(null)
   const [showCreate, setShowCreate] = useState(false)
 
+  // Reorder mode — shows drag handles + up/down buttons on mobile
+  const [reorderMode, setReorderMode] = useState(false)
+
+  // Snapshot of server order when entering reorder mode (for cancel)
+  const orderSnapshotRef = useRef<typeof serverTopics | null>(null)
+
   // Optimistic local order — overrides server data while a reorder is in-flight
   const [optimisticTopics, setOptimisticTopics] = useState<typeof serverTopics | null>(null)
   const pendingReorders = useRef(0)
@@ -64,9 +70,6 @@ function LeaderboardManagement() {
 
   // Use optimistic order when available, otherwise fall back to server data
   const topics = optimisticTopics ?? serverTopics
-
-  // When server data updates and no reorder is pending, clear the override
-  // (handled implicitly: optimisticTopics is only set during in-flight mutations)
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -92,7 +95,6 @@ function LeaderboardManagement() {
     mutationFn: reorderMutationFn,
     onSettled: () => {
       pendingReorders.current -= 1
-      // Only clear optimistic state when all in-flight reorders have settled
       if (pendingReorders.current <= 0) {
         pendingReorders.current = 0
         setOptimisticTopics(null)
@@ -128,7 +130,7 @@ function LeaderboardManagement() {
     )
     setOptimisticTopics(reordered)
     pendingReorders.current += 1
-    return newIndex + 1 // new ranking (1-indexed)
+    return newIndex + 1
   }
 
   function handleMoveUp(id: string) {
@@ -168,9 +170,49 @@ function LeaderboardManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-xl font-bold">Leaderboard Management</h1>
-        <Button onClick={() => setShowCreate(true)}>Add Leaderboard Entry</Button>
+        {reorderMode ? (
+          <div className="flex items-center gap-2 md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                // Cancel — revert to the snapshot taken when entering reorder mode
+                setOptimisticTopics(null)
+                setReorderMode(false)
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => setReorderMode(false)}
+            >
+              Done
+            </Button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            {topics.length > 1 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="md:hidden"
+                onClick={() => {
+                  orderSnapshotRef.current = [...serverTopics]
+                  setReorderMode(true)
+                }}
+              >
+                Reorder
+              </Button>
+            )}
+            <Button onClick={() => setShowCreate(true)}>
+              <span className="hidden sm:inline">Add Leaderboard Entry</span>
+              <span className="sm:hidden">Add Entry</span>
+            </Button>
+          </div>
+        )}
       </div>
 
       {topics.length === 0 ? (
@@ -197,6 +239,7 @@ function LeaderboardManagement() {
                   description={topic.description}
                   isFirst={index === 0}
                   isLast={index === topics.length - 1}
+                  reorderMode={reorderMode}
                   moveDirection={movedItem?.id === topic._id ? movedItem.direction : null}
                   onEdit={(id) => setEditingId(id as Id<'topics'>)}
                   onRemove={handleRemove}
