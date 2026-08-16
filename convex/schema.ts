@@ -28,7 +28,12 @@ export default defineSchema({
     details: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
     submittedAt: v.number(),
+    // RBAC: admin submission review fields
+    chosenAt: v.optional(v.number()),
+    chosenBy: v.optional(v.id('users')),
+    isChosen: v.optional(v.boolean()),
   })
     .index('by_submittedAt', ['submittedAt'])
-    .index('by_userId', ['userId']),
+    .index('by_userId', ['userId'])
+    .index('by_isChosen_and_submittedAt', ['isChosen', 'submittedAt']),
 })

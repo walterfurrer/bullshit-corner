@@ -8,7 +8,10 @@
  * @module
  */
 
+import type * as admin_submissions from "../admin/submissions.js";
+import type * as admin_topics from "../admin/topics.js";
 import type * as constants from "../constants.js";
+import type * as lib_auth from "../lib/auth.js";
 import type * as migrations from "../migrations.js";
 import type * as seed from "../seed.js";
 import type * as submissions from "../submissions.js";
@@ -22,7 +25,10 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  "admin/submissions": typeof admin_submissions;
+  "admin/topics": typeof admin_topics;
   constants: typeof constants;
+  "lib/auth": typeof lib_auth;
   migrations: typeof migrations;
   seed: typeof seed;
   submissions: typeof submissions;

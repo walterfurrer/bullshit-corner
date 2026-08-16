@@ -17,17 +17,12 @@ export function SubmissionCard({
   topic,
   details,
   submittedBy,
-  submittedAt,
 }: SubmissionCardProps) {
-  const relativeTime = getRelativeTime(submittedAt)
+
 
   return (
     <article className="flex flex-col gap-3 rounded-lg border border-border p-4 text-start">
       <h3 className="text-base font-semibold">{topic}</h3>
-      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-        <span>{submittedBy ? `${submittedBy}` : 'Anonymous'}</span>
-        <span>{relativeTime}</span>
-      </div>
 
       {details ? (
         <Accordion defaultValue={[]}>
@@ -45,29 +40,8 @@ export function SubmissionCard({
           No description submitted.
         </p>
       )}
+
+      <p className="text-xs text-muted-foreground" >{submittedBy ? `Submitted as ${submittedBy}` : 'Submitted anonymously'}</p>
     </article>
   )
-}
-
-function getRelativeTime(timestamp: number): string {
-  const now = Date.now()
-  const diffMs = now - timestamp
-  const diffSeconds = Math.floor(diffMs / 1000)
-  const diffMinutes = Math.floor(diffSeconds / 60)
-  const diffHours = Math.floor(diffMinutes / 60)
-  const diffDays = Math.floor(diffHours / 24)
-
-  if (diffDays > 30) {
-    return new Date(timestamp).toLocaleDateString()
-  }
-  if (diffDays > 0) {
-    return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`
-  }
-  if (diffHours > 0) {
-    return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`
-  }
-  if (diffMinutes > 0) {
-    return `${diffMinutes} minute${diffMinutes === 1 ? '' : 's'} ago`
-  }
-  return 'just now'
 }

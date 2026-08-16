@@ -12,10 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppAdminRouteImport } from './routes/_app/admin'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppSubmitTopicRouteImport } from './routes/_app/submit-topic'
 import { Route as AppYourSubmissionsRouteImport } from './routes/_app/your-submissions'
 import { Route as ApiOgRouteImport } from './routes/api/og'
+import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
+import { Route as AppAdminLeaderboardRouteImport } from './routes/_app/admin/leaderboard'
+import { Route as AppAdminSubmissionsRouteImport } from './routes/_app/admin/submissions'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -29,6 +33,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
@@ -51,14 +60,33 @@ const ApiOgRoute = ApiOgRouteImport.update({
   path: '/api/og',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminLeaderboardRoute = AppAdminLeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminSubmissionsRoute = AppAdminSubmissionsRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => AppAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/onboarding': typeof OnboardingRoute
+  '/admin': typeof AppAdminRouteWithChildren
   '/settings': typeof AppSettingsRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/your-submissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
+  '/admin/leaderboard': typeof AppAdminLeaderboardRoute
+  '/admin/submissions': typeof AppAdminSubmissionsRoute
+  '/admin/': typeof AppAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
@@ -67,26 +95,37 @@ export interface FileRoutesByTo {
   '/your-submissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
   '/': typeof AppIndexRoute
+  '/admin/leaderboard': typeof AppAdminLeaderboardRoute
+  '/admin/submissions': typeof AppAdminSubmissionsRoute
+  '/admin': typeof AppAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
+  '/_app/admin': typeof AppAdminRouteWithChildren
   '/_app/settings': typeof AppSettingsRoute
   '/_app/submit-topic': typeof AppSubmitTopicRoute
   '/_app/your-submissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/admin/leaderboard': typeof AppAdminLeaderboardRoute
+  '/_app/admin/submissions': typeof AppAdminSubmissionsRoute
+  '/_app/admin/': typeof AppAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/onboarding'
+    | '/admin'
     | '/settings'
     | '/submit-topic'
     | '/your-submissions'
     | '/api/og'
+    | '/admin/leaderboard'
+    | '/admin/submissions'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/onboarding'
@@ -95,15 +134,22 @@ export interface FileRouteTypes {
     | '/your-submissions'
     | '/api/og'
     | '/'
+    | '/admin/leaderboard'
+    | '/admin/submissions'
+    | '/admin'
   id:
     | '__root__'
     | '/_app'
     | '/onboarding'
+    | '/_app/admin'
     | '/_app/settings'
     | '/_app/submit-topic'
     | '/_app/your-submissions'
     | '/api/og'
     | '/_app/'
+    | '/_app/admin/leaderboard'
+    | '/_app/admin/submissions'
+    | '/_app/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -135,6 +181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -163,10 +216,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiOgRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/admin/': {
+      id: '/_app/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AppAdminIndexRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/leaderboard': {
+      id: '/_app/admin/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/admin/leaderboard'
+      preLoaderRoute: typeof AppAdminLeaderboardRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/submissions': {
+      id: '/_app/admin/submissions'
+      path: '/submissions'
+      fullPath: '/admin/submissions'
+      preLoaderRoute: typeof AppAdminSubmissionsRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
   }
 }
 
+interface AppAdminRouteChildren {
+  AppAdminLeaderboardRoute: typeof AppAdminLeaderboardRoute
+  AppAdminSubmissionsRoute: typeof AppAdminSubmissionsRoute
+  AppAdminIndexRoute: typeof AppAdminIndexRoute
+}
+
+const AppAdminRouteChildren: AppAdminRouteChildren = {
+  AppAdminLeaderboardRoute: AppAdminLeaderboardRoute,
+  AppAdminSubmissionsRoute: AppAdminSubmissionsRoute,
+  AppAdminIndexRoute: AppAdminIndexRoute,
+}
+
+const AppAdminRouteWithChildren = AppAdminRoute._addFileChildren(
+  AppAdminRouteChildren,
+)
+
 interface AppRouteChildren {
+  AppAdminRoute: typeof AppAdminRouteWithChildren
   AppSettingsRoute: typeof AppSettingsRoute
   AppSubmitTopicRoute: typeof AppSubmitTopicRoute
   AppYourSubmissionsRoute: typeof AppYourSubmissionsRoute
@@ -174,6 +265,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAdminRoute: AppAdminRouteWithChildren,
   AppSettingsRoute: AppSettingsRoute,
   AppSubmitTopicRoute: AppSubmitTopicRoute,
   AppYourSubmissionsRoute: AppYourSubmissionsRoute,

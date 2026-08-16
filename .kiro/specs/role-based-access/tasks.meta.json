@@ -1,0 +1,481 @@
+{
+  "pbtResults": {
+    "1.3 Write property tests for `requireAdmin()` using fast-check": {
+      "status": "passed",
+      "lastRunTimestamp": 1786910829733
+    },
+    "2.3 Write property tests for submission chosen/unchosen logic": {
+      "status": "passed",
+      "lastRunTimestamp": 1786911206105
+    },
+    "3.2 Write property tests for reorder and remove logic": {
+      "status": "passed",
+      "lastRunTimestamp": 1786911260564
+    },
+    "3.3 Write property test for title validation": {
+      "status": "passed",
+      "lastRunTimestamp": 1786911317201
+    }
+  },
+  "executionHistory": {
+    "1.1 Document the Clerk Dashboard session token customization": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451584
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910475892
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910649127
+      }
+    ],
+    "1.2 Create the Convex auth helper at `convex/lib/auth.ts`": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451615
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910477042
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910650098
+      }
+    ],
+    "1.3 Write property tests for `requireAdmin()` using fast-check": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451634
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910654568
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910860391
+      }
+    ],
+    "2.1 Update `convex/schema.ts` — add `chosenAt`, `chosenBy`, `isChosen` fields to `submissions` table": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451655
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910478277
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910651106
+      }
+    ],
+    "2.2 Create `convex/admin/submissions.ts` — admin submission review functions": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451676
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910655361
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910861387
+      }
+    ],
+    "2.3 Write property tests for submission chosen/unchosen logic": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451717
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910866547
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911333456
+      }
+    ],
+    "3.1 Create `convex/admin/topics.ts` — admin leaderboard CRUD functions": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451742
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910656221
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910862133
+      }
+    ],
+    "3.2 Write property tests for reorder and remove logic": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451762
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910867222
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911334112
+      }
+    ],
+    "3.3 Write property test for title validation": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451785
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910868009
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911334857
+      }
+    ],
+    "4. Checkpoint — Backend complete": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451812
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911339695
+      }
+    ],
+    "5.1 Create the admin layout route at `src/routes/_app/admin.tsx`": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451836
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911343329
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911475905
+      }
+    ],
+    "5.2 Conditionally render admin nav link in site header": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451862
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911344062
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911476611
+      }
+    ],
+    "6.1 Create `src/routes/_app/admin/index.tsx` — admin dashboard redirect": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451882
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911481737
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911627656
+      }
+    ],
+    "6.2 Create `src/routes/_app/admin/leaderboard.tsx` — leaderboard management page": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451910
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911678829
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911893805
+      }
+    ],
+    "6.3 Create `src/routes/_app/admin/submissions.tsx` — submission review page": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451931
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911679632
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911894720
+      }
+    ],
+    "7.1 Create `src/components/admin/admin-nav.tsx`": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910451965
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911482430
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911624389
+      }
+    ],
+    "7.2 Create `src/components/admin/topic-form.tsx`": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452000
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911483347
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911625074
+      }
+    ],
+    "7.3 Create `src/components/admin/topic-list-item.tsx`": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452034
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911483983
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911625921
+      }
+    ],
+    "7.4 Create `src/components/admin/submission-card.tsx`": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452062
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911484764
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911626605
+      }
+    ],
+    "7.5 Create `src/components/admin/submission-filters.tsx`": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452091
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911631489
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911674347
+      }
+    ],
+    "8. Checkpoint — Full admin panel wired": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452117
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911901573
+      }
+    ],
+    "9.1 Verify existing public routes remain unguarded": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452140
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911906847
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911987703
+      }
+    ],
+    "9.2 Ensure general user redirect for direct admin URL access": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452170
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911907607
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911988409
+      }
+    ],
+    "9.3 Write unit tests for route guard behaviour and role propagation": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452201
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911995381
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786912089485
+      }
+    ],
+    "10. Final checkpoint — All features complete": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910452230
+      },
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786912093541
+      }
+    ],
+    "1. Clerk session token configuration and Convex auth helper": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786910860417
+      }
+    ],
+    "2. Schema changes and submission review backend": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911333487
+      }
+    ],
+    "3. Admin leaderboard management backend": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911334883
+      }
+    ],
+    "5. Client-side route protection and admin layout": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911476645
+      }
+    ],
+    "7. Admin UI components": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911674380
+      }
+    ],
+    "6. Admin panel pages": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786911894755
+      }
+    ],
+    "9. General user and role propagation verification": [
+      {
+        "executionId": "ff45ff04-efdd-431b-a3c6-8e6a78c051ee",
+        "chatSessionId": "sess_d8e69d43-d34a-4d16-9c3c-2fabd33d45c7",
+        "timestamp": 1786912089517
+      }
+    ]
+  }
+}
