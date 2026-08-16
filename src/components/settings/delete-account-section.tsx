@@ -78,11 +78,11 @@ export function DeleteAccountSection() {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <div className="rounded-md border border-destructive/20 bg-destructive/5 px-4 py-3">
+        <div className="flex flex-col gap-2 rounded-md border border-destructive/20 bg-destructive/5 px-4 py-3">
           <p className="text-sm text-destructive dark:text-red-400">
             Deleting your account will:
           </p>
-          <ul className="mt-2 list-inside list-disc text-sm text-muted-foreground">
+          <ul className="list-inside list-disc text-sm text-muted-foreground">
             <li>Anonymize all your past submissions (shown as &ldquo;Deleted User&rdquo;)</li>
             <li>Remove your profile and sign-in credentials</li>
             <li>Sign you out of all sessions immediately</li>

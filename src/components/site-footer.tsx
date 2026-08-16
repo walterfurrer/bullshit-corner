@@ -15,13 +15,13 @@ export function SiteFooter() {
   const { copied, copy } = useCopyToClipboard()
 
   return (
-    <footer className="mt-10 sm:mt-14">
+    <footer className="mt-10 flex flex-col gap-4 sm:mt-14">
       <p className="text-center text-xs text-muted-foreground">
         Unofficial fan project tracking Bullshit Corner from High Performance
         Racing.
       </p>
-      <Separator className="mt-6" />
-      <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+      <Separator className="pt-0.5 opacity-50" />
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
         <p>
           Built by{' '}
           <a

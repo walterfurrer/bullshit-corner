@@ -67,11 +67,11 @@ function Home() {
 function HomePending() {
   return (
     <>
-      <div className="mb-8 space-y-3 sm:mb-10">
+      <div className="mb-8 flex flex-col gap-3 sm:mb-10">
         <Skeleton className="h-9 w-72 max-w-full" />
         <Skeleton className="h-4 w-full max-w-xl" />
       </div>
-      <div className="space-y-3">
+      <div className="flex flex-col gap-3">
         {Array.from({ length: 6 }).map((_, index) => (
           <Skeleton key={index} className="h-20 w-full rounded-xl" />
         ))}

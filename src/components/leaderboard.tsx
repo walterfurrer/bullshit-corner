@@ -31,7 +31,7 @@ export function Leaderboard({ topics }: { topics: Array<Doc<'topics'>> }) {
                       ) : null}
                     </div>
                     {topic.submittedBy ? (
-                      <p className="mt-1.5 font-mono text-xs text-muted-foreground">
+                      <p className="font-mono text-xs text-muted-foreground">
                         Submitted by {topic.submittedBy}
                       </p>
                     ) : null}

@@ -98,6 +98,7 @@ function SubmissionsList() {
         <SubmissionCard
           key={submission._id}
           topic={submission.topic}
+          details={submission.details}
           submittedBy={submission.submittedBy}
           submittedAt={submission.submittedAt}
         />
