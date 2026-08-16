@@ -1,6 +1,8 @@
 import { auth } from '@clerk/tanstack-react-start/server'
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { useConvexAuth, useMutation } from 'convex/react'
+import { useConvexMutation } from '@convex-dev/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useConvexAuth } from 'convex/react'
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 
 import { ConnectionsSection } from '#/components/settings/connectionsSection'
@@ -24,12 +26,11 @@ import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { cn } from '#/lib/utils.ts'
 import { getAccountDetails } from '#/server/account.ts'
 
-import { api } from '../../../convex/_generated/api'
+import { api } from '#convex/_generated/api'
 
 import type { AccountDetails } from '#/server/account.ts'
 
-/** Client-side mirror of convex/constants.ts (can't import across runtime boundary). */
-const DISPLAY_NAME_MAX_LENGTH = 50
+import { DISPLAY_NAME_MAX_LENGTH } from '#shared/constants'
 
 export const Route = createFileRoute('/_app/userSettings')({
   head: () => ({
@@ -113,13 +114,15 @@ function SettingsLayout({ sections }: { sections: SettingsSection[] }) {
 function SettingsPage() {
   const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth()
   const { user, isLoading: isUserLoading } = useCurrentUser()
-  const updateProfile = useMutation(api.users.updateProfile)
+
+  const updateProfileMutation = useMutation({
+    mutationFn: useConvexMutation(api.users.updateProfile),
+  })
 
   const [displayName, setDisplayName] = useState('')
   const [nameError, setNameError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [toggleError, setToggleError] = useState<string | null>(null)
-  const [isSaving, setIsSaving] = useState(false)
 
   // Account details from Clerk Backend API
   const [accountDetails, setAccountDetails] = useState<AccountDetails | null>(
@@ -180,9 +183,8 @@ function SettingsPage() {
       return
     }
 
-    setIsSaving(true)
     try {
-      await updateProfile({ name: trimmed, alwaysAnonymous: false })
+      await updateProfileMutation.mutateAsync({ name: trimmed, alwaysAnonymous: false })
       setSuccessMessage(
         'Display name saved. Your submissions will show this name.',
       )
@@ -192,8 +194,6 @@ function SettingsPage() {
           ? e.message
           : 'Something went wrong. Please try again.'
       setNameError(message)
-    } finally {
-      setIsSaving(false)
     }
   }
 
@@ -203,9 +203,8 @@ function SettingsPage() {
     setNameError(null)
 
     if (checked) {
-      setIsSaving(true)
       try {
-        await updateProfile({ alwaysAnonymous: true })
+        await updateProfileMutation.mutateAsync({ alwaysAnonymous: true })
         setSuccessMessage(
           'Anonymous mode enabled. Your submissions will appear as "Anonymous".',
         )
@@ -215,8 +214,6 @@ function SettingsPage() {
             ? e.message
             : 'Something went wrong. Please try again.'
         setToggleError(message)
-      } finally {
-        setIsSaving(false)
       }
     } else {
       const currentName = displayName.trim() || (user!.name ?? '')
@@ -226,9 +223,8 @@ function SettingsPage() {
         return
       }
 
-      setIsSaving(true)
       try {
-        await updateProfile({ alwaysAnonymous: false })
+        await updateProfileMutation.mutateAsync({ alwaysAnonymous: false })
         setSuccessMessage(
           'Anonymous mode disabled. Your submissions will show your display name.',
         )
@@ -238,8 +234,6 @@ function SettingsPage() {
             ? e.message
             : 'Something went wrong. Please try again.'
         setToggleError(message)
-      } finally {
-        setIsSaving(false)
       }
     }
   }
@@ -270,7 +264,7 @@ function SettingsPage() {
           successMessage={successMessage}
           setSuccessMessage={setSuccessMessage}
           toggleError={toggleError}
-          isSaving={isSaving}
+          isSaving={updateProfileMutation.isPending}
           onSaveName={handleSaveName}
           onToggleAnonymous={handleToggleAnonymous}
         />

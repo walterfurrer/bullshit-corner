@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useConvexAuth } from 'convex/react'
 import { ConvexError } from 'convex/values'
 
-import { api } from '../../convex/_generated/api'
+import { api } from '#convex/_generated/api'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
@@ -25,7 +25,7 @@ import {
   validateTopic,
 } from '#/lib/submissionUtils'
 
-import type { Doc } from '../../convex/_generated/dataModel'
+import type { Doc } from '#convex/_generated/dataModel'
 
 type SubmitStatus = 'idle' | 'auth-required' | 'success' | 'error'
 

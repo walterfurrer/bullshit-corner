@@ -1,6 +1,6 @@
 import { YoutubeLogoIcon } from '@phosphor-icons/react'
 
-import type { Doc } from '../../convex/_generated/dataModel'
+import type { Doc } from '#convex/_generated/dataModel'
 import { PositionBadge } from './positionBadge'
 
 export function Leaderboard({ topics }: { topics: Array<Doc<'topics'>> }) {

@@ -7,7 +7,7 @@ import { SiteFooter } from '#/components/siteFooter'
 import { Button } from '#/components/ui/button.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 
-import { api } from '../../../convex/_generated/api'
+import { api } from '#convex/_generated/api'
 
 const leaderboardQuery = convexQuery(api.topics.listRanked, { limit: 50 })
 

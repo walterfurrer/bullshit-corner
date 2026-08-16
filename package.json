@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "imports": {
-    "#/*": "./src/*"
+    "#/*": "./src/*",
+    "#convex/*": "./convex/*",
+    "#shared/*": "./shared/*"
   },
   "scripts": {
     "dev": "concurrently -n web,convex -c blue,magenta \"pnpm dev:web\" \"pnpm dev:convex\"",

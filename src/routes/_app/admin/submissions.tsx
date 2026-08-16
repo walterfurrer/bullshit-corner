@@ -9,8 +9,8 @@ import {
   type SubmissionFilter,
 } from '#/components/admin/submissionFilters'
 
-import { api } from '../../../../convex/_generated/api'
-import type { Id } from '../../../../convex/_generated/dataModel'
+import { api } from '#convex/_generated/api'
+import type { Id } from '#convex/_generated/dataModel'
 
 const paginationOpts = { numItems: 50, cursor: null }
 

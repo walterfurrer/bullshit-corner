@@ -1,7 +1,7 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
-import { DISPLAY_NAME_MAX_LENGTH } from './constants'
+import { DISPLAY_NAME_MAX_LENGTH } from '../shared/constants'
 
 import type { Id } from './_generated/dataModel'
 import type { MutationCtx } from './_generated/server'

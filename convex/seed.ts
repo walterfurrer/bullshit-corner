@@ -1,3 +1,9 @@
+/**
+ * Dashboard-only seed script.
+ *
+ * Run from the Convex dashboard (Functions → seed → Run) to populate
+ * initial topic data. Skips insertion if topics already exist.
+ */
 import { internalMutation } from './_generated/server'
 
 const topicsData = [

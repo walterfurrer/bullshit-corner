@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useMutation } from 'convex/react'
+import { useConvexMutation } from '@convex-dev/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { useCurrentUser } from '#/hooks/useCurrentUser.ts'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
@@ -15,10 +16,9 @@ import {
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 
-import { api } from '../../convex/_generated/api'
+import { api } from '#convex/_generated/api'
 
-/** Client-side mirror of convex/constants.ts (can't import across runtime boundary). */
-const DISPLAY_NAME_MAX_LENGTH = 50
+import { DISPLAY_NAME_MAX_LENGTH } from '#shared/constants'
 
 export const Route = createFileRoute('/onboarding')({
   head: () => ({
@@ -30,11 +30,14 @@ export const Route = createFileRoute('/onboarding')({
 function OnboardingPage() {
   const navigate = useNavigate()
   const { user, needsOnboarding, isLoading } = useCurrentUser()
-  const updateProfile = useMutation(api.users.updateProfile)
+
+  const updateProfileMutation = useMutation({
+    mutationFn: useConvexMutation(api.users.updateProfile),
+    onSuccess: () => setSuccess(true),
+  })
 
   const [displayName, setDisplayName] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
 
   // Route guard: redirect if auth is disabled or user doesn't need onboarding
@@ -90,31 +93,23 @@ function OnboardingPage() {
       return
     }
 
-    setIsSubmitting(true)
     try {
-      await updateProfile({ name: trimmed, alwaysAnonymous: false })
-      setSuccess(true)
+      await updateProfileMutation.mutateAsync({ name: trimmed, alwaysAnonymous: false })
     } catch (e) {
       const message =
         e instanceof Error ? e.message : 'Something went wrong. Please try again.'
       setError(message)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   async function handleStayAnonymous() {
     setError(null)
-    setIsSubmitting(true)
     try {
-      await updateProfile({ alwaysAnonymous: true })
-      setSuccess(true)
+      await updateProfileMutation.mutateAsync({ alwaysAnonymous: true })
     } catch (e) {
       const message =
         e instanceof Error ? e.message : 'Something went wrong. Please try again.'
       setError(message)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -142,7 +137,7 @@ function OnboardingPage() {
               maxLength={DISPLAY_NAME_MAX_LENGTH + 10}
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? 'name-error' : undefined}
-              disabled={isSubmitting}
+              disabled={updateProfileMutation.isPending}
             />
             {error && (
               <p
@@ -157,15 +152,15 @@ function OnboardingPage() {
           <div className="flex gap-2">
             <Button
               onClick={handleSaveName}
-              disabled={isSubmitting}
+              disabled={updateProfileMutation.isPending}
             >
-              {isSubmitting ? 'Saving…' : 'Save Name'}
+              {updateProfileMutation.isPending ? 'Saving…' : 'Save Name'}
             </Button>
 
             <Button
               variant="outline"
               onClick={handleStayAnonymous}
-              disabled={isSubmitting}
+              disabled={updateProfileMutation.isPending}
             >
               Stay Anonymous
             </Button>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { useMutation } from 'convex/react'
+import { useConvexMutation } from '@convex-dev/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { TrashIcon, WarningOctagonIcon } from '@phosphor-icons/react'
 
 import {
@@ -25,17 +26,19 @@ import { Button } from '#/components/ui/button.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { deleteClerkAccount } from '#/server/account.ts'
-import { api } from '../../../convex/_generated/api'
+import { api } from '#convex/_generated/api'
 
 const CONFIRMATION_TEXT = 'DELETE'
 
 export function DeleteAccountSection() {
   const navigate = useNavigate()
-  const softDelete = useMutation(api.users.softDelete)
+
+  const deleteMutation = useMutation({
+    mutationFn: useConvexMutation(api.users.softDelete),
+  })
 
   const [confirmInput, setConfirmInput] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const isConfirmed =
@@ -44,11 +47,10 @@ export function DeleteAccountSection() {
   async function handleDelete() {
     if (!isConfirmed) return
     setError(null)
-    setIsDeleting(true)
 
     try {
       // Step 1: Soft-delete in Convex (anonymize submissions, mark record)
-      await softDelete({})
+      await deleteMutation.mutateAsync({})
 
       // Step 2: Delete user from Clerk (revokes all sessions)
       await deleteClerkAccount()
@@ -61,7 +63,6 @@ export function DeleteAccountSection() {
           ? e.message
           : 'Something went wrong. Please try again or contact support.'
       setError(message)
-      setIsDeleting(false)
     }
   }
 
@@ -131,7 +132,7 @@ export function DeleteAccountSection() {
                   setConfirmInput(e.target.value)
                   if (error) setError(null)
                 }}
-                disabled={isDeleting}
+                disabled={deleteMutation.isPending}
                 aria-describedby={error ? 'delete-error' : undefined}
               />
               {error && (
@@ -146,18 +147,18 @@ export function DeleteAccountSection() {
             </div>
 
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>
+              <AlertDialogCancel disabled={deleteMutation.isPending}>
                 Cancel
               </AlertDialogCancel>
               <AlertDialogAction
                 variant="destructive"
-                disabled={!isConfirmed || isDeleting}
+                disabled={!isConfirmed || deleteMutation.isPending}
                 onClick={(e) => {
                   e.preventDefault()
                   void handleDelete()
                 }}
               >
-                {isDeleting ? 'Deleting\u2026' : 'Delete my account permanently'}
+                {deleteMutation.isPending ? 'Deleting\u2026' : 'Delete my account permanently'}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

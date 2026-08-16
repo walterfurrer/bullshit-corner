@@ -4,8 +4,7 @@ import { Button } from '#/components/ui/button.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { Textarea } from '#/components/ui/textarea.tsx'
-
-const TITLE_MAX = 200
+import { TITLE_MAX } from '#shared/constants'
 
 export interface TopicFormValues {
   title: string

@@ -1,14 +1,14 @@
 import { RateLimiter } from '@convex-dev/rate-limiter'
 import { ConvexError, v } from 'convex/values'
 
+import { SUBMISSION_LIMITS } from '../shared/constants'
 import { components } from './_generated/api'
 import { mutation, query } from './_generated/server'
 import { getOrCreateUserId } from './users'
 
-// Inline constants — cannot import from src/ across the Convex boundary
-const TOPIC_MAX = 200
-const ALIAS_MAX = 100
-const DETAILS_MAX = 1000
+const TOPIC_MAX = SUBMISSION_LIMITS.topic
+const ALIAS_MAX = SUBMISSION_LIMITS.alias
+const DETAILS_MAX = SUBMISSION_LIMITS.details
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000
 

@@ -73,12 +73,4 @@ export async function requireAdmin(ctx: AuthCtx) {
   return identity
 }
 
-/**
- * Returns the role string for the current user, or null if unauthenticated.
- * Does NOT throw — used for conditional logic rather than gating.
- */
-export async function getUserRole(ctx: AuthCtx): Promise<string | null> {
-  const identity = await ctx.auth.getUserIdentity()
-  if (!identity) return null
-  return (identity as any).metadata?.role ?? 'general_user'
-}
+

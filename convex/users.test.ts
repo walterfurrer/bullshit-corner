@@ -5,7 +5,7 @@ import * as fc from 'fast-check'
 import { describe, expect, test } from 'vitest'
 
 import { api } from './_generated/api'
-import { DISPLAY_NAME_MAX_LENGTH } from './constants'
+import { DISPLAY_NAME_MAX_LENGTH } from '../shared/constants'
 import schema from './schema'
 
 const modules = import.meta.glob('./**/*.ts')

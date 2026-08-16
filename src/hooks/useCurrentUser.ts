@@ -1,7 +1,7 @@
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from 'convex/react'
 
-import { api } from '../../convex/_generated/api'
+import { api } from '#convex/_generated/api'
 
 /**
  * TanStack Query-compatible query options for users.getMe.

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useAuth } from '@clerk/tanstack-react-start'
 import { useConvexAuth, useMutation } from 'convex/react'
 
-import { api } from '../../convex/_generated/api'
+import { api } from '#convex/_generated/api'
 
 const MAX_SYNC_ATTEMPTS = 3
 const INITIAL_RETRY_DELAY_MS = 500

@@ -1,9 +1,8 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from '../_generated/server'
+import { TITLE_MAX } from '../../shared/constants'
 import { requireAdmin } from '../lib/auth'
-
-const TITLE_MAX = 200
 
 function validateTitle(title: string): string {
   const trimmed = title.trim()
