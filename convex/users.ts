@@ -1,6 +1,7 @@
 import { ConvexError, v } from 'convex/values'
 
 import { mutation, query } from './_generated/server'
+import { internalQuery } from './_generated/server'
 import { DISPLAY_NAME_MAX_LENGTH } from '../shared/constants'
 
 import type { Id } from './_generated/dataModel'
@@ -200,5 +201,20 @@ export const softDelete = mutation({
     })
 
     return user._id
+  },
+})
+
+
+/**
+ * Internal query: returns all non-deleted users who have a name and a clerkId.
+ * Used by the one-time backfill action to push names to Clerk.
+ */
+export const listUsersWithNames = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    const users = await ctx.db.query('users').collect()
+    return users
+      .filter((u) => u.name && u.clerkId && !u.deletedAt)
+      .map((u) => ({ clerkId: u.clerkId, name: u.name! }))
   },
 })

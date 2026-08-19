@@ -10,6 +10,7 @@
 
 import type * as admin_submissions from "../admin/submissions.js";
 import type * as admin_topics from "../admin/topics.js";
+import type * as backfillClerkNames from "../backfillClerkNames.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as seed from "../seed.js";
 import type * as submissions from "../submissions.js";
@@ -25,6 +26,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   "admin/submissions": typeof admin_submissions;
   "admin/topics": typeof admin_topics;
+  backfillClerkNames: typeof backfillClerkNames;
   "lib/auth": typeof lib_auth;
   seed: typeof seed;
   submissions: typeof submissions;
