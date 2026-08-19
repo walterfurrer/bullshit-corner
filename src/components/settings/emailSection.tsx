@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useUser } from '@clerk/tanstack-react-start'
 import { EnvelopeSimpleIcon } from '@phosphor-icons/react'
 
 import {
@@ -11,11 +12,6 @@ import {
 import { Button } from '#/components/ui/button.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
-import {
-  requestEmailChange,
-  verifyAndSetPrimaryEmail,
-} from '#/server/account.ts'
-
 import type { AccountEmail } from '#/server/account.ts'
 
 interface EmailSectionProps {
@@ -26,6 +22,7 @@ interface EmailSectionProps {
 type Step = 'display' | 'enter-new' | 'verify'
 
 export function EmailSection({ emails, onUpdated }: EmailSectionProps) {
+  const { isLoaded, user } = useUser()
   const primaryEmail = emails.find((e) => e.isPrimary)
 
   const [step, setStep] = useState<Step>('display')
@@ -60,12 +57,16 @@ export function EmailSection({ emails, onUpdated }: EmailSectionProps) {
       return
     }
 
+    if (!isLoaded || !user) {
+      setError('Your account is still loading. Please try again.')
+      return
+    }
+
     setIsSaving(true)
     try {
-      const { emailAddressId } = await requestEmailChange({
-        data: { newEmail: trimmed },
-      })
-      setPendingEmailId(emailAddressId)
+      const emailAddress = await user.createEmailAddress({ email: trimmed })
+      await emailAddress.prepareVerification({ strategy: 'email_code' })
+      setPendingEmailId(emailAddress.id)
       setStep('verify')
     } catch (e) {
       const message =
@@ -92,11 +93,29 @@ export function EmailSection({ emails, onUpdated }: EmailSectionProps) {
       return
     }
 
+    if (!isLoaded || !user) {
+      setError('Your account is still loading. Please try again.')
+      return
+    }
+
+    const emailAddress = user.emailAddresses.find(
+      (email) => email.id === pendingEmailId,
+    )
+
+    if (!emailAddress) {
+      setError('That email verification has expired. Please start over.')
+      return
+    }
+
     setIsSaving(true)
     try {
-      await verifyAndSetPrimaryEmail({
-        data: { emailAddressId: pendingEmailId, code: trimmedCode },
+      const verifiedEmail = await emailAddress.attemptVerification({
+        code: trimmedCode,
       })
+      if (verifiedEmail.verification.status !== 'verified') {
+        throw new Error('Verification failed. Please check the code and try again.')
+      }
+      await user.update({ primaryEmailAddressId: verifiedEmail.id })
       setSuccess('Email updated successfully.')
       resetState()
       onUpdated()

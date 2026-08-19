@@ -45,7 +45,7 @@ function Home() {
             {" "} where co-hosts Jake Humphrey, Otmar Szafnauer, and Rob Smedley discuss, debate, and rank various fan-submitted topics surrounding Formula 1.
           </p>
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Here you can view the offical HPR Leaderboard, submit your own entires for a future episode, and even provide your own rankings to the community-based leaderboard.
+            Here you can view the official HPR Leaderboard, submit your own entries for a future episode, and even provide your own rankings to the community-based leaderboard.
           </p>
         </div>
       </div>

@@ -12,8 +12,10 @@
     "dev:web": "vite dev --port 3000 --host",
     "dev:convex": "convex dev",
     "generate-routes": "tsr generate",
+    "typecheck": "tsc --noEmit",
     "test": "vitest --run",
     "build": "vite build",
+    "check": "pnpm typecheck && pnpm test && pnpm build",
     "preview": "vite preview"
   },
   "dependencies": {
