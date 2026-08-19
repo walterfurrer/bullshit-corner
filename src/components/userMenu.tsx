@@ -32,6 +32,16 @@ export function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
+        {user?.primaryEmailAddress?.emailAddress && (
+          <>
+            <div className="px-2 py-1.5">
+              <p className="truncate text-sm text-muted-foreground">
+                {user.primaryEmailAddress.emailAddress}
+              </p>
+            </div>
+            <DropdownMenuSeparator />
+          </>
+        )}
         {userNavLinks.map((link) => (
           <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
             <link.icon className="me-2 size-4" aria-hidden={true} />

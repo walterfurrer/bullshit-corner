@@ -21,6 +21,7 @@ import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
 import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
 import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
 import { Route as AppAdminLeaderboardManagementRouteImport } from './routes/_app/admin/leaderboardManagement'
+import { Route as AppAdminNewUsersRouteImport } from './routes/_app/admin/newUsers'
 import { Route as AppAdminSubmissionsRouteImport } from './routes/_app/admin/submissions'
 import { Route as AppAdminUserManagementRouteImport } from './routes/_app/admin/userManagement'
 
@@ -84,6 +85,11 @@ const AppAdminLeaderboardManagementRoute =
     path: '/leaderboardManagement',
     getParentRoute: () => AppAdminRoute,
   } as any)
+const AppAdminNewUsersRoute = AppAdminNewUsersRouteImport.update({
+  id: '/newUsers',
+  path: '/newUsers',
+  getParentRoute: () => AppAdminRoute,
+} as any)
 const AppAdminSubmissionsRoute = AppAdminSubmissionsRouteImport.update({
   id: '/submissions',
   path: '/submissions',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
   '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
+  '/admin/newUsers': typeof AppAdminNewUsersRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
   '/admin/userManagement': typeof AppAdminUserManagementRoute
   '/admin/': typeof AppAdminIndexRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/sign-up/$': typeof SignUpSplatRoute
   '/': typeof AppIndexRoute
   '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
+  '/admin/newUsers': typeof AppAdminNewUsersRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
   '/admin/userManagement': typeof AppAdminUserManagementRoute
   '/admin': typeof AppAdminIndexRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/sign-up/$': typeof SignUpSplatRoute
   '/_app/': typeof AppIndexRoute
   '/_app/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
+  '/_app/admin/newUsers': typeof AppAdminNewUsersRoute
   '/_app/admin/submissions': typeof AppAdminSubmissionsRoute
   '/_app/admin/userManagement': typeof AppAdminUserManagementRoute
   '/_app/admin/': typeof AppAdminIndexRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/sign-in/$'
     | '/sign-up/$'
     | '/admin/leaderboardManagement'
+    | '/admin/newUsers'
     | '/admin/submissions'
     | '/admin/userManagement'
     | '/admin/'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/sign-up/$'
     | '/'
     | '/admin/leaderboardManagement'
+    | '/admin/newUsers'
     | '/admin/submissions'
     | '/admin/userManagement'
     | '/admin'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/sign-up/$'
     | '/_app/'
     | '/_app/admin/leaderboardManagement'
+    | '/_app/admin/newUsers'
     | '/_app/admin/submissions'
     | '/_app/admin/userManagement'
     | '/_app/admin/'
@@ -283,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminLeaderboardManagementRouteImport
       parentRoute: typeof AppAdminRoute
     }
+    '/_app/admin/newUsers': {
+      id: '/_app/admin/newUsers'
+      path: '/newUsers'
+      fullPath: '/admin/newUsers'
+      preLoaderRoute: typeof AppAdminNewUsersRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
     '/_app/admin/submissions': {
       id: '/_app/admin/submissions'
       path: '/submissions'
@@ -302,6 +321,7 @@ declare module '@tanstack/react-router' {
 
 interface AppAdminRouteChildren {
   AppAdminLeaderboardManagementRoute: typeof AppAdminLeaderboardManagementRoute
+  AppAdminNewUsersRoute: typeof AppAdminNewUsersRoute
   AppAdminSubmissionsRoute: typeof AppAdminSubmissionsRoute
   AppAdminUserManagementRoute: typeof AppAdminUserManagementRoute
   AppAdminIndexRoute: typeof AppAdminIndexRoute
@@ -309,6 +329,7 @@ interface AppAdminRouteChildren {
 
 const AppAdminRouteChildren: AppAdminRouteChildren = {
   AppAdminLeaderboardManagementRoute: AppAdminLeaderboardManagementRoute,
+  AppAdminNewUsersRoute: AppAdminNewUsersRoute,
   AppAdminSubmissionsRoute: AppAdminSubmissionsRoute,
   AppAdminUserManagementRoute: AppAdminUserManagementRoute,
   AppAdminIndexRoute: AppAdminIndexRoute,

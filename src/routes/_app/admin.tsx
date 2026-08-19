@@ -15,6 +15,7 @@ import { cn } from '#/lib/utils'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 const adminSections = [
+  { to: '/admin/newUsers', label: 'New Users' },
   { to: '/admin/leaderboardManagement', label: 'Leaderboard Management' },
   { to: '/admin/submissions', label: 'View Submissions' },
   { to: '/admin/userManagement', label: 'User Management' },
