@@ -22,6 +22,7 @@ import { Label } from '#/components/ui/label.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 import { Switch } from '#/components/ui/switch.tsx'
 import { useCurrentUser } from '#/hooks/useCurrentUser.ts'
+import { useSyncToClerk } from '#/hooks/useSyncToClerk.ts'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { cn } from '#/lib/utils.ts'
 import { getAccountDetails } from '#/server/account.ts'
@@ -114,6 +115,7 @@ function SettingsLayout({ sections }: { sections: SettingsSection[] }) {
 function SettingsPage() {
   const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth()
   const { user, isLoading: isUserLoading } = useCurrentUser()
+  const { syncName } = useSyncToClerk()
 
   const updateProfileMutation = useMutation({
     mutationFn: useConvexMutation(api.users.updateProfile),
@@ -185,6 +187,7 @@ function SettingsPage() {
 
     try {
       await updateProfileMutation.mutateAsync({ name: trimmed, alwaysAnonymous: false })
+      void syncName(trimmed)
       setSuccessMessage(
         'Display name saved. Your submissions will show this name.',
       )
@@ -205,6 +208,7 @@ function SettingsPage() {
     if (checked) {
       try {
         await updateProfileMutation.mutateAsync({ alwaysAnonymous: true })
+        void syncName(undefined)
         setSuccessMessage(
           'Anonymous mode enabled. Your submissions will appear as "Anonymous".',
         )
@@ -225,6 +229,7 @@ function SettingsPage() {
 
       try {
         await updateProfileMutation.mutateAsync({ alwaysAnonymous: false })
+        void syncName(currentName)
         setSuccessMessage(
           'Anonymous mode disabled. Your submissions will show your display name.',
         )

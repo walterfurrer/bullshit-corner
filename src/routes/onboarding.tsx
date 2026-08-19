@@ -4,6 +4,7 @@ import { useConvexMutation } from '@convex-dev/react-query'
 import { useMutation } from '@tanstack/react-query'
 
 import { useCurrentUser } from '#/hooks/useCurrentUser.ts'
+import { useSyncToClerk } from '#/hooks/useSyncToClerk.ts'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { Button } from '#/components/ui/button.tsx'
 import {
@@ -30,6 +31,8 @@ export const Route = createFileRoute('/onboarding')({
 function OnboardingPage() {
   const navigate = useNavigate()
   const { user, needsOnboarding, isLoading } = useCurrentUser()
+
+  const { syncName } = useSyncToClerk()
 
   const updateProfileMutation = useMutation({
     mutationFn: useConvexMutation(api.users.updateProfile),
@@ -95,6 +98,7 @@ function OnboardingPage() {
 
     try {
       await updateProfileMutation.mutateAsync({ name: trimmed, alwaysAnonymous: false })
+      void syncName(trimmed)
     } catch (e) {
       const message =
         e instanceof Error ? e.message : 'Something went wrong. Please try again.'
@@ -106,6 +110,7 @@ function OnboardingPage() {
     setError(null)
     try {
       await updateProfileMutation.mutateAsync({ alwaysAnonymous: true })
+      void syncName(undefined)
     } catch (e) {
       const message =
         e instanceof Error ? e.message : 'Something went wrong. Please try again.'

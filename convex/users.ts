@@ -52,7 +52,11 @@ export async function getOrCreateUserId(
   const profile = profileFromIdentity(identity)
 
   if (existing) {
-    // Patch profile fields from Clerk — never overwrite alwaysAnonymous
+    // Patch profile fields from Clerk — never overwrite alwaysAnonymous.
+    // Guard: don't blank a user-set name with a stale/empty Clerk token value.
+    if (existing.name && !profile.name) {
+      delete (profile as Partial<UserProfile>).name
+    }
     await ctx.db.patch(existing._id, profile)
     return existing._id
   }
