@@ -22,6 +22,7 @@ import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
 import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
 import { Route as AppAdminLeaderboardManagementRouteImport } from './routes/_app/admin/leaderboardManagement'
 import { Route as AppAdminSubmissionsRouteImport } from './routes/_app/admin/submissions'
+import { Route as AppAdminUserManagementRouteImport } from './routes/_app/admin/userManagement'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -88,6 +89,11 @@ const AppAdminSubmissionsRoute = AppAdminSubmissionsRouteImport.update({
   path: '/submissions',
   getParentRoute: () => AppAdminRoute,
 } as any)
+const AppAdminUserManagementRoute = AppAdminUserManagementRouteImport.update({
+  id: '/userManagement',
+  path: '/userManagement',
+  getParentRoute: () => AppAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/sign-up/$': typeof SignUpSplatRoute
   '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
+  '/admin/userManagement': typeof AppAdminUserManagementRoute
   '/admin/': typeof AppAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
+  '/admin/userManagement': typeof AppAdminUserManagementRoute
   '/admin': typeof AppAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/_app/admin/submissions': typeof AppAdminSubmissionsRoute
+  '/_app/admin/userManagement': typeof AppAdminUserManagementRoute
   '/_app/admin/': typeof AppAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/sign-up/$'
     | '/admin/leaderboardManagement'
     | '/admin/submissions'
+    | '/admin/userManagement'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/leaderboardManagement'
     | '/admin/submissions'
+    | '/admin/userManagement'
     | '/admin'
   id:
     | '__root__'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/admin/leaderboardManagement'
     | '/_app/admin/submissions'
+    | '/_app/admin/userManagement'
     | '/_app/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -278,18 +290,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminSubmissionsRouteImport
       parentRoute: typeof AppAdminRoute
     }
+    '/_app/admin/userManagement': {
+      id: '/_app/admin/userManagement'
+      path: '/userManagement'
+      fullPath: '/admin/userManagement'
+      preLoaderRoute: typeof AppAdminUserManagementRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
   }
 }
 
 interface AppAdminRouteChildren {
   AppAdminLeaderboardManagementRoute: typeof AppAdminLeaderboardManagementRoute
   AppAdminSubmissionsRoute: typeof AppAdminSubmissionsRoute
+  AppAdminUserManagementRoute: typeof AppAdminUserManagementRoute
   AppAdminIndexRoute: typeof AppAdminIndexRoute
 }
 
 const AppAdminRouteChildren: AppAdminRouteChildren = {
   AppAdminLeaderboardManagementRoute: AppAdminLeaderboardManagementRoute,
   AppAdminSubmissionsRoute: AppAdminSubmissionsRoute,
+  AppAdminUserManagementRoute: AppAdminUserManagementRoute,
   AppAdminIndexRoute: AppAdminIndexRoute,
 }
 
