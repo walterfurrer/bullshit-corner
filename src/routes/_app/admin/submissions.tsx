@@ -110,6 +110,7 @@ function SubmissionsReview() {
               id={submission._id}
               topic={submission.topic}
               details={submission.details}
+              youtubeUrl={submission.youtubeUrl}
               submittedBy={submission.submittedBy}
               submittedAt={submission.submittedAt}
               isChosen={filter === 'chosen'}

@@ -18,11 +18,13 @@ export interface SubmissionInput {
   topic: string
   alias: string
   details: string
+  youtubeUrl: string
 }
 
 export interface NormalizedSubmission {
   topic: string
   details: string | undefined
+  youtubeUrl: string | undefined
   submittedBy: string | undefined
 }
 
@@ -31,10 +33,12 @@ export function normalizeSubmission(
 ): NormalizedSubmission {
   const alias = values.alias.trim()
   const details = values.details.trim()
+  const youtubeUrl = values.youtubeUrl.trim()
 
   return {
     topic: values.topic.trim(),
     details: details.length > 0 ? details : undefined,
+    youtubeUrl: youtubeUrl.length > 0 ? youtubeUrl : undefined,
     submittedBy: alias.length > 0 ? alias : undefined,
   }
 }

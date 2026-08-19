@@ -16,4 +16,5 @@ export const SUBMISSION_LIMITS = {
   topic: 200,
   alias: 100,
   details: 1000,
+  youtubeUrl: 500,
 } as const

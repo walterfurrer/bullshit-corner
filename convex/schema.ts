@@ -26,6 +26,7 @@ export default defineSchema({
     userId: v.id('users'),
     topic: v.string(),
     details: v.optional(v.string()),
+    youtubeUrl: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
     submittedAt: v.number(),
     // RBAC: admin submission review fields

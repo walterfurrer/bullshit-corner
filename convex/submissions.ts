@@ -2,6 +2,7 @@ import { RateLimiter } from '@convex-dev/rate-limiter'
 import { ConvexError, v } from 'convex/values'
 
 import { SUBMISSION_LIMITS } from '../shared/constants'
+import { isValidYouTubeUrl } from '../shared/youtubeUrl'
 import { components } from './_generated/api'
 import { mutation, query } from './_generated/server'
 import { getOrCreateUserId } from './users'
@@ -9,6 +10,7 @@ import { getOrCreateUserId } from './users'
 const TOPIC_MAX = SUBMISSION_LIMITS.topic
 const ALIAS_MAX = SUBMISSION_LIMITS.alias
 const DETAILS_MAX = SUBMISSION_LIMITS.details
+const YOUTUBE_URL_MAX = SUBMISSION_LIMITS.youtubeUrl
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000
 
@@ -20,6 +22,7 @@ export const submit = mutation({
   args: {
     topic: v.string(),
     details: v.optional(v.string()),
+    youtubeUrl: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -31,6 +34,7 @@ export const submit = mutation({
 
     const topic = args.topic.trim()
     const details = args.details?.trim() || undefined
+    const youtubeUrl = args.youtubeUrl?.trim() || undefined
     const submittedBy = args.submittedBy?.trim() || undefined
 
     if (topic.length === 0) {
@@ -47,6 +51,19 @@ export const submit = mutation({
       throw new ConvexError(
         `Details must be ${DETAILS_MAX} characters or fewer (received ${details.length}).`,
       )
+    }
+
+    if (youtubeUrl !== undefined) {
+      if (youtubeUrl.length > YOUTUBE_URL_MAX) {
+        throw new ConvexError(
+          `YouTube URL must be ${YOUTUBE_URL_MAX} characters or fewer (received ${youtubeUrl.length}).`,
+        )
+      }
+      if (!isValidYouTubeUrl(youtubeUrl)) {
+        throw new ConvexError(
+          'Please enter a valid YouTube URL (youtube.com/watch, youtu.be, shorts, or live).',
+        )
+      }
     }
 
     if (submittedBy !== undefined && submittedBy.length > ALIAS_MAX) {
@@ -71,6 +88,7 @@ export const submit = mutation({
       userId,
       topic,
       details,
+      youtubeUrl,
       submittedBy: finalSubmittedBy,
       submittedAt: Date.now(),
     })

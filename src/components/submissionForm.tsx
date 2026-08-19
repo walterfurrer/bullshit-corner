@@ -24,6 +24,7 @@ import {
   validateLength,
   validateTopic,
 } from '#/lib/submissionUtils'
+import { isValidYouTubeUrl } from '#shared/youtubeUrl'
 
 import type { Doc } from '#convex/_generated/dataModel'
 
@@ -56,6 +57,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
         ? 'Anonymous'
         : (user?.name ?? ''),
       details: '',
+      youtubeUrl: '',
     },
     onSubmit: async ({ value }) => {
       setSubmitStatus('idle')
@@ -121,49 +123,171 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
       noValidate
     >
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <form.Field
-          name="topic"
-          validators={{
-            onChange: ({ value }) =>
-              validateTopic(value) ??
-              validateLength(value, SUBMISSION_LIMITS.topic),
-            onBlur: ({ value }) => validateTopic(value),
-          }}
-        >
-          {(field) => (
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor={field.name}>
-                Bullshit Corner Topic
-                <span
-                  className="ms-1 text-destructive"
-                  aria-hidden="true"
-                >
-                  *
-                </span>
-              </Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onChange={(event) => field.handleChange(event.target.value)}
-                onBlur={field.handleBlur}
-                placeholder="What deserves a spot in Bullshit Corner?"
-                aria-required="true"
-                aria-describedby={
-                  field.state.meta.isTouched &&
-                    field.state.meta.errors.length > 0
-                    ? `${field.name}-error`
-                    : undefined
+        {/* Left column: Topic, Alias, YouTube */}
+        <div className="flex flex-col gap-6">
+          <form.Field
+            name="topic"
+            validators={{
+              onChange: ({ value }) =>
+                validateTopic(value) ??
+                validateLength(value, SUBMISSION_LIMITS.topic),
+              onBlur: ({ value }) => validateTopic(value),
+            }}
+          >
+            {(field) => (
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor={field.name}>
+                  Bullshit Corner Topic
+                  <span
+                    className="ms-1 text-destructive"
+                    aria-hidden="true"
+                  >
+                    *
+                  </span>
+                </Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder="What deserves a spot in Bullshit Corner?"
+                  aria-required="true"
+                  aria-describedby={
+                    field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
+                      ? `${field.name}-error`
+                      : undefined
+                  }
+                  aria-invalid={
+                    field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
+                      ? true
+                      : undefined
+                  }
+                />
+                {field.state.meta.isTouched &&
+                  field.state.meta.errors.length > 0 && (
+                    <p
+                      id={`${field.name}-error`}
+                      className="text-sm text-destructive"
+                      role="alert"
+                    >
+                      {field.state.meta.errors[0]}
+                    </p>
+                  )}
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field
+            name="alias"
+            validators={{
+              onChange: ({ value }) =>
+                aliasLocked
+                  ? undefined
+                  : validateLength(value, SUBMISSION_LIMITS.alias),
+            }}
+          >
+            {(field) => (
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor={field.name}>Name/Alias</Label>
+                {aliasLocked ? (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger render={<span tabIndex={0} className="w-full" />}>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          value="Anonymous"
+                          disabled
+                          placeholder="Anonymous if left blank."
+                          aria-describedby={`${field.name}-tooltip`}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent id={`${field.name}-tooltip`}>
+                        Change this in Settings to use a display name.
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : (
+                  <>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onChange={(event) => field.handleChange(event.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="Anonymous if left blank."
+                      aria-describedby={
+                        field.state.meta.isTouched &&
+                          field.state.meta.errors.length > 0
+                          ? `${field.name}-error`
+                          : undefined
+                      }
+                      aria-invalid={
+                        field.state.meta.isTouched &&
+                          field.state.meta.errors.length > 0
+                          ? true
+                          : undefined
+                      }
+                    />
+                    {field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0 && (
+                        <p
+                          id={`${field.name}-error`}
+                          className="text-sm text-destructive"
+                          role="alert"
+                        >
+                          {field.state.meta.errors[0]}
+                        </p>
+                      )}
+                  </>
+                )}
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field
+            name="youtubeUrl"
+            validators={{
+              onChange: ({ value }) => {
+                if (!value.trim()) return undefined
+                const lengthErr = validateLength(value, SUBMISSION_LIMITS.youtubeUrl)
+                if (lengthErr) return lengthErr
+                if (!isValidYouTubeUrl(value.trim())) {
+                  return 'Please enter a valid YouTube URL'
                 }
-                aria-invalid={
-                  field.state.meta.isTouched &&
-                    field.state.meta.errors.length > 0
-                    ? true
-                    : undefined
-                }
-              />
-              {field.state.meta.isTouched &&
-                field.state.meta.errors.length > 0 && (
+                return undefined
+              },
+            }}
+          >
+            {(field) => (
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor={field.name}>YouTube Link</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  type="url"
+                  value={field.state.value}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder="https://youtube.com/watch?v=..."
+                  aria-describedby={
+                    field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
+                      ? `${field.name}-error`
+                      : `${field.name}-hint`
+                  }
+                  aria-invalid={
+                    field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
+                      ? true
+                      : undefined
+                  }
+                />
+                {field.state.meta.isTouched &&
+                  field.state.meta.errors.length > 0 ? (
                   <p
                     id={`${field.name}-error`}
                     className="text-sm text-destructive"
@@ -171,79 +295,20 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
                   >
                     {field.state.meta.errors[0]}
                   </p>
+                ) : (
+                  <p
+                    id={`${field.name}-hint`}
+                    className="text-xs text-muted-foreground"
+                  >
+                    Links are reviewed before publishing.
+                  </p>
                 )}
-            </div>
-          )}
-        </form.Field>
+              </div>
+            )}
+          </form.Field>
+        </div>
 
-        <form.Field
-          name="alias"
-          validators={{
-            onChange: ({ value }) =>
-              aliasLocked
-                ? undefined
-                : validateLength(value, SUBMISSION_LIMITS.alias),
-          }}
-        >
-          {(field) => (
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor={field.name}>Name/Alias (optional)</Label>
-              {aliasLocked ? (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger render={<span tabIndex={0} className="w-full" />}>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value="Anonymous"
-                        disabled
-                        placeholder="Anonymous if left blank."
-                        aria-describedby={`${field.name}-tooltip`}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent id={`${field.name}-tooltip`}>
-                      Change this in Settings to use a display name.
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : (
-                <>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    onBlur={field.handleBlur}
-                    placeholder="Anonymous if left blank."
-                    aria-describedby={
-                      field.state.meta.isTouched &&
-                        field.state.meta.errors.length > 0
-                        ? `${field.name}-error`
-                        : undefined
-                    }
-                    aria-invalid={
-                      field.state.meta.isTouched &&
-                        field.state.meta.errors.length > 0
-                        ? true
-                        : undefined
-                    }
-                  />
-                  {field.state.meta.isTouched &&
-                    field.state.meta.errors.length > 0 && (
-                      <p
-                        id={`${field.name}-error`}
-                        className="text-sm text-destructive"
-                        role="alert"
-                      >
-                        {field.state.meta.errors[0]}
-                      </p>
-                    )}
-                </>
-              )}
-            </div>
-          )}
-        </form.Field>
-
+        {/* Right column: Details (stretches to fill height) */}
         <form.Field
           name="details"
           validators={{
@@ -253,7 +318,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
         >
           {(field) => (
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor={field.name}>Details (optional)</Label>
+              <Label htmlFor={field.name}>Details</Label>
               <Textarea
                 id={field.name}
                 name={field.name}
@@ -261,6 +326,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
                 onChange={(event) => field.handleChange(event.target.value)}
                 onBlur={field.handleBlur}
                 placeholder="Why does this deserve a spot?"
+                className="min-h-[120px] flex-1"
                 aria-describedby={
                   field.state.meta.isTouched &&
                     field.state.meta.errors.length > 0

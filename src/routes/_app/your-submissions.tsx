@@ -99,6 +99,7 @@ function SubmissionsList() {
           key={submission._id}
           topic={submission.topic}
           details={submission.details}
+          youtubeUrl={submission.youtubeUrl}
           submittedBy={submission.submittedBy}
           submittedAt={submission.submittedAt}
         />

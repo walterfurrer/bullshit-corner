@@ -6,10 +6,12 @@ import {
 } from '#/components/ui/accordion.tsx'
 import { Button } from '#/components/ui/button.tsx'
 import { FormatDetails } from '#/lib/formatDetails'
+import { YoutubeLogoIcon } from '@phosphor-icons/react'
 
 type BaseProps = {
   topic: string
   details?: string
+  youtubeUrl?: string
   submittedBy?: string
   submittedAt: number
 }
@@ -43,7 +45,7 @@ function truncateText(text: string, maxLength: number): string {
 }
 
 export function SubmissionCard(props: SubmissionCardProps) {
-  const { topic, details, submittedBy, submittedAt } = props
+  const { topic, details, youtubeUrl, submittedBy, submittedAt } = props
 
   return (
     <article className="flex flex-col gap-3 rounded-lg border border-border p-4 text-start">
@@ -90,6 +92,18 @@ export function SubmissionCard(props: SubmissionCardProps) {
         <p className="text-xs italic text-muted-foreground">
           No description submitted.
         </p>
+      )}
+
+      {youtubeUrl && (
+        <a
+          href={youtubeUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
+        >
+          <YoutubeLogoIcon size={14} aria-hidden="true" />
+          Watch video
+        </a>
       )}
 
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
