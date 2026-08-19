@@ -8,6 +8,7 @@ import {
   SubmissionFilters,
   type SubmissionFilter,
 } from '#/components/admin/submissionFilters'
+import { Alert, AlertDescription } from '#/components/ui/alert.tsx'
 
 import { api } from '#convex/_generated/api'
 import type { Id } from '#convex/_generated/dataModel'
@@ -96,18 +97,17 @@ function SubmissionsReview() {
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-xl font-bold">Submission Review</h1>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-xl font-bold tracking-racing-compact">
+        Submission Review
+      </h1>
 
       <SubmissionFilters value={filter} onChange={setFilter} />
 
       {actionError && (
-        <div
-          className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-          role="alert"
-        >
-          {actionError}
-        </div>
+        <Alert variant="destructive">
+          <AlertDescription>{actionError}</AlertDescription>
+        </Alert>
       )}
 
       {submissions.length === 0 ? (
@@ -117,7 +117,7 @@ function SubmissionsReview() {
             : 'No dismissed submissions.'}
         </p>
       ) : (
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
           {filter === 'available'
             ? submissions.map((submission) => (
               <SubmissionCard

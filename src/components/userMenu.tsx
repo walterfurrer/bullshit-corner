@@ -44,7 +44,7 @@ export function UserMenu() {
         )}
         {userNavLinks.map((link) => (
           <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
-            <link.icon className="me-2 size-4" aria-hidden={true} />
+            <link.icon aria-hidden={true} />
             {link.label}
           </DropdownMenuItem>
         ))}
@@ -53,7 +53,7 @@ export function UserMenu() {
             <DropdownMenuSeparator />
             {adminNavLinks.map((link) => (
               <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
-                <link.icon className="me-2 size-4" aria-hidden={true} />
+                <link.icon aria-hidden={true} />
                 {link.label}
               </DropdownMenuItem>
             ))}
@@ -61,7 +61,7 @@ export function UserMenu() {
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>
-          <SignOutIcon className="me-2 size-4" aria-hidden="true" />
+          <SignOutIcon aria-hidden="true" />
           Sign Out
         </DropdownMenuItem>
       </DropdownMenuContent>

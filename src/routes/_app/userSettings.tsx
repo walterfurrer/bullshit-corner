@@ -77,21 +77,16 @@ function SettingsLayout({ sections }: { sections: SettingsSection[] }) {
   return (
     <div className="flex flex-col gap-6 md:flex-row md:gap-8">
       {/* Sidebar — vertical on desktop, horizontal scroll on mobile */}
-      <nav
-        aria-label="Settings sections"
-        className="shrink-0 md:w-48 lg:w-56"
-      >
-        <ul className="flex gap-1 overflow-x-auto pb-2 md:flex-col md:gap-0.5 md:overflow-x-visible md:pb-0">
+      <nav aria-label="Settings sections" className="section-nav">
+        <ul className="section-nav-list">
           {sections.map((section) => (
             <li key={section.id}>
               <button
                 type="button"
                 onClick={() => setActiveSection(section.id)}
                 className={cn(
-                  'w-full whitespace-nowrap rounded-sm px-3 py-2 text-start text-sm font-medium transition-colors',
-                  activeSection === section.id
-                    ? 'bg-accent text-accent-foreground'
-                    : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
+                  'section-nav-item',
+                  activeSection === section.id && 'section-nav-item-active',
                 )}
                 aria-current={activeSection === section.id ? 'page' : undefined}
               >
@@ -371,7 +366,7 @@ function IdentitySection({
           display name.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-6">
+      <CardContent className="gap-6">
         {/* Anonymous toggle */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
@@ -401,7 +396,7 @@ function IdentitySection({
 
         {/* Display name input — shown when not anonymous */}
         {user.alwaysAnonymous !== true && (
-          <div className="flex flex-col gap-3 border-t border-border pt-4">
+          <div className="flex flex-col gap-3 border-t pt-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="settings-display-name">Display Name</Label>
               <Input
@@ -444,10 +439,7 @@ function IdentitySection({
 
         {/* Shared success message */}
         {successMessage && (
-          <p
-            role="status"
-            className="text-sm text-green-600 dark:text-green-400"
-          >
+          <p role="status" className="text-sm text-success">
             {successMessage}
           </p>
         )}
@@ -463,7 +455,7 @@ function SettingsSkeleton() {
         <Skeleton className="h-5 w-40" />
         <Skeleton className="mt-2 h-4 w-64" />
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="gap-4">
         <Skeleton className="h-4 w-48" />
         <Skeleton className="h-9 w-full" />
       </CardContent>
@@ -480,7 +472,7 @@ function SettingsError({
 }) {
   return (
     <Card>
-      <CardContent className="flex flex-col items-center gap-3 py-8">
+      <CardContent className="items-center py-8">
         <p className="text-sm text-destructive">{message}</p>
         <Button variant="outline" size="sm" onClick={onRetry}>
           Retry

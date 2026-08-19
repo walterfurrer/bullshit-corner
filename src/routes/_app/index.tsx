@@ -9,7 +9,7 @@ import { Skeleton } from '#/components/ui/skeleton.tsx'
 
 import { api } from '#convex/_generated/api'
 
-const leaderboardQuery = convexQuery(api.topics.listRanked, { limit: 50 })
+const leaderboardQuery = convexQuery(api.entries.listRanked, { limit: 50 })
 
 export const Route = createFileRoute('/_app/')({
   head: () => ({
@@ -51,7 +51,7 @@ function Home() {
       </div>
       <div className="flex flex-col gap-2">
         <h2>Have some bullshit to submit?</h2>
-        <div className="flex flex-start">
+        <div>
           <Button render={<Link to="/submit-topic" viewTransition />} nativeButton={false} size="lg">Submit a Topic</Button>
         </div>
       </div>

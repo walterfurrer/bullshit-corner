@@ -3,6 +3,11 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 
 import { SubmissionForm } from '#/components/submissionForm'
 import { SiteFooter } from '#/components/siteFooter'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '#/components/ui/alert.tsx'
 import { currentUserQuery } from '#/hooks/useCurrentUser.ts'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 
@@ -39,14 +44,17 @@ function SubmitTopicPage() {
 
       {ENABLE_AUTH && (
         <Show when="signed-out">
-          <div className="flex flex-col gap-1 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
-            <p className="font-medium">A free account is required to submit.</p>
-            <p className="text-muted-foreground">
+          <Alert
+            className="rounded-lg border-primary/30 bg-primary/5"
+            role="note"
+          >
+            <AlertTitle>A free account is required to submit.</AlertTitle>
+            <AlertDescription>
               Fill out the form first — when you hit submit, we'll ask you to
               sign in or create a free account. This helps keep submissions fair
               and limits spam.
-            </p>
-          </div>
+            </AlertDescription>
+          </Alert>
         </Show>
       )}
 

@@ -15,7 +15,7 @@ export function SiteHeader() {
   const { isLoaded, isSignedIn } = useAuth()
 
   return (
-    <header className="sticky top-0 z-10 border-b border-border/60 bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-10 border-b border-border/60 bg-background/80 backdrop-blur-xs">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
         <Link to="/" title="Home" aria-label="Home" id="logo" viewTransition>
           <div className="flex items-center gap-2.5">

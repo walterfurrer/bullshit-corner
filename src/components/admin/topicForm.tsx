@@ -68,8 +68,8 @@ export function TopicForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         <Label htmlFor="topic-title">Title *</Label>
         <Input
           id="topic-title"
@@ -85,7 +85,7 @@ export function TopicForm({
       </div>
 
       {showRanking && (
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="topic-ranking">Ranking Position *</Label>
           <Input
             id="topic-ranking"
@@ -102,7 +102,7 @@ export function TopicForm({
         </div>
       )}
 
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         <Label htmlFor="topic-youtube-url">YouTube URL</Label>
         <Input
           id="topic-youtube-url"
@@ -113,7 +113,7 @@ export function TopicForm({
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         <Label htmlFor="topic-submitted-by">Submitted By</Label>
         <Input
           id="topic-submitted-by"

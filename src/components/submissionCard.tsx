@@ -54,12 +54,12 @@ export function SubmissionCard(props: SubmissionCardProps) {
   const [showDetails, setShowDetails] = useState(false)
 
   return (
-    <article className="flex flex-col gap-2 rounded-lg border border-border p-4 text-start">
+    <article className="flex flex-col gap-2 rounded-lg border p-4 text-start">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <h3 className="text-base font-semibold">
+          <h2 className="text-base font-semibold tracking-racing-compact">
             {truncateText(topic, 200)}
-          </h3>
+          </h2>
           <p className="mt-0.5 text-xs text-muted-foreground">
             {submittedBy
               ? `Submitted by ${submittedBy}`
@@ -79,7 +79,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
                       aria-label="Watch on YouTube"
                     />
                   }
-                  className="inline-flex size-8 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-primary"
+                  className="inline-flex size-8 items-center justify-center rounded-xs text-muted-foreground transition-colors hover:text-primary"
                 >
                   <YoutubeLogoIcon size={20} aria-hidden="true" />
                 </TooltipTrigger>
@@ -101,7 +101,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
                     }
                     className="text-muted-foreground hover:text-primary"
                   >
-                    <ArrowFatUpIcon size={18} aria-hidden="true" />
+                    <ArrowFatUpIcon data-icon="inline-start" aria-hidden="true" />
                   </TooltipTrigger>
                   <TooltipContent>Promote to leaderboard</TooltipContent>
                 </Tooltip>
@@ -118,7 +118,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
                     }
                     className="text-muted-foreground hover:text-destructive"
                   >
-                    <XIcon size={18} aria-hidden="true" />
+                    <XIcon data-icon="inline-start" aria-hidden="true" />
                   </TooltipTrigger>
                   <TooltipContent>Dismiss</TooltipContent>
                 </Tooltip>
@@ -138,7 +138,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
                   }
                   className="text-muted-foreground hover:text-primary"
                 >
-                  <ArrowCounterClockwiseIcon size={18} aria-hidden="true" />
+                  <ArrowCounterClockwiseIcon data-icon="inline-start" aria-hidden="true" />
                 </TooltipTrigger>
                 <TooltipContent>Restore</TooltipContent>
               </Tooltip>

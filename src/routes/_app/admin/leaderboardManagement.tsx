@@ -222,9 +222,11 @@ function LeaderboardManagement() {
   const topicIds = topics.map((t) => t._id)
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-xl font-bold">Leaderboard Management</h1>
+        <h1 className="text-xl font-bold tracking-racing-compact">
+          Leaderboard Management
+        </h1>
         {reorderMode ? (
           <div className="flex items-center gap-2 md:hidden">
             <Button
@@ -282,7 +284,7 @@ function LeaderboardManagement() {
             items={topicIds}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               {topics.map((topic, index) => (
                 <SortableTopicItem
                   key={topic._id}

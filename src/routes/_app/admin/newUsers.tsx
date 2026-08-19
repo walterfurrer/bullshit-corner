@@ -3,6 +3,10 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import {
+  AdminUserRow,
+  AdminUserRowSkeleton,
+} from '#/components/admin/adminUserRow'
+import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -27,7 +31,9 @@ function NewUsers() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-medium">New Users</h2>
+        <h1 className="text-xl font-bold tracking-racing-compact">
+          New Users
+        </h1>
         <p className="text-sm text-muted-foreground">
           Most recent signups — updates in real time.
         </p>
@@ -64,7 +70,7 @@ function UserRow({ user }: UserRowProps) {
 
   if (isAnonymous) {
     return (
-      <div className="flex items-center gap-3 rounded-sm border border-border p-3">
+      <AdminUserRow>
         <Avatar>
           <AvatarFallback>?</AvatarFallback>
         </Avatar>
@@ -79,7 +85,7 @@ function UserRow({ user }: UserRowProps) {
         >
           {formatRelativeTime(user._creationTime)}
         </time>
-      </div>
+      </AdminUserRow>
     )
   }
 
@@ -94,7 +100,7 @@ function UserRow({ user }: UserRowProps) {
       .slice(0, 2) || '?'
 
   return (
-    <div className="flex items-center gap-3 rounded-sm border border-border p-3">
+    <AdminUserRow>
       <Avatar>
         <AvatarImage src={user.imageUrl} alt={displayName} />
         <AvatarFallback>{initials}</AvatarFallback>
@@ -115,7 +121,7 @@ function UserRow({ user }: UserRowProps) {
       >
         {formatRelativeTime(user._creationTime)}
       </time>
-    </div>
+    </AdminUserRow>
   )
 }
 
@@ -146,22 +152,15 @@ function NewUsersPending() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-7 w-40" />
         <Skeleton className="h-4 w-64" />
       </div>
       <div className="flex flex-col gap-2">
+        <p className="sr-only" role="status">
+          Loading recent users…
+        </p>
         {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-3 rounded-sm border border-border p-3"
-          >
-            <Skeleton className="size-8 rounded-full" />
-            <div className="flex-1 space-y-1.5">
-              <Skeleton className="h-3.5 w-28" />
-              <Skeleton className="h-3 w-44" />
-            </div>
-            <Skeleton className="h-3 w-12" />
-          </div>
+          <AdminUserRowSkeleton key={i} trailing="time" />
         ))}
       </div>
     </div>

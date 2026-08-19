@@ -28,7 +28,7 @@ function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
     <SheetPrimitive.Backdrop
       data-slot="sheet-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/10 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs",
+        "fixed inset-0 z-50 bg-overlay/10 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs",
         className
       )}
       {...props}
@@ -65,12 +65,12 @@ function SheetContent({
             render={
               <Button
                 variant="ghost"
-                className="absolute top-4 right-4"
+                className="absolute top-4 end-4"
                 size="icon-sm"
               />
             }
           >
-            <XIcon strokeWidth={2} />
+            <XIcon data-icon="inline-start" strokeWidth={2} />
             <span className="sr-only">Close</span>
           </SheetPrimitive.Close>
         )}
@@ -103,7 +103,7 @@ function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
-      className={cn("font-heading font-medium text-foreground", className)}
+      className={cn("font-sans text-base/normal font-medium tracking-normal text-foreground", className)}
       {...props}
     />
   )

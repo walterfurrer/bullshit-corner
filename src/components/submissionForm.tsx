@@ -7,9 +7,11 @@ import { useConvexAuth } from 'convex/react'
 import { ConvexError } from 'convex/values'
 
 import { api } from '#convex/_generated/api'
+import { Alert, AlertDescription } from '#/components/ui/alert'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
+import { Spinner } from '#/components/ui/spinner'
 import { Textarea } from '#/components/ui/textarea'
 import {
   Tooltip,
@@ -122,7 +124,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
       className="flex flex-col gap-6"
       noValidate
     >
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2">
         {/* Left column: Topic, Alias, YouTube */}
         <div className="flex flex-col gap-6">
           <form.Field
@@ -356,35 +358,31 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
       </div>
 
       {submitStatus === 'auth-required' && (
-        <div
-          className="rounded-sm border border-primary/30 bg-primary/5 px-4 py-3 text-sm"
+        <Alert
+          className="border-primary/30 bg-primary/5"
           role="status"
           aria-live="polite"
         >
-          {isAuthenticated
-            ? 'You\u2019re signed in. Click \u201cSubmit Topic\u201d again to confirm your submission.'
-            : 'Sign in or create an account to continue. Your draft will stay here.'}
-        </div>
+          <AlertDescription className="text-foreground">
+            {isAuthenticated
+              ? 'You\u2019re signed in. Click \u201cSubmit Topic\u201d again to confirm your submission.'
+              : 'Sign in or create an account to continue. Your draft will stay here.'}
+          </AlertDescription>
+        </Alert>
       )}
 
       {submitStatus === 'success' && (
-        <div
-          className="rounded-sm border border-green-800/40 bg-green-950/30 px-4 py-3 text-sm text-green-300"
-          role="status"
-          aria-live="polite"
-        >
-          Your topic has been submitted! Thanks for contributing.
-        </div>
+        <Alert variant="success" role="status" aria-live="polite">
+          <AlertDescription>
+            Your topic has been submitted! Thanks for contributing.
+          </AlertDescription>
+        </Alert>
       )}
 
       {submitStatus === 'error' && submitError && (
-        <div
-          className="rounded-sm border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
-          role="alert"
-          aria-live="assertive"
-        >
-          {submitError}
-        </div>
+        <Alert variant="destructive" aria-live="assertive">
+          <AlertDescription>{submitError}</AlertDescription>
+        </Alert>
       )}
 
       <form.Subscribe selector={(state) => state.isSubmitting}>
@@ -397,10 +395,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
           >
             {isSubmitting ? (
               <>
-                <span
-                  className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-                  aria-hidden="true"
-                />
+                <Spinner data-icon="inline-start" aria-hidden="true" />
                 <span>Submitting…</span>
               </>
             ) : (

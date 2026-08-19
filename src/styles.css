@@ -7,7 +7,7 @@
 :root {
   color-scheme: dark;
 
-  /* Typography Scale — minor-third (1.2), base 16px */
+  /* Typography scale — minor third (1.2), base 16px */
   --font-size-xs: 0.6944rem;
   --font-size-sm: 0.8333rem;
   --font-size-base: 1rem;
@@ -30,11 +30,8 @@
   --letter-spacing-lg: -0.005em;
   --letter-spacing-xl: -0.01em;
   --letter-spacing-2xl: -0.015em;
-  --letter-spacing-3xl: -0.02em;
+  --letter-spacing-3xl: -0.01em;
   --letter-spacing-4xl: -0.025em;
-  --measure-narrow: 45ch;
-  --measure-base: 65ch;
-  --measure-wide: 75ch;
 
   --background: oklch(0.14 0.005 230);
   --foreground: oklch(0.96 0.003 230);
@@ -52,23 +49,15 @@
   --accent-foreground: oklch(0.96 0.003 230);
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.145 0.02 27);
+  --success: oklch(0.72 0.16 145);
+  --success-foreground: oklch(0.16 0.03 145);
+  --warning: oklch(0.8 0.15 88);
+  --warning-foreground: oklch(0.18 0.04 88);
   --border: oklch(0.27 0.007 230);
   --input: oklch(0.27 0.007 230);
   --ring: oklch(0.5 0.02 230);
-  --chart-1: oklch(0.75 0.02 230);
-  --chart-2: oklch(0.6 0.02 230);
-  --chart-3: oklch(0.45 0.02 230);
-  --chart-4: oklch(0.32 0.02 230);
-  --chart-5: oklch(0.2 0.02 230);
+  --overlay: oklch(0 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.17 0.006 230);
-  --sidebar-foreground: oklch(0.96 0.003 230);
-  --sidebar-primary: oklch(0.65 0.19 29);
-  --sidebar-primary-foreground: oklch(0.145 0.02 29);
-  --sidebar-accent: oklch(0.25 0.007 230);
-  --sidebar-accent-foreground: oklch(0.96 0.003 230);
-  --sidebar-border: oklch(0.27 0.007 230);
-  --sidebar-ring: oklch(0.5 0.02 230);
   --gold: oklch(0.8 0.15 88);
   --silver: oklch(0.78 0.006 230);
   --bronze: oklch(0.62 0.12 55);
@@ -80,6 +69,13 @@
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, 'Liberation Mono', 'Courier New', monospace;
   --font-racing: 'Racing Sans One', ui-sans-serif, system-ui, sans-serif;
+  --text-xs: var(--font-size-xs);
+  --text-xs--line-height: var(--line-height-xs);
+  --text-xs--letter-spacing: var(--letter-spacing-xs);
+  --text-sm: var(--font-size-sm);
+  --text-sm--line-height: var(--line-height-sm);
+  --text-sm--letter-spacing: var(--letter-spacing-sm);
+  --tracking-racing-compact: 0.01em;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -96,37 +92,26 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
+  --color-overlay: var(--overlay);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
   --color-gold: var(--gold);
   --color-silver: var(--silver);
   --color-bronze: var(--bronze);
 }
 
 html,
-body,
-#app {
+body {
   min-height: 100%;
 }
 
@@ -235,10 +220,19 @@ body,
   .nav-link-desktop {
     @apply text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;
   }
-  .nav-link-mobile {
-    @apply block px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;
-  }
   .nav-link-active {
     @apply text-sm font-medium text-foreground;
+  }
+  .section-nav {
+    @apply shrink-0 md:w-48 lg:w-56;
+  }
+  .section-nav-list {
+    @apply flex gap-1 overflow-x-auto pb-2 md:flex-col md:gap-0.5 md:overflow-x-visible md:pb-0;
+  }
+  .section-nav-item {
+    @apply block w-full whitespace-nowrap rounded-xs px-3 py-2 text-start text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground;
+  }
+  .section-nav-item-active {
+    @apply bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground;
   }
 }

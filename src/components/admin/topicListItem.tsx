@@ -15,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '#/components/ui/dropdownMenu'
+import { cn } from '#/lib/utils'
 
 interface TopicListItemProps {
   id: string
@@ -47,13 +48,19 @@ export function TopicListItem({
 }: TopicListItemProps) {
   return (
     <div
-      className={`flex items-center gap-3 rounded-lg border border-border px-4 py-3 ${isDragging ? 'opacity-50' : ''}`}
+      className={cn(
+        'flex items-center gap-3 rounded-lg border px-4 py-3',
+        isDragging && 'opacity-50',
+      )}
     >
       {/* Drag handle — always visible on desktop, only in reorder mode on mobile */}
       {dragHandleProps && (
         <button
           type="button"
-          className={`shrink-0 cursor-grab touch-none items-center justify-center rounded-sm p-1.5 text-muted-foreground hover:text-foreground active:cursor-grabbing md:flex md:p-0 ${reorderMode ? 'flex' : 'hidden'}`}
+          className={cn(
+            'shrink-0 cursor-grab touch-none items-center justify-center rounded-xs p-1.5 text-muted-foreground hover:text-foreground active:cursor-grabbing md:flex md:p-0',
+            reorderMode ? 'flex' : 'hidden',
+          )}
           aria-label="Drag to reorder"
           {...dragHandleProps}
         >
@@ -76,7 +83,7 @@ export function TopicListItem({
           disabled={isFirst}
           onClick={() => onMoveUp(id)}
         >
-          <ArrowUpIcon size={16} aria-hidden="true" />
+          <ArrowUpIcon data-icon="inline-start" aria-hidden="true" />
         </Button>
         <Button
           variant="ghost"
@@ -85,7 +92,7 @@ export function TopicListItem({
           disabled={isLast}
           onClick={() => onMoveDown(id)}
         >
-          <ArrowDownIcon size={16} aria-hidden="true" />
+          <ArrowDownIcon data-icon="inline-start" aria-hidden="true" />
         </Button>
         <Button
           variant="ghost"
@@ -93,7 +100,7 @@ export function TopicListItem({
           aria-label="Edit topic"
           onClick={() => onEdit(id)}
         >
-          <PencilSimpleIcon size={16} aria-hidden="true" />
+          <PencilSimpleIcon data-icon="inline-start" aria-hidden="true" />
         </Button>
         <Button
           variant="ghost"
@@ -101,7 +108,7 @@ export function TopicListItem({
           aria-label="Remove topic"
           onClick={() => onRemove(id)}
         >
-          <TrashIcon size={16} aria-hidden="true" />
+          <TrashIcon data-icon="inline-start" aria-hidden="true" />
         </Button>
       </div>
 
@@ -115,7 +122,7 @@ export function TopicListItem({
             disabled={isFirst}
             onClick={() => onMoveUp(id)}
           >
-            <ArrowUpIcon size={20} aria-hidden="true" />
+            <ArrowUpIcon data-icon="inline-start" aria-hidden="true" />
           </Button>
           <Button
             variant="ghost"
@@ -124,7 +131,7 @@ export function TopicListItem({
             disabled={isLast}
             onClick={() => onMoveDown(id)}
           >
-            <ArrowDownIcon size={20} aria-hidden="true" />
+            <ArrowDownIcon data-icon="inline-start" aria-hidden="true" />
           </Button>
         </div>
       )}
@@ -134,18 +141,18 @@ export function TopicListItem({
         <div className="shrink-0 md:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger
-              className="flex size-10 items-center justify-center rounded-sm text-muted-foreground hover:text-foreground"
+              className="flex size-10 items-center justify-center rounded-xs text-muted-foreground hover:text-foreground"
               aria-label="Topic actions"
             >
               <DotsThreeIcon size={24} weight="bold" aria-hidden="true" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-44">
               <DropdownMenuItem onClick={() => onEdit(id)}>
-                <PencilSimpleIcon className="me-2 size-4" aria-hidden="true" />
+                <PencilSimpleIcon data-icon="inline-start" aria-hidden="true" />
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onRemove(id)}>
-                <TrashIcon className="me-2 size-4" aria-hidden="true" />
+                <TrashIcon data-icon="inline-start" aria-hidden="true" />
                 Remove
               </DropdownMenuItem>
             </DropdownMenuContent>

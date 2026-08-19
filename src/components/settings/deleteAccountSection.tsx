@@ -5,6 +5,11 @@ import { useMutation } from '@tanstack/react-query'
 import { TrashIcon, WarningOctagonIcon } from '@phosphor-icons/react'
 
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '#/components/ui/alert.tsx'
+import {
   Card,
   CardContent,
   CardDescription,
@@ -78,18 +83,21 @@ export function DeleteAccountSection() {
           cannot be undone.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2 rounded-md border border-destructive/20 bg-destructive/5 px-4 py-3">
-          <p className="text-sm text-destructive dark:text-red-400">
-            Deleting your account will:
-          </p>
-          <ul className="list-inside list-disc text-sm text-muted-foreground">
-            <li>Anonymize all your past submissions (shown as &ldquo;Deleted User&rdquo;)</li>
-            <li>Remove your profile and sign-in credentials</li>
-            <li>Sign you out of all sessions immediately</li>
-            <li>This is permanent and cannot be reversed</li>
-          </ul>
-        </div>
+      <CardContent className="gap-4">
+        <Alert variant="destructive" role="note">
+          <AlertTitle>Deleting your account will:</AlertTitle>
+          <AlertDescription>
+            <ul className="list-inside list-disc">
+              <li>
+                Anonymize all your past submissions (shown as &ldquo;Deleted
+                User&rdquo;)
+              </li>
+              <li>Remove your profile and sign-in credentials</li>
+              <li>Sign you out of all sessions immediately</li>
+              <li>This is permanent and cannot be reversed</li>
+            </ul>
+          </AlertDescription>
+        </Alert>
 
         <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <AlertDialogTrigger
@@ -104,7 +112,7 @@ export function DeleteAccountSection() {
               />
             }
           >
-            <TrashIcon className="size-4" aria-hidden="true" />
+            <TrashIcon data-icon="inline-start" aria-hidden="true" />
             Delete my account
           </AlertDialogTrigger>
           <AlertDialogContent>
@@ -164,6 +172,6 @@ export function DeleteAccountSection() {
           </AlertDialogContent>
         </AlertDialog>
       </CardContent>
-    </Card >
+    </Card>
   )
 }

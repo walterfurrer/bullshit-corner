@@ -66,6 +66,7 @@ function OnboardingPage() {
   if (success) {
     return (
       <div className="flex min-h-dvh items-center justify-center px-4">
+        <h1 className="sr-only">Onboarding complete</h1>
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-xl">You&rsquo;re all set!</CardTitle>
@@ -120,6 +121,7 @@ function OnboardingPage() {
 
   return (
     <div className="flex min-h-dvh items-center justify-center px-4">
+      <h1 className="sr-only">Welcome to Bullshit Corner</h1>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-xl">Welcome to Bullshit Corner</CardTitle>
@@ -127,7 +129,7 @@ function OnboardingPage() {
             Choose a display name for your submissions, or stay anonymous.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <CardContent className="gap-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor="display-name">Display Name</Label>
             <Input

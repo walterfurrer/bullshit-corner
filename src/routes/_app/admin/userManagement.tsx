@@ -2,6 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useUser } from '@clerk/tanstack-react-start'
 
+import {
+  AdminUserRow,
+  AdminUserRowSkeleton,
+} from '#/components/admin/adminUserRow'
+import { Alert, AlertDescription } from '#/components/ui/alert.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Button } from '#/components/ui/button.tsx'
 import { Badge } from '#/components/ui/badge.tsx'
@@ -159,8 +164,20 @@ function UserManagement() {
 
   return (
     <div className="flex flex-col gap-8">
+      <h1 className="text-xl font-bold tracking-racing-compact">
+        User Management
+      </h1>
+
+      {actionError && (
+        <Alert variant="destructive">
+          <AlertDescription>{actionError}</AlertDescription>
+        </Alert>
+      )}
+
       <section>
-        <h2 className="mb-3 text-lg font-medium">Search Users</h2>
+        <h2 className="mb-3 text-lg font-medium tracking-racing-compact">
+          Search Users
+        </h2>
         <Input
           type="search"
           placeholder="Search users by email…"
@@ -170,26 +187,19 @@ function UserManagement() {
         />
 
         {searchError && (
-          <p className="mt-2 text-sm text-destructive">{searchError}</p>
-        )}
-        {actionError && (
-          <p className="mt-2 text-sm text-destructive">{actionError}</p>
+          <Alert className="mt-2" variant="destructive">
+            <AlertDescription>{searchError}</AlertDescription>
+          </Alert>
         )}
 
         {/* Search results */}
         {searchLoading && query.trim().length >= 2 && (
           <div className="mt-4 flex flex-col gap-3">
+            <p className="sr-only" role="status">
+              Searching users…
+            </p>
             {Array.from({ length: 3 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 rounded-md border border-border p-3 animate-pulse"
-              >
-                <div className="size-8 rounded-full bg-muted" />
-                <div className="flex-1 space-y-1.5">
-                  <div className="h-3.5 w-32 rounded-sm bg-muted" />
-                  <div className="h-3 w-48 rounded-sm bg-muted" />
-                </div>
-              </div>
+              <AdminUserRowSkeleton key={i} />
             ))}
           </div>
         )}
@@ -218,25 +228,23 @@ function UserManagement() {
 
       {/* Current admins list */}
       <section>
-        <h2 className="mb-3 text-lg font-medium">Current Admins</h2>
+        <h2 className="mb-3 text-lg font-medium tracking-racing-compact">
+          Current Admins
+        </h2>
 
         {adminsError && (
-          <p className="text-sm text-destructive">{adminsError}</p>
+          <Alert variant="destructive">
+            <AlertDescription>{adminsError}</AlertDescription>
+          </Alert>
         )}
 
         {adminsLoading && (
           <div className="flex flex-col gap-3">
+            <p className="sr-only" role="status">
+              Loading administrators…
+            </p>
             {Array.from({ length: 2 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 rounded-md border border-border p-3 animate-pulse"
-              >
-                <div className="size-8 rounded-full bg-muted" />
-                <div className="flex-1 space-y-1.5">
-                  <div className="h-3.5 w-32 rounded-sm bg-muted" />
-                  <div className="h-3 w-48 rounded-sm bg-muted" />
-                </div>
-              </div>
+              <AdminUserRowSkeleton key={i} />
             ))}
           </div>
         )}
@@ -326,7 +334,7 @@ function UserCard({
     [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Unknown'
 
   return (
-    <div className="flex items-center gap-3 rounded-md border border-border p-3">
+    <AdminUserRow>
       <Avatar>
         <AvatarImage src={user.imageUrl} alt={displayName} />
         <AvatarFallback>{initials}</AvatarFallback>
@@ -381,6 +389,6 @@ function UserCard({
           </Button>
         )}
       </div>
-    </div>
+    </AdminUserRow>
   )
 }

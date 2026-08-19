@@ -11,7 +11,7 @@ import {
 import { createServerFn } from '@tanstack/react-start'
 import { useEffect } from 'react'
 
-import { cn } from '#/lib/utils'
+import { Spinner } from '#/components/ui/spinner.tsx'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 const adminSections = [
@@ -70,7 +70,10 @@ function AdminLayout() {
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="size-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+        <Spinner
+          className="size-8 text-primary"
+          aria-label="Checking admin access"
+        />
       </div>
     )
   }
@@ -81,43 +84,33 @@ function AdminLayout() {
   }
 
   return (
-    <>
-      <h1 className="mb-4">Admin</h1>
-      <div className="flex flex-col gap-6 md:flex-row md:gap-8">
-        {/* Sidebar — vertical on desktop, horizontal scroll on mobile */}
-        <nav
-          aria-label="Admin sections"
-          className="shrink-0 md:w-48 lg:w-56"
-        >
-          <ul className="flex gap-1 overflow-x-auto pb-2 md:flex-col md:gap-0.5 md:overflow-x-visible md:pb-0">
-            {adminSections.map(({ to, label }) => (
-              <li key={to}>
-                <Link
-                  to={to}
-                  className={cn(
-                    'block whitespace-nowrap rounded-sm px-3 py-2 text-start text-sm font-medium transition-colors',
-                    'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
-                  )}
-                  activeProps={{
-                    className: cn(
-                      'block whitespace-nowrap rounded-sm px-3 py-2 text-start text-sm font-medium transition-colors',
-                      'bg-accent text-accent-foreground',
-                    ),
-                  }}
-                  viewTransition
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+    <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+      {/* Layout has no heading — each admin child page owns its own <h1>,
+          matching the rest of the app's route structure. */}
+      {/* Sidebar — vertical on desktop, horizontal scroll on mobile */}
+      <nav aria-label="Admin sections" className="section-nav">
+        <ul className="section-nav-list">
+          {adminSections.map(({ to, label }) => (
+            <li key={to}>
+              <Link
+                to={to}
+                className="section-nav-item"
+                activeProps={{
+                  className: 'section-nav-item section-nav-item-active',
+                }}
+                viewTransition
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-        {/* Content area */}
-        <div className="min-w-0 flex-1">
-          <Outlet />
-        </div>
+      {/* Content area */}
+      <div className="min-w-0 flex-1">
+        <Outlet />
       </div>
-    </>
+    </div>
   )
 }

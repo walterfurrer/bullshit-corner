@@ -14,6 +14,10 @@ import {
 import type { IconProps } from '@phosphor-icons/react'
 
 import {
+  Alert,
+  AlertDescription,
+} from '#/components/ui/alert.tsx'
+import {
   Card,
   CardContent,
   CardDescription,
@@ -189,7 +193,7 @@ export function ConnectionsSection({
           accounts for easier access.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="gap-4">
         {/* Connected accounts list */}
         {externalAccounts.length > 0 ? (
           <ul className="flex flex-col gap-3" role="list">
@@ -200,7 +204,7 @@ export function ConnectionsSection({
               return (
                 <li
                   key={account.id}
-                  className="flex items-center justify-between rounded-md border border-border px-3 py-2.5"
+                  className="flex items-center justify-between rounded-md border px-3 py-2.5"
                 >
                   <div className="flex items-center gap-3">
                     <Icon className="size-5 shrink-0" aria-hidden="true" />
@@ -226,7 +230,10 @@ export function ConnectionsSection({
                       'Removing\u2026'
                     ) : (
                       <>
-                        <LinkBreakIcon className="size-4" aria-hidden="true" />
+                        <LinkBreakIcon
+                          data-icon="inline-start"
+                          aria-hidden="true"
+                        />
                         <span className="hidden sm:inline">Disconnect</span>
                       </>
                     )}
@@ -243,21 +250,18 @@ export function ConnectionsSection({
 
         {/* Safety warning when disconnect is blocked */}
         {!canDisconnect && externalAccounts.length > 0 && (
-          <div className="flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 dark:border-amber-900/50 dark:bg-amber-950/30">
-            <WarningIcon
-              className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400"
-              aria-hidden="true"
-            />
-            <p className="text-xs text-amber-800 dark:text-amber-300">
+          <Alert variant="warning" role="note">
+            <WarningIcon aria-hidden="true" />
+            <AlertDescription>
               You can&apos;t disconnect your only sign-in method. Set a password
               or connect another account first.
-            </p>
-          </div>
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Connect new providers */}
         {availableToConnect.length > 0 && (
-          <div className="flex flex-col gap-2 border-t border-border pt-4">
+          <div className="flex flex-col gap-2 border-t pt-4">
             <span className="text-sm font-medium">Connect another account</span>
             <div className="flex flex-wrap gap-2">
               {availableToConnect.map(({ strategy, label, icon: Icon }) => {
@@ -274,8 +278,8 @@ export function ConnectionsSection({
                       'Connecting\u2026'
                     ) : (
                       <>
-                        <Icon className="size-4" aria-hidden="true" />
-                        <PlusIcon className="size-3" aria-hidden="true" />
+                        <Icon data-icon="inline-start" aria-hidden="true" />
+                        <PlusIcon aria-hidden="true" />
                         {label}
                       </>
                     )}
@@ -295,7 +299,7 @@ export function ConnectionsSection({
 
         {/* Success */}
         {success && (
-          <p role="status" className="text-sm text-green-600 dark:text-green-400">
+          <p role="status" className="text-sm text-success">
             {success}
           </p>
         )}

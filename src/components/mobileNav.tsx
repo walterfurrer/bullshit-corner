@@ -42,7 +42,7 @@ export function MobileNav() {
           aria-label="Open menu"
           onClick={() => setOpen(true)}
         >
-          <ListIcon size={24} aria-hidden="true" />
+          <ListIcon data-icon="inline-start" aria-hidden="true" />
         </Button>
 
         <SheetContent side="right" aria-label="Navigation menu">
@@ -68,16 +68,16 @@ export function MobileNav() {
 
           {/* Footer — sign out or sign in */}
           {ENABLE_AUTH && (
-            <div className="mt-auto border-t border-border px-4 py-4">
+            <div className="mt-auto border-t px-4 py-4">
               {!isLoaded ? (
-                <div className="h-10 rounded-sm bg-muted animate-pulse" />
+                <div className="h-10 animate-pulse rounded-xs bg-muted" />
               ) : isSignedIn ? (
                 <Button
                   variant="ghost"
                   className="w-full justify-start gap-3 text-base"
                   onClick={handleSignOut}
                 >
-                  <SignOutIcon size={20} aria-hidden="true" />
+                  <SignOutIcon data-icon="inline-start" aria-hidden="true" />
                   Sign Out
                 </Button>
               ) : (
@@ -108,10 +108,9 @@ function NavSection({
         <li key={link.to}>
           <Link
             to={link.to}
-            className="flex min-h-11 items-center gap-3 rounded-sm px-3 py-2.5 text-base font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
+            className="flex min-h-11 items-center gap-3 rounded-xs px-3 py-2.5 text-base font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
             activeProps={{
-              className:
-                'flex min-h-11 items-center gap-3 rounded-sm px-3 py-2.5 text-base font-medium bg-accent text-accent-foreground',
+              className: 'bg-accent text-accent-foreground',
             }}
             activeOptions={link.exact ? { exact: true } : undefined}
             onClick={onNavigate}

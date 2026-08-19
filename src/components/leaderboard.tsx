@@ -13,8 +13,8 @@ export function Leaderboard({ topics }: { topics: Array<Doc<'bullshitCornerEntri
   return (
     <div className="flex flex-col gap-2">
       <h2>HPR's Leaderboard</h2>
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <div className="grid grid-cols-[3rem_1fr_2.5rem] gap-x-3 border-b border-border px-4 py-2.5 text-xs font-medium tracking-widest text-muted-foreground uppercase sm:gap-x-4 sm:px-5">
+      <div className="overflow-hidden rounded-xl border bg-card">
+        <div className="grid grid-cols-[3rem_1fr_2.5rem] gap-x-3 border-b px-4 py-2.5 text-xs font-medium tracking-widest text-muted-foreground uppercase sm:gap-x-4 sm:px-5">
           <span>Pos</span>
           <span>Topic</span>
         </div>
@@ -50,7 +50,7 @@ export function Leaderboard({ topics }: { topics: Array<Doc<'bullshitCornerEntri
                               aria-label={`Watch "${topic.title}" on YouTube`}
                             />
                           }
-                          className="inline-flex size-8 items-center justify-center justify-self-end rounded-sm text-muted-foreground transition-colors hover:text-primary"
+                          className="inline-flex size-8 items-center justify-center justify-self-end rounded-xs text-muted-foreground transition-colors hover:text-primary"
                         >
                           <YoutubeLogoIcon size={24} aria-hidden={true} />
                         </TooltipTrigger>

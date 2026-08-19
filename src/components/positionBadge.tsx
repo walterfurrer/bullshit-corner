@@ -17,7 +17,7 @@ export function PositionBadge({ position, className }: PositionBadgeProps) {
   return (
     <Badge
       className={cn(
-        'font-racing flex h-8 w-12 items-center justify-center rounded-md text-base tracking-wide',
+        'font-racing h-8 w-12 rounded-md text-base tracking-wide',
         positionStyles(position),
         className,
       )}

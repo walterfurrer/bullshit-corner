@@ -122,7 +122,7 @@ export function EmailSection({ emails, onUpdated }: EmailSectionProps) {
           Your email is used for sign-in and notifications.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="gap-4">
         {/* Current email display */}
         <div className="flex flex-col gap-1">
           <span className="text-sm text-muted-foreground">Current email</span>
@@ -148,7 +148,7 @@ export function EmailSection({ emails, onUpdated }: EmailSectionProps) {
 
         {/* Step: enter new email */}
         {step === 'enter-new' && (
-          <div className="flex flex-col gap-3 border-t border-border pt-4">
+          <div className="flex flex-col gap-3 border-t pt-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="settings-new-email">New email address</Label>
               <Input
@@ -186,7 +186,7 @@ export function EmailSection({ emails, onUpdated }: EmailSectionProps) {
 
         {/* Step: verify code */}
         {step === 'verify' && (
-          <div className="flex flex-col gap-3 border-t border-border pt-4">
+          <div className="flex flex-col gap-3 border-t pt-4">
             <p className="text-sm text-muted-foreground">
               We sent a verification code to{' '}
               <span className="font-medium text-foreground">
@@ -243,7 +243,7 @@ export function EmailSection({ emails, onUpdated }: EmailSectionProps) {
 
         {/* Success message */}
         {success && (
-          <p role="status" className="text-sm text-green-600 dark:text-green-400">
+          <p role="status" className="text-sm text-success">
             {success}
           </p>
         )}

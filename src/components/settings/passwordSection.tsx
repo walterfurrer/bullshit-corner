@@ -116,12 +116,12 @@ export function PasswordSection({ hasPassword }: PasswordSectionProps) {
             : 'Set a password so you can sign in with your email and password in addition to your connected accounts.'}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="gap-4">
         {/* Status indicator */}
         {hasPassword && !isEditing && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <CheckCircleIcon
-              className="size-4 text-green-600 dark:text-green-400"
+              className="size-4 text-success"
               aria-hidden="true"
             />
             Password is set
@@ -145,7 +145,7 @@ export function PasswordSection({ hasPassword }: PasswordSectionProps) {
 
         {/* Password form */}
         {isEditing && (
-          <div className="flex flex-col gap-4 border-t border-border pt-4">
+          <div className="flex flex-col gap-4 border-t pt-4">
             {/* Current password — only if user already has one */}
             {hasPassword && (
               <div className="flex flex-col gap-2">
@@ -251,7 +251,7 @@ export function PasswordSection({ hasPassword }: PasswordSectionProps) {
 
         {/* Success */}
         {success && (
-          <p role="status" className="text-sm text-green-600 dark:text-green-400">
+          <p role="status" className="text-sm text-success">
             {success}
           </p>
         )}
