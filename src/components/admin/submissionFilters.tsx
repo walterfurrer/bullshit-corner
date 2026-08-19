@@ -1,4 +1,4 @@
-type SubmissionFilter = 'available' | 'chosen'
+type SubmissionFilter = 'available' | 'dismissed'
 
 interface SubmissionFiltersProps {
   value: SubmissionFilter
@@ -10,33 +10,31 @@ export type { SubmissionFilter }
 export function SubmissionFilters({ value, onChange }: SubmissionFiltersProps) {
   return (
     <div
-      className="flex gap-1 border-b border-border mb-4"
+      className="mb-4 flex gap-1 border-b border-border"
       role="tablist"
       aria-label="Submission filters"
     >
       <button
         role="tab"
         aria-selected={value === 'available'}
-        className={`inline-block px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
-          value === 'available'
-            ? 'text-foreground border-primary'
-            : 'text-muted-foreground border-transparent hover:text-foreground'
-        }`}
+        className={`-mb-px inline-block border-b-2 px-4 py-2 text-sm font-medium transition-colors ${value === 'available'
+            ? 'border-primary text-foreground'
+            : 'border-transparent text-muted-foreground hover:text-foreground'
+          }`}
         onClick={() => onChange('available')}
       >
         Available
       </button>
       <button
         role="tab"
-        aria-selected={value === 'chosen'}
-        className={`inline-block px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
-          value === 'chosen'
-            ? 'text-foreground border-primary'
-            : 'text-muted-foreground border-transparent hover:text-foreground'
-        }`}
-        onClick={() => onChange('chosen')}
+        aria-selected={value === 'dismissed'}
+        className={`-mb-px inline-block border-b-2 px-4 py-2 text-sm font-medium transition-colors ${value === 'dismissed'
+            ? 'border-primary text-foreground'
+            : 'border-transparent text-muted-foreground hover:text-foreground'
+          }`}
+        onClick={() => onChange('dismissed')}
       >
-        Chosen
+        Dismissed
       </button>
     </div>
   )

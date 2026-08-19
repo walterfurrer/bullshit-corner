@@ -28,7 +28,7 @@ export const list = query({
   handler: async (ctx) => {
     await requireAdmin(ctx)
     return ctx.db
-      .query('topics')
+      .query('bullshitCornerEntries')
       .withIndex('by_ranking')
       .order('asc')
       .take(500)
@@ -41,7 +41,6 @@ export const create = mutation({
   args: {
     title: v.string(),
     ranking: v.number(),
-    description: v.optional(v.string()),
     youtubeUrl: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
   },
@@ -51,7 +50,7 @@ export const create = mutation({
 
     // Shift existing topics at or below the target ranking down by 1
     const toShift = await ctx.db
-      .query('topics')
+      .query('bullshitCornerEntries')
       .withIndex('by_ranking', (q) => q.gte('ranking', args.ranking))
       .collect()
 
@@ -59,10 +58,9 @@ export const create = mutation({
       await ctx.db.patch(topic._id, { ranking: topic.ranking + 1 })
     }
 
-    return ctx.db.insert('topics', {
+    return ctx.db.insert('bullshitCornerEntries', {
       title,
       ranking: args.ranking,
-      description: args.description,
       youtubeUrl: args.youtubeUrl,
       submittedBy: args.submittedBy,
     })
@@ -73,9 +71,8 @@ export const create = mutation({
 
 export const update = mutation({
   args: {
-    id: v.id('topics'),
+    id: v.id('bullshitCornerEntries'),
     title: v.optional(v.string()),
-    description: v.optional(v.string()),
     youtubeUrl: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
   },
@@ -92,7 +89,6 @@ export const update = mutation({
     if (fields.title !== undefined) {
       patch.title = validateTitle(fields.title)
     }
-    if (fields.description !== undefined) patch.description = fields.description
     if (fields.youtubeUrl !== undefined) patch.youtubeUrl = fields.youtubeUrl
     if (fields.submittedBy !== undefined) patch.submittedBy = fields.submittedBy
 
@@ -106,7 +102,7 @@ export const update = mutation({
 
 export const reorder = mutation({
   args: {
-    id: v.id('topics'),
+    id: v.id('bullshitCornerEntries'),
     newRanking: v.number(),
   },
   handler: async (ctx, args) => {
@@ -124,7 +120,7 @@ export const reorder = mutation({
 
     // Get all topics to re-rank
     const allTopics = await ctx.db
-      .query('topics')
+      .query('bullshitCornerEntries')
       .withIndex('by_ranking')
       .order('asc')
       .collect()
@@ -154,7 +150,7 @@ export const reorder = mutation({
 // ─── Remove ───────────────────────────────────────────────────────────────────
 
 export const remove = mutation({
-  args: { id: v.id('topics') },
+  args: { id: v.id('bullshitCornerEntries') },
   handler: async (ctx, args) => {
     await requireAdmin(ctx)
 
@@ -168,7 +164,7 @@ export const remove = mutation({
 
     // Shift subsequent topics up to close the gap
     const subsequent = await ctx.db
-      .query('topics')
+      .query('bullshitCornerEntries')
       .withIndex('by_ranking', (q) => q.gt('ranking', topic.ranking))
       .collect()
 

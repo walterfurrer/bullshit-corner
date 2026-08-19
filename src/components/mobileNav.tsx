@@ -117,7 +117,7 @@ function NavSection({
             onClick={onNavigate}
             viewTransition
           >
-            <link.icon size={20} aria-hidden="true" />
+            <link.icon size={20} aria-hidden={true} />
             {link.label}
           </Link>
         </li>

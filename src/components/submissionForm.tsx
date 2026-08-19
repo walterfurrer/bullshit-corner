@@ -326,7 +326,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
                 onChange={(event) => field.handleChange(event.target.value)}
                 onBlur={field.handleBlur}
                 placeholder="Why does this deserve a spot?"
-                className="min-h-[120px] flex-1"
+                className="min-h-30 flex-1"
                 aria-describedby={
                   field.state.meta.isTouched &&
                     field.state.meta.errors.length > 0

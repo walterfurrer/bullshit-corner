@@ -8,7 +8,6 @@ interface SortableTopicItemProps {
   id: string
   ranking: number
   title: string
-  description?: string
   isFirst: boolean
   isLast: boolean
   reorderMode?: boolean

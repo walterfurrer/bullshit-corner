@@ -15,8 +15,10 @@ import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
 import { Route as AppSubmitTopicRouteImport } from './routes/_app/submit-topic'
 import { Route as AppUserSettingsRouteImport } from './routes/_app/userSettings'
-import { Route as AppYourSubmissionsRouteImport } from './routes/_app/your-submissions'
+import { Route as AppYourSubmissionsRouteImport } from './routes/_app/yourSubmissions'
 import { Route as ApiOgRouteImport } from './routes/api/og'
+import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
+import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
 import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
 import { Route as AppAdminLeaderboardManagementRouteImport } from './routes/_app/admin/leaderboardManagement'
 import { Route as AppAdminSubmissionsRouteImport } from './routes/_app/admin/submissions'
@@ -51,13 +53,23 @@ const AppUserSettingsRoute = AppUserSettingsRouteImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 const AppYourSubmissionsRoute = AppYourSubmissionsRouteImport.update({
-  id: '/your-submissions',
-  path: '/your-submissions',
+  id: '/yourSubmissions',
+  path: '/yourSubmissions',
   getParentRoute: () => AppRoute,
 } as any)
 const ApiOgRoute = ApiOgRouteImport.update({
   id: '/api/og',
   path: '/api/og',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInSplatRoute = SignInSplatRouteImport.update({
+  id: '/sign-in/$',
+  path: '/sign-in/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignUpSplatRoute = SignUpSplatRouteImport.update({
+  id: '/sign-up/$',
+  path: '/sign-up/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
@@ -83,8 +95,10 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AppAdminRouteWithChildren
   '/submit-topic': typeof AppSubmitTopicRoute
   '/userSettings': typeof AppUserSettingsRoute
-  '/your-submissions': typeof AppYourSubmissionsRoute
+  '/yourSubmissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
+  '/sign-in/$': typeof SignInSplatRoute
+  '/sign-up/$': typeof SignUpSplatRoute
   '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
   '/admin/': typeof AppAdminIndexRoute
@@ -93,8 +107,10 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/userSettings': typeof AppUserSettingsRoute
-  '/your-submissions': typeof AppYourSubmissionsRoute
+  '/yourSubmissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
+  '/sign-in/$': typeof SignInSplatRoute
+  '/sign-up/$': typeof SignUpSplatRoute
   '/': typeof AppIndexRoute
   '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
@@ -107,8 +123,10 @@ export interface FileRoutesById {
   '/_app/admin': typeof AppAdminRouteWithChildren
   '/_app/submit-topic': typeof AppSubmitTopicRoute
   '/_app/userSettings': typeof AppUserSettingsRoute
-  '/_app/your-submissions': typeof AppYourSubmissionsRoute
+  '/_app/yourSubmissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
+  '/sign-in/$': typeof SignInSplatRoute
+  '/sign-up/$': typeof SignUpSplatRoute
   '/_app/': typeof AppIndexRoute
   '/_app/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/_app/admin/submissions': typeof AppAdminSubmissionsRoute
@@ -122,8 +140,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/submit-topic'
     | '/userSettings'
-    | '/your-submissions'
+    | '/yourSubmissions'
     | '/api/og'
+    | '/sign-in/$'
+    | '/sign-up/$'
     | '/admin/leaderboardManagement'
     | '/admin/submissions'
     | '/admin/'
@@ -132,8 +152,10 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/submit-topic'
     | '/userSettings'
-    | '/your-submissions'
+    | '/yourSubmissions'
     | '/api/og'
+    | '/sign-in/$'
+    | '/sign-up/$'
     | '/'
     | '/admin/leaderboardManagement'
     | '/admin/submissions'
@@ -145,8 +167,10 @@ export interface FileRouteTypes {
     | '/_app/admin'
     | '/_app/submit-topic'
     | '/_app/userSettings'
-    | '/_app/your-submissions'
+    | '/_app/yourSubmissions'
     | '/api/og'
+    | '/sign-in/$'
+    | '/sign-up/$'
     | '/_app/'
     | '/_app/admin/leaderboardManagement'
     | '/_app/admin/submissions'
@@ -157,6 +181,8 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   ApiOgRoute: typeof ApiOgRoute
+  SignInSplatRoute: typeof SignInSplatRoute
+  SignUpSplatRoute: typeof SignUpSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -203,10 +229,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppUserSettingsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/your-submissions': {
-      id: '/_app/your-submissions'
-      path: '/your-submissions'
-      fullPath: '/your-submissions'
+    '/_app/yourSubmissions': {
+      id: '/_app/yourSubmissions'
+      path: '/yourSubmissions'
+      fullPath: '/yourSubmissions'
       preLoaderRoute: typeof AppYourSubmissionsRouteImport
       parentRoute: typeof AppRoute
     }
@@ -215,6 +241,20 @@ declare module '@tanstack/react-router' {
       path: '/api/og'
       fullPath: '/api/og'
       preLoaderRoute: typeof ApiOgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in/$': {
+      id: '/sign-in/$'
+      path: '/sign-in/$'
+      fullPath: '/sign-in/$'
+      preLoaderRoute: typeof SignInSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-up/$': {
+      id: '/sign-up/$'
+      path: '/sign-up/$'
+      fullPath: '/sign-up/$'
+      preLoaderRoute: typeof SignUpSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/admin/': {
@@ -279,6 +319,8 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   ApiOgRoute: ApiOgRoute,
+  SignInSplatRoute: SignInSplatRoute,
+  SignUpSplatRoute: SignUpSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

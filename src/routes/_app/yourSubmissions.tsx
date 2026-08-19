@@ -11,7 +11,7 @@ import { Skeleton } from '#/components/ui/skeleton.tsx'
 
 import { api } from '#convex/_generated/api'
 
-export const Route = createFileRoute('/_app/your-submissions')({
+export const Route = createFileRoute('/_app/yourSubmissions')({
   head: () => ({
     meta: [{ title: 'Your Submissions | Bullshit Corner' }],
   }),

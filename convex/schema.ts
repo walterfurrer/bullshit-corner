@@ -13,9 +13,8 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index('by_tokenIdentifier', ['tokenIdentifier']),
 
-  topics: defineTable({
+  bullshitCornerEntries: defineTable({
     title: v.string(),
-    description: v.optional(v.string()),
     // ranking is a whole number (1 = highest ranked); no upper bound
     ranking: v.number(),
     youtubeUrl: v.optional(v.string()),
@@ -29,12 +28,13 @@ export default defineSchema({
     youtubeUrl: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
     submittedAt: v.number(),
-    // RBAC: admin submission review fields
-    chosenAt: v.optional(v.number()),
-    chosenBy: v.optional(v.id('users')),
-    isChosen: v.optional(v.boolean()),
+    // Admin review: promote to leaderboard
+    promotedAt: v.optional(v.number()),
+    promotedBy: v.optional(v.id('users')),
+    // Admin review: dismiss/hide from queue
+    dismissedAt: v.optional(v.number()),
+    dismissedBy: v.optional(v.id('users')),
   })
     .index('by_submittedAt', ['submittedAt'])
-    .index('by_userId', ['userId'])
-    .index('by_isChosen_and_submittedAt', ['isChosen', 'submittedAt']),
+    .index('by_userId', ['userId']),
 })

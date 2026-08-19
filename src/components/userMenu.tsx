@@ -34,7 +34,7 @@ export function UserMenu() {
       <DropdownMenuContent align="end" className="w-48">
         {userNavLinks.map((link) => (
           <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
-            <link.icon className="me-2 size-4" aria-hidden="true" />
+            <link.icon className="me-2 size-4" aria-hidden={true} />
             {link.label}
           </DropdownMenuItem>
         ))}
@@ -43,7 +43,7 @@ export function UserMenu() {
             <DropdownMenuSeparator />
             {adminNavLinks.map((link) => (
               <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
-                <link.icon className="me-2 size-4" aria-hidden="true" />
+                <link.icon className="me-2 size-4" aria-hidden={true} />
                 {link.label}
               </DropdownMenuItem>
             ))}

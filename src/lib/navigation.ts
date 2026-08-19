@@ -20,7 +20,7 @@ export const primaryNavLinks: NavLink[] = [
 ]
 
 export const userNavLinks: NavLink[] = [
-  { to: '/your-submissions', label: 'Your Submissions', icon: ListBulletsIcon },
+  { to: '/yourSubmissions', label: 'Your Submissions', icon: ListBulletsIcon },
   { to: '/userSettings', label: 'Settings', icon: GearSixIcon },
 ]
 

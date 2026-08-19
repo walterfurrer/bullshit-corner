@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useUser } from '@clerk/tanstack-react-start'
+import { useMemo, useState } from 'react'
+import { useClerk, useUser } from '@clerk/tanstack-react-start'
 import {
   LinkIcon,
   LinkBreakIcon,
@@ -11,6 +11,7 @@ import {
   PlusIcon,
   WarningIcon,
 } from '@phosphor-icons/react'
+import type { IconProps } from '@phosphor-icons/react'
 
 import {
   Card,
@@ -23,17 +24,16 @@ import { Button } from '#/components/ui/button.tsx'
 
 import type { AccountExternalAccount } from '#/server/account.ts'
 
-/** Supported OAuth strategies for connecting new accounts. */
-const AVAILABLE_PROVIDERS = [
-  { strategy: 'oauth_google', label: 'Google', icon: GoogleLogoIcon },
-  { strategy: 'oauth_github', label: 'GitHub', icon: GithubLogoIcon },
-  { strategy: 'oauth_apple', label: 'Apple', icon: AppleLogoIcon },
-  {
-    strategy: 'oauth_microsoft',
-    label: 'Microsoft',
-    icon: MicrosoftOutlookLogoIcon,
-  },
-] as const
+/** Map of known OAuth strategies to their display metadata. */
+const PROVIDER_META: Record<
+  string,
+  { label: string; icon: React.ComponentType<IconProps> }
+> = {
+  oauth_google: { label: 'Google', icon: GoogleLogoIcon },
+  oauth_github: { label: 'GitHub', icon: GithubLogoIcon },
+  oauth_apple: { label: 'Apple', icon: AppleLogoIcon },
+  oauth_microsoft: { label: 'Microsoft', icon: MicrosoftOutlookLogoIcon },
+}
 
 function getProviderIcon(provider: string) {
   switch (provider) {
@@ -54,6 +54,14 @@ function getProviderIcon(provider: string) {
   }
 }
 
+/** Fallback: derive a human-readable label from an oauth_* strategy string. */
+function formatStrategyLabel(strategy: string): string {
+  return strategy
+    .replace(/^oauth_/, '')
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 interface ConnectionsSectionProps {
   externalAccounts: AccountExternalAccount[]
   hasPassword: boolean
@@ -65,10 +73,34 @@ export function ConnectionsSection({
   hasPassword,
   onUpdated,
 }: ConnectionsSectionProps) {
+  const clerk = useClerk()
   const { user } = useUser()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [loadingAction, setLoadingAction] = useState<string | null>(null)
+
+  // Dynamically get the OAuth strategies enabled in the Clerk dashboard.
+  // clerk.__internal_environment is populated once Clerk loads — it reflects
+  // the instance's real configuration (social providers, etc.).
+  const enabledProviders = useMemo(() => {
+    const env = (clerk as any).__internal_environment
+    const social = env?.userSettings?.social as
+      | Record<string, { enabled: boolean; strategy: string }>
+      | undefined
+
+    if (!social) return []
+
+    return Object.values(social)
+      .filter((p) => p.enabled)
+      .map((p) => {
+        const meta = PROVIDER_META[p.strategy]
+        return {
+          strategy: p.strategy,
+          label: meta?.label ?? formatStrategyLabel(p.strategy),
+          icon: meta?.icon ?? GlobeIcon,
+        }
+      })
+  }, [clerk])
 
   const connectedProviders = new Set(
     externalAccounts.map((a) => a.provider),
@@ -141,7 +173,7 @@ export function ConnectionsSection({
   }
 
   // Providers not yet connected
-  const availableToConnect = AVAILABLE_PROVIDERS.filter(
+  const availableToConnect = enabledProviders.filter(
     (p) => !connectedProviders.has(p.strategy) && !connectedProviders.has(p.strategy.replace('oauth_', '')),
   )
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
@@ -17,7 +17,7 @@ const paginationOpts = { numItems: 50, cursor: null }
 const availableQuery = convexQuery(api.admin.submissions.list, {
   paginationOpts,
 })
-const chosenQuery = convexQuery(api.admin.submissions.listChosen, {
+const dismissedQuery = convexQuery(api.admin.submissions.listDismissed, {
   paginationOpts,
 })
 
@@ -25,7 +25,7 @@ export const Route = createFileRoute('/_app/admin/submissions')({
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData(availableQuery),
-      context.queryClient.ensureQueryData(chosenQuery),
+      context.queryClient.ensureQueryData(dismissedQuery),
     ])
   },
   component: SubmissionsReview,
@@ -35,19 +35,18 @@ function SubmissionsReview() {
   const [filter, setFilter] = useState<SubmissionFilter>('available')
   const [actionError, setActionError] = useState<string | null>(null)
   const [pendingId, setPendingId] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const { data: availableData } = useSuspenseQuery(availableQuery)
-  const { data: chosenData } = useSuspenseQuery(chosenQuery)
+  const { data: dismissedData } = useSuspenseQuery(dismissedQuery)
 
   const submissions =
-    filter === 'available' ? availableData.page : chosenData.page
+    filter === 'available' ? availableData.page : dismissedData.page
 
-  const markChosenMutation = useMutation({
-    mutationFn: useConvexMutation(api.admin.submissions.markChosen),
+  const dismissMutation = useMutation({
+    mutationFn: useConvexMutation(api.admin.submissions.dismiss),
     onError: () => {
-      setActionError(
-        'Failed to mark submission as chosen. Please try again.',
-      )
+      setActionError('Failed to dismiss submission. Please try again.')
       setPendingId(null)
     },
     onSuccess: () => {
@@ -56,10 +55,10 @@ function SubmissionsReview() {
     },
   })
 
-  const unmarkChosenMutation = useMutation({
-    mutationFn: useConvexMutation(api.admin.submissions.unmarkChosen),
+  const undoDismissMutation = useMutation({
+    mutationFn: useConvexMutation(api.admin.submissions.undoDismiss),
     onError: () => {
-      setActionError('Failed to undo chosen status. Please try again.')
+      setActionError('Failed to restore submission. Please try again.')
       setPendingId(null)
     },
     onSuccess: () => {
@@ -68,16 +67,32 @@ function SubmissionsReview() {
     },
   })
 
-  function handleChoose(id: string) {
-    setActionError(null)
-    setPendingId(id)
-    markChosenMutation.mutate({ id: id as Id<'submissions'> })
+  function handlePromote(id: string) {
+    // Find the submission to pass its data to the leaderboard page
+    const submission = submissions.find((s) => s._id === id)
+    if (!submission) return
+
+    navigate({
+      to: '/admin/leaderboardManagement',
+      search: {
+        promoteSubmissionId: id,
+        promoteTitle: submission.topic,
+        promoteYoutubeUrl: submission.youtubeUrl,
+        promoteSubmittedBy: submission.submittedBy,
+      },
+    })
   }
 
-  function handleUnchoose(id: string) {
+  function handleDismiss(id: string) {
     setActionError(null)
     setPendingId(id)
-    unmarkChosenMutation.mutate({ id: id as Id<'submissions'> })
+    dismissMutation.mutate({ id: id as Id<'submissions'> })
+  }
+
+  function handleUndoDismiss(id: string) {
+    setActionError(null)
+    setPendingId(id)
+    undoDismissMutation.mutate({ id: id as Id<'submissions'> })
   }
 
   return (
@@ -99,26 +114,40 @@ function SubmissionsReview() {
         <p className="py-8 text-center text-muted-foreground">
           {filter === 'available'
             ? 'No submissions available for review.'
-            : 'No chosen submissions yet.'}
+            : 'No dismissed submissions.'}
         </p>
       ) : (
         <div className="space-y-3">
-          {submissions.map((submission) => (
-            <SubmissionCard
-              key={submission._id}
-              variant="actionable"
-              id={submission._id}
-              topic={submission.topic}
-              details={submission.details}
-              youtubeUrl={submission.youtubeUrl}
-              submittedBy={submission.submittedBy}
-              submittedAt={submission.submittedAt}
-              isChosen={filter === 'chosen'}
-              onChoose={handleChoose}
-              onUnchoose={handleUnchoose}
-              isActionPending={pendingId === submission._id}
-            />
-          ))}
+          {filter === 'available'
+            ? submissions.map((submission) => (
+              <SubmissionCard
+                key={submission._id}
+                variant="actionable"
+                id={submission._id}
+                topic={submission.topic}
+                details={submission.details}
+                youtubeUrl={submission.youtubeUrl}
+                submittedBy={submission.submittedBy}
+                submittedAt={submission.submittedAt}
+                onPromote={handlePromote}
+                onDismiss={handleDismiss}
+                isActionPending={pendingId === submission._id}
+              />
+            ))
+            : submissions.map((submission) => (
+              <SubmissionCard
+                key={submission._id}
+                variant="dismissed"
+                id={submission._id}
+                topic={submission.topic}
+                details={submission.details}
+                youtubeUrl={submission.youtubeUrl}
+                submittedBy={submission.submittedBy}
+                submittedAt={submission.submittedAt}
+                onUndoDismiss={handleUndoDismiss}
+                isActionPending={pendingId === submission._id}
+              />
+            ))}
         </div>
       )}
     </div>

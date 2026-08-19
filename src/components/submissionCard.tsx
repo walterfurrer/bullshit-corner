@@ -1,12 +1,19 @@
+import { useState } from 'react'
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '#/components/ui/accordion.tsx'
+  ArrowFatUpIcon,
+  XIcon,
+  ArrowCounterClockwiseIcon,
+  YoutubeLogoIcon,
+} from '@phosphor-icons/react'
+
 import { Button } from '#/components/ui/button.tsx'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '#/components/ui/tooltip.tsx'
 import { FormatDetails } from '#/lib/formatDetails'
-import { YoutubeLogoIcon } from '@phosphor-icons/react'
 
 type BaseProps = {
   topic: string
@@ -23,21 +30,19 @@ type ReadOnlyProps = BaseProps & {
 type ActionableProps = BaseProps & {
   variant: 'actionable'
   id: string
-  isChosen: boolean
-  onChoose: (id: string) => void
-  onUnchoose: (id: string) => void
+  onPromote: (id: string) => void
+  onDismiss: (id: string) => void
   isActionPending?: boolean
 }
 
-export type SubmissionCardProps = ReadOnlyProps | ActionableProps
-
-function formatDate(timestamp: number): string {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(new Date(timestamp))
+type DismissedProps = BaseProps & {
+  variant: 'dismissed'
+  id: string
+  onUndoDismiss: (id: string) => void
+  isActionPending?: boolean
 }
+
+export type SubmissionCardProps = ReadOnlyProps | ActionableProps | DismissedProps
 
 function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text
@@ -45,75 +50,120 @@ function truncateText(text: string, maxLength: number): string {
 }
 
 export function SubmissionCard(props: SubmissionCardProps) {
-  const { topic, details, youtubeUrl, submittedBy, submittedAt } = props
+  const { topic, details, youtubeUrl, submittedBy } = props
+  const [showDetails, setShowDetails] = useState(false)
 
   return (
-    <article className="flex flex-col gap-3 rounded-lg border border-border p-4 text-start">
+    <article className="flex flex-col gap-2 rounded-lg border border-border p-4 text-start">
       <div className="flex items-start justify-between gap-3">
-        <h3 className="min-w-0 flex-1 text-base font-semibold">
-          {truncateText(topic, 200)}
-        </h3>
-        {props.variant === 'actionable' && (
-          <Button
-            variant={props.isChosen ? 'outline' : 'default'}
-            size="sm"
-            onClick={() =>
-              props.isChosen
-                ? props.onUnchoose(props.id)
-                : props.onChoose(props.id)
-            }
-            disabled={props.isActionPending}
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base font-semibold">
+            {truncateText(topic, 200)}
+          </h3>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {submittedBy
+              ? `Submitted by ${submittedBy}`
+              : 'Submitted anonymously'}
+          </p>
+        </div>
+        <TooltipProvider delay={500}>
+          <div className="flex shrink-0 items-center gap-1">
+            {youtubeUrl && (
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <a
+                      href={youtubeUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label="Watch on YouTube"
+                    />
+                  }
+                  className="inline-flex size-8 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-primary"
+                >
+                  <YoutubeLogoIcon size={20} aria-hidden="true" />
+                </TooltipTrigger>
+                <TooltipContent>Watch on YouTube</TooltipContent>
+              </Tooltip>
+            )}
+            {props.variant === 'actionable' && (
+              <>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => props.onPromote(props.id)}
+                        disabled={props.isActionPending}
+                        aria-label="Promote to leaderboard"
+                      />
+                    }
+                    className="text-muted-foreground hover:text-primary"
+                  >
+                    <ArrowFatUpIcon size={18} aria-hidden="true" />
+                  </TooltipTrigger>
+                  <TooltipContent>Promote to leaderboard</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => props.onDismiss(props.id)}
+                        disabled={props.isActionPending}
+                        aria-label="Dismiss submission"
+                      />
+                    }
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <XIcon size={18} aria-hidden="true" />
+                  </TooltipTrigger>
+                  <TooltipContent>Dismiss</TooltipContent>
+                </Tooltip>
+              </>
+            )}
+            {props.variant === 'dismissed' && (
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => props.onUndoDismiss(props.id)}
+                      disabled={props.isActionPending}
+                      aria-label="Restore submission"
+                    />
+                  }
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  <ArrowCounterClockwiseIcon size={18} aria-hidden="true" />
+                </TooltipTrigger>
+                <TooltipContent>Restore</TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+        </TooltipProvider>
+      </div>
+
+      {details && (
+        <div>
+          <button
+            type="button"
+            onClick={() => setShowDetails(!showDetails)}
+            className="text-xs text-muted-foreground hover:text-foreground"
           >
-            {props.isChosen ? 'Undo' : 'Choose'}
-          </Button>
-        )}
-      </div>
-
-      {details ? (
-        <Accordion defaultValue={[]}>
-          <AccordionItem value="details" className="border-b-0">
-            <AccordionTrigger className="group/details py-0 text-xs text-muted-foreground hover:text-foreground hover:no-underline">
-              <span className="group-aria-expanded/details:hidden">
-                Show details
-              </span>
-              <span className="hidden group-aria-expanded/details:inline">
-                Hide details
-              </span>
-            </AccordionTrigger>
-            <AccordionContent>
-              <FormatDetails
-                text={details}
-                className="text-sm text-muted-foreground"
-              />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      ) : (
-        <p className="text-xs italic text-muted-foreground">
-          No description submitted.
-        </p>
+            {showDetails ? 'Hide details' : 'Show details'}
+          </button>
+          {showDetails && (
+            <FormatDetails
+              text={details}
+              className="mt-1.5 text-sm text-muted-foreground"
+            />
+          )}
+        </div>
       )}
-
-      {youtubeUrl && (
-        <a
-          href={youtubeUrl}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
-        >
-          <YoutubeLogoIcon size={14} aria-hidden="true" />
-          Watch video
-        </a>
-      )}
-
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span>
-          {submittedBy
-            ? `Submitted as ${submittedBy}`
-            : 'Submitted anonymously'}
-        </span>
-        <span>{formatDate(submittedAt)}</span>
-      </div>
     </article>
   )
 }

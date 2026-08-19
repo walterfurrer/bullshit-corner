@@ -56,7 +56,7 @@ function SubmitTopicPage() {
         <Show when="signed-in">
           <p className="text-sm text-muted-foreground">
             <Link
-              to="/your-submissions"
+              to="/yourSubmissions"
               className="font-medium transition-colors duration-200 hover:text-primary"
               viewTransition
             >

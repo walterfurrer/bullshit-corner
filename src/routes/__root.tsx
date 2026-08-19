@@ -140,7 +140,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere selection:bg-primary/20">
-        <ClerkProvider>
+        <ClerkProvider
+          signInFallbackRedirectUrl="/"
+          signUpFallbackRedirectUrl="/onboarding"
+          afterSignOutUrl="/"
+        >
           <ConvexProviderWithClerk client={convexClient} useAuth={useAuth}>
             <SyncUser />
             <OnboardingGuard />

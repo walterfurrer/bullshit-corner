@@ -3,12 +3,11 @@ import { useState } from 'react'
 import { Button } from '#/components/ui/button.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
-import { Textarea } from '#/components/ui/textarea.tsx'
 import { TITLE_MAX } from '#shared/constants'
 
 export interface TopicFormValues {
   title: string
-  description?: string
+  ranking?: number
   youtubeUrl?: string
   submittedBy?: string
 }
@@ -19,6 +18,10 @@ interface TopicFormProps {
   onCancel?: () => void
   submitLabel?: string
   isSubmitting?: boolean
+  /** When true, shows a ranking input field */
+  showRanking?: boolean
+  /** Maximum valid ranking value (total topics + 1 for new entries) */
+  maxRanking?: number
 }
 
 export function TopicForm({
@@ -27,10 +30,12 @@ export function TopicForm({
   onCancel,
   submitLabel = 'Save',
   isSubmitting = false,
+  showRanking = false,
+  maxRanking = 1,
 }: TopicFormProps) {
   const [title, setTitle] = useState(initialValues?.title ?? '')
-  const [description, setDescription] = useState(
-    initialValues?.description ?? '',
+  const [ranking, setRanking] = useState<number>(
+    initialValues?.ranking ?? maxRanking,
   )
   const [youtubeUrl, setYoutubeUrl] = useState(
     initialValues?.youtubeUrl ?? '',
@@ -56,7 +61,7 @@ export function TopicForm({
 
     onSubmit({
       title: trimmedTitle,
-      description: description.trim() || undefined,
+      ranking: showRanking ? ranking : undefined,
       youtubeUrl: youtubeUrl.trim() || undefined,
       submittedBy: submittedBy.trim() || undefined,
     })
@@ -79,16 +84,23 @@ export function TopicForm({
         </p>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="topic-description">Description</Label>
-        <Textarea
-          id="topic-description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Optional description"
-          rows={3}
-        />
-      </div>
+      {showRanking && (
+        <div className="space-y-2">
+          <Label htmlFor="topic-ranking">Ranking Position *</Label>
+          <Input
+            id="topic-ranking"
+            type="number"
+            min={1}
+            max={maxRanking}
+            value={ranking}
+            onChange={(e) => setRanking(Number(e.target.value))}
+            required
+          />
+          <p className="text-xs text-muted-foreground">
+            Enter a position from 1 to {maxRanking}. Existing items at this position and below will shift down.
+          </p>
+        </div>
+      )}
 
       <div className="space-y-2">
         <Label htmlFor="topic-youtube-url">YouTube URL</Label>

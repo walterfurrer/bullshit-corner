@@ -41,25 +41,25 @@ function setup() {
 }
 
 /**
- * Property 6: Marking a submission as chosen excludes it from default view
- * Validates: Requirements 5.2, 5.4
+ * Property 6: Dismissing a submission excludes it from available view
+ * Validates: dismiss mutation hides submissions from the default list
  *
- * For any submission in the pool, after markChosen is called on it,
- * querying the default (unchosen) submission list SHALL NOT include that
- * submission, and querying the chosen list SHALL include it.
+ * For any submission in the pool, after dismiss is called on it,
+ * querying the available submission list SHALL NOT include that
+ * submission, and querying the dismissed list SHALL include it.
  */
-describe('Property 6: Marking a submission as chosen excludes it from default view', () => {
-  test('marked submission disappears from unchosen list and appears in chosen list', async () => {
+describe('Property 6: Dismissing a submission excludes it from available view', () => {
+  test('dismissed submission disappears from available list and appears in dismissed list', async () => {
     await fc.assert(
       fc.asyncProperty(
         fc.integer({ min: 1, max: 10 }),
         fc.nat(),
-        async (numSubmissions, chosenIndexRaw) => {
+        async (numSubmissions, dismissedIndexRaw) => {
           const t = setup()
           const asAdmin = t.withIdentity(adminIdentity)
 
-          // Pick which submission to mark as chosen
-          const chosenIndex = chosenIndexRaw % numSubmissions
+          // Pick which submission to dismiss
+          const dismissedIndex = dismissedIndexRaw % numSubmissions
 
           // Create a user and submissions directly in the DB
           const submissionIds = await t.run(async (ctx) => {
@@ -81,32 +81,32 @@ describe('Property 6: Marking a submission as chosen excludes it from default vi
             return ids
           })
 
-          const chosenId = submissionIds[chosenIndex]
+          const dismissedId = submissionIds[dismissedIndex]
 
-          // Mark the chosen submission
-          await asAdmin.mutation(api.admin.submissions.markChosen, {
-            id: chosenId,
+          // Dismiss the submission
+          await asAdmin.mutation(api.admin.submissions.dismiss, {
+            id: dismissedId,
           })
 
-          // Query unchosen list — the marked submission should NOT appear
-          const unchosenResult = await asAdmin.query(
+          // Query available list — the dismissed submission should NOT appear
+          const availableResult = await asAdmin.query(
             api.admin.submissions.list,
             { paginationOpts: { numItems: 50, cursor: null } },
           )
-          const unchosenIds = unchosenResult.page.map(
+          const availableIds = availableResult.page.map(
             (s: { _id: string }) => s._id,
           )
-          expect(unchosenIds).not.toContain(chosenId)
+          expect(availableIds).not.toContain(dismissedId)
 
-          // Query chosen list — the marked submission SHOULD appear
-          const chosenResult = await asAdmin.query(
-            api.admin.submissions.listChosen,
+          // Query dismissed list — the submission SHOULD appear
+          const dismissedResult = await asAdmin.query(
+            api.admin.submissions.listDismissed,
             { paginationOpts: { numItems: 50, cursor: null } },
           )
-          const chosenIds = chosenResult.page.map(
+          const dismissedIds = dismissedResult.page.map(
             (s: { _id: string }) => s._id,
           )
-          expect(chosenIds).toContain(chosenId)
+          expect(dismissedIds).toContain(dismissedId)
         },
       ),
       { numRuns: 100 },
@@ -115,25 +115,25 @@ describe('Property 6: Marking a submission as chosen excludes it from default vi
 })
 
 /**
- * Property 7: Unmarking a chosen submission returns it to the pool
- * Validates: Requirements 5.6
+ * Property 7: Undoing a dismissal returns the submission to the available pool
+ * Validates: undoDismiss mutation restores dismissed submissions
  *
- * For any previously chosen submission, after unmarkChosen is called on it,
- * querying the default (unchosen) submission list SHALL include that submission,
- * and querying the chosen list SHALL NOT include it.
+ * For any previously dismissed submission, after undoDismiss is called on it,
+ * querying the available list SHALL include that submission,
+ * and querying the dismissed list SHALL NOT include it.
  */
-describe('Property 7: Unmarking a chosen submission returns it to the pool', () => {
-  test('unmarked submission reappears in unchosen list and disappears from chosen list', async () => {
+describe('Property 7: Undoing a dismissal returns the submission to the available pool', () => {
+  test('restored submission reappears in available list and disappears from dismissed list', async () => {
     await fc.assert(
       fc.asyncProperty(
         fc.integer({ min: 1, max: 10 }),
         fc.nat(),
-        async (numSubmissions, chosenIndexRaw) => {
+        async (numSubmissions, dismissedIndexRaw) => {
           const t = setup()
           const asAdmin = t.withIdentity(adminIdentity)
 
-          // Pick which submission to mark then unmark
-          const chosenIndex = chosenIndexRaw % numSubmissions
+          // Pick which submission to dismiss then restore
+          const dismissedIndex = dismissedIndexRaw % numSubmissions
 
           // Create a user and submissions directly in the DB
           const submissionIds = await t.run(async (ctx) => {
@@ -155,37 +155,37 @@ describe('Property 7: Unmarking a chosen submission returns it to the pool', () 
             return ids
           })
 
-          const chosenId = submissionIds[chosenIndex]
+          const dismissedId = submissionIds[dismissedIndex]
 
-          // First mark it as chosen
-          await asAdmin.mutation(api.admin.submissions.markChosen, {
-            id: chosenId,
+          // First dismiss it
+          await asAdmin.mutation(api.admin.submissions.dismiss, {
+            id: dismissedId,
           })
 
-          // Then unmark it
-          await asAdmin.mutation(api.admin.submissions.unmarkChosen, {
-            id: chosenId,
+          // Then undo the dismissal
+          await asAdmin.mutation(api.admin.submissions.undoDismiss, {
+            id: dismissedId,
           })
 
-          // Query unchosen list — the submission SHOULD appear again
-          const unchosenResult = await asAdmin.query(
+          // Query available list — the submission SHOULD appear again
+          const availableResult = await asAdmin.query(
             api.admin.submissions.list,
             { paginationOpts: { numItems: 50, cursor: null } },
           )
-          const unchosenIds = unchosenResult.page.map(
+          const availableIds = availableResult.page.map(
             (s: { _id: string }) => s._id,
           )
-          expect(unchosenIds).toContain(chosenId)
+          expect(availableIds).toContain(dismissedId)
 
-          // Query chosen list — the submission should NOT appear
-          const chosenResult = await asAdmin.query(
-            api.admin.submissions.listChosen,
+          // Query dismissed list — the submission should NOT appear
+          const dismissedResult = await asAdmin.query(
+            api.admin.submissions.listDismissed,
             { paginationOpts: { numItems: 50, cursor: null } },
           )
-          const chosenIds = chosenResult.page.map(
+          const dismissedIds = dismissedResult.page.map(
             (s: { _id: string }) => s._id,
           )
-          expect(chosenIds).not.toContain(chosenId)
+          expect(dismissedIds).not.toContain(dismissedId)
         },
       ),
       { numRuns: 100 },

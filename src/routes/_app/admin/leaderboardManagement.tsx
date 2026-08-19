@@ -1,5 +1,5 @@
-import { useCallback, useRef, useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { convexQuery, useConvexMutation } from '@convex-dev/react-query'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import {
@@ -34,9 +34,22 @@ import {
 import { api } from '#convex/_generated/api'
 import type { Id } from '#convex/_generated/dataModel'
 
+type PromoteSearchParams = {
+  promoteSubmissionId?: string
+  promoteTitle?: string
+  promoteYoutubeUrl?: string
+  promoteSubmittedBy?: string
+}
+
 const topicsQuery = convexQuery(api.admin.topics.list, {})
 
 export const Route = createFileRoute('/_app/admin/leaderboardManagement')({
+  validateSearch: (search: Record<string, unknown>): PromoteSearchParams => ({
+    promoteSubmissionId: search.promoteSubmissionId as string | undefined,
+    promoteTitle: search.promoteTitle as string | undefined,
+    promoteYoutubeUrl: search.promoteYoutubeUrl as string | undefined,
+    promoteSubmittedBy: search.promoteSubmittedBy as string | undefined,
+  }),
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(topicsQuery)
   },
@@ -45,8 +58,35 @@ export const Route = createFileRoute('/_app/admin/leaderboardManagement')({
 
 function LeaderboardManagement() {
   const { data: serverTopics } = useSuspenseQuery(topicsQuery)
-  const [editingId, setEditingId] = useState<Id<'topics'> | null>(null)
+  const [editingId, setEditingId] = useState<Id<'bullshitCornerEntries'> | null>(null)
   const [showCreate, setShowCreate] = useState(false)
+
+  // Promote flow — detect search params from submissions page
+  const {
+    promoteSubmissionId,
+    promoteTitle,
+    promoteYoutubeUrl,
+    promoteSubmittedBy,
+  } = Route.useSearch()
+  const navigate = useNavigate()
+  const [showPromote, setShowPromote] = useState(false)
+
+  // Auto-open promote dialog when search params arrive
+  useEffect(() => {
+    if (promoteSubmissionId && promoteTitle) {
+      setShowPromote(true)
+    }
+  }, [promoteSubmissionId, promoteTitle])
+
+  function closePromoteDialog() {
+    setShowPromote(false)
+    // Clear search params
+    navigate({
+      to: '/admin/leaderboardManagement',
+      search: {},
+      replace: true,
+    })
+  }
 
   // Reorder mode — shows drag handles + up/down buttons on mobile
   const [reorderMode, setReorderMode] = useState(false)
@@ -102,6 +142,10 @@ function LeaderboardManagement() {
     },
   })
 
+  const promoteMutation = useMutation({
+    mutationFn: useConvexMutation(api.admin.submissions.promote),
+  })
+
   const editingTopic = editingId
     ? topics.find((t) => t._id === editingId)
     : null
@@ -112,6 +156,15 @@ function LeaderboardManagement() {
       ranking: topics.length + 1,
     })
     setShowCreate(false)
+  }
+
+  async function handlePromote(values: TopicFormValues) {
+    if (!promoteSubmissionId || !values.ranking) return
+    await promoteMutation.mutateAsync({
+      id: promoteSubmissionId as Id<'submissions'>,
+      ranking: values.ranking,
+    })
+    closePromoteDialog()
   }
 
   async function handleUpdate(values: TopicFormValues) {
@@ -138,7 +191,7 @@ function LeaderboardManagement() {
     if (index <= 0) return
     const newRanking = applyOptimisticReorder(index, index - 1)
     markAsMoved(id, 'up')
-    reorderMutation.mutate({ id: id as Id<'topics'>, newRanking })
+    reorderMutation.mutate({ id: id as Id<'bullshitCornerEntries'>, newRanking })
   }
 
   function handleMoveDown(id: string) {
@@ -146,12 +199,12 @@ function LeaderboardManagement() {
     if (index === -1 || index >= topics.length - 1) return
     const newRanking = applyOptimisticReorder(index, index + 1)
     markAsMoved(id, 'down')
-    reorderMutation.mutate({ id: id as Id<'topics'>, newRanking })
+    reorderMutation.mutate({ id: id as Id<'bullshitCornerEntries'>, newRanking })
   }
 
   function handleRemove(id: string) {
     if (!confirm('Remove this topic from the leaderboard?')) return
-    removeMutation.mutate({ id: id as Id<'topics'> })
+    removeMutation.mutate({ id: id as Id<'bullshitCornerEntries'> })
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -163,7 +216,7 @@ function LeaderboardManagement() {
     if (oldIndex === -1 || newIndex === -1) return
 
     const newRanking = applyOptimisticReorder(oldIndex, newIndex)
-    reorderMutation.mutate({ id: active.id as Id<'topics'>, newRanking })
+    reorderMutation.mutate({ id: active.id as Id<'bullshitCornerEntries'>, newRanking })
   }
 
   const topicIds = topics.map((t) => t._id)
@@ -236,12 +289,11 @@ function LeaderboardManagement() {
                   id={topic._id}
                   ranking={topic.ranking}
                   title={topic.title}
-                  description={topic.description}
                   isFirst={index === 0}
                   isLast={index === topics.length - 1}
                   reorderMode={reorderMode}
                   moveDirection={movedItem?.id === topic._id ? movedItem.direction : null}
-                  onEdit={(id) => setEditingId(id as Id<'topics'>)}
+                  onEdit={(id) => setEditingId(id as Id<'bullshitCornerEntries'>)}
                   onRemove={handleRemove}
                   onMoveUp={handleMoveUp}
                   onMoveDown={handleMoveDown}
@@ -283,7 +335,6 @@ function LeaderboardManagement() {
               key={editingId}
               initialValues={{
                 title: editingTopic.title,
-                description: editingTopic.description,
                 youtubeUrl: editingTopic.youtubeUrl,
                 submittedBy: editingTopic.submittedBy,
               }}
@@ -293,6 +344,35 @@ function LeaderboardManagement() {
               isSubmitting={updateMutation.isPending}
             />
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Promote Dialog — auto-opened when navigating from submissions */}
+      <Dialog
+        open={showPromote}
+        onOpenChange={(open) => {
+          if (!open) closePromoteDialog()
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Promote to Leaderboard</DialogTitle>
+          </DialogHeader>
+          <TopicForm
+            key={promoteSubmissionId}
+            initialValues={{
+              title: promoteTitle ?? '',
+              ranking: topics.length + 1,
+              youtubeUrl: promoteYoutubeUrl,
+              submittedBy: promoteSubmittedBy,
+            }}
+            showRanking
+            maxRanking={topics.length + 1}
+            onSubmit={handlePromote}
+            onCancel={closePromoteDialog}
+            submitLabel="Promote"
+            isSubmitting={promoteMutation.isPending}
+          />
         </DialogContent>
       </Dialog>
     </div>

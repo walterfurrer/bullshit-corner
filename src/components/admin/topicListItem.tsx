@@ -20,7 +20,6 @@ interface TopicListItemProps {
   id: string
   ranking: number
   title: string
-  description?: string
   isFirst: boolean
   isLast: boolean
   isDragging?: boolean
@@ -36,7 +35,6 @@ export function TopicListItem({
   id,
   ranking,
   title,
-  description,
   isFirst,
   isLast,
   isDragging,
@@ -67,11 +65,6 @@ export function TopicListItem({
 
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium text-foreground">{title}</p>
-        {description && (
-          <p className="truncate text-sm text-muted-foreground">
-            {description}
-          </p>
-        )}
       </div>
 
       {/* Desktop inline actions — always visible */}
