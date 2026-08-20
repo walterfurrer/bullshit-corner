@@ -22,7 +22,7 @@ export function SortableTopicItem(props: SortableTopicItemProps) {
   return (
     <SortableListItem id={props.id}>
       {({ attributes, listeners, setNodeRef, transform, transition, isDragging }) => (
-        <div
+        <li
           ref={setNodeRef}
           style={{
             transform: CSS.Transform.toString(transform),
@@ -39,7 +39,7 @@ export function SortableTopicItem(props: SortableTopicItemProps) {
             isDragging={isDragging}
             dragHandleProps={listeners}
           />
-        </div>
+        </li>
       )}
     </SortableListItem>
   )

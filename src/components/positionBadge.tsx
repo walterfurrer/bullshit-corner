@@ -5,7 +5,7 @@ function positionStyles(position: number) {
   if (position === 1) return 'bg-gold text-background'
   if (position === 2) return 'bg-silver text-background'
   if (position === 3) return 'bg-bronze text-background'
-  return 'border border-border bg-muted text-muted-foreground'
+  return 'bg-transparent text-muted-foreground'
 }
 
 interface PositionBadgeProps {

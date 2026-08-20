@@ -284,7 +284,7 @@ function LeaderboardManagement() {
             items={topicIds}
             strategy={verticalListSortingStrategy}
           >
-            <div className="flex flex-col gap-2">
+            <ol className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
               {topics.map((topic, index) => (
                 <SortableTopicItem
                   key={topic._id}
@@ -301,7 +301,7 @@ function LeaderboardManagement() {
                   onMoveDown={handleMoveDown}
                 />
               ))}
-            </div>
+            </ol>
           </SortableContext>
         </DndContext>
       )}

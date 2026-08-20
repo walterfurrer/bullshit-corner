@@ -75,13 +75,16 @@ function SortableEntry({
         <li
           ref={setNodeRef}
           style={{ transform: CSS.Transform.toString(transform), transition }}
-          className={cn(isDragging && 'opacity-50')}
+          className={cn(
+            'transition-colors hover:bg-accent/30 focus-within:bg-accent/30',
+            isDragging && 'relative z-10 rounded-md bg-card shadow-md ring-1 ring-primary/30',
+          )}
           {...attributes}
         >
-          <div className="flex items-center gap-3 rounded-lg border px-4 py-3">
+          <div className="flex items-center gap-3 px-4 py-3">
             <button
               type="button"
-              className="shrink-0 cursor-grab touch-none rounded-xs p-1.5 text-muted-foreground hover:text-foreground active:cursor-grabbing"
+              className="shrink-0 cursor-grab touch-none rounded-xs p-1.5 text-muted-foreground hover:text-foreground focus-visible:bg-accent/50 focus-visible:ring-2 focus-visible:ring-ring/50 active:cursor-grabbing"
               aria-label={`Drag ${entry.title}`}
               {...listeners}
             >
@@ -130,8 +133,8 @@ function RankingDropZone({
     <div
       ref={setNodeRef}
       className={cn(
-        'rounded-xs transition-colors',
-        isOver && 'bg-primary/5 outline outline-2 outline-primary/30 outline-offset-2',
+        'rounded-xl transition-[background-color,box-shadow]',
+        isOver && 'bg-primary/5 ring-2 ring-primary/30 ring-offset-2 ring-offset-background',
       )}
     >
       {children}
@@ -261,7 +264,9 @@ export function CommunityRankingEditor({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Your ranking</CardTitle>
+        <CardTitle className="text-xl/7 font-semibold tracking-normal">
+          Your ranking
+        </CardTitle>
         <CardDescription>
           Rank as many entries as you like. Unranked entries are treated as no opinion.
         </CardDescription>
@@ -271,13 +276,15 @@ export function CommunityRankingEditor({
           <div className="grid gap-6 lg:grid-cols-2">
             <section className="flex flex-col gap-3" aria-labelledby="your-ranked-entries">
               <div>
-                <h3 id="your-ranked-entries" className="font-medium">Your ranking</h3>
+                <h3 id="your-ranked-entries" className="text-lg/6 font-semibold tracking-normal">
+                  Ranked entries
+                </h3>
                 <p className="text-sm text-muted-foreground">Drag to reorder or use the remove button.</p>
               </div>
               <RankingDropZone id={RANKED_DROP_ZONE}>
                 {rankedEntries.length > 0 ? (
                   <SortableContext items={rankedEntryIds} strategy={verticalListSortingStrategy}>
-                    <ol className="flex flex-col gap-2">
+                    <ol className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
                       {rankedEntries.map((entry, index) => (
                         <SortableEntry
                           key={entry.id}
@@ -291,7 +298,7 @@ export function CommunityRankingEditor({
                     </ol>
                   </SortableContext>
                 ) : (
-                  <p className="rounded-xs border border-dashed px-3 py-6 text-sm text-muted-foreground">
+                  <p className="surface rounded-xl border border-dashed px-4 py-8 text-sm text-muted-foreground">
                     Add at least one entry to create your ranking.
                   </p>
                 )}
@@ -300,7 +307,12 @@ export function CommunityRankingEditor({
 
             <section className="flex flex-col gap-3" aria-labelledby="unranked-entries">
               <div>
-                <h3 id="unranked-entries" className="font-medium">Available entries</h3>
+                <h3
+                  id="unranked-entries"
+                  className="text-lg/6 font-semibold tracking-normal"
+                >
+                  Available entries
+                </h3>
                 <p className="text-sm text-muted-foreground">Choose only the entries you want to rank.</p>
               </div>
               <RankingDropZone id={UNRANKED_DROP_ZONE}>
@@ -308,7 +320,7 @@ export function CommunityRankingEditor({
                   items={unrankedEntries.map((entry) => entry.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <ol className="flex max-h-120 flex-col gap-2 overflow-y-auto pe-1">
+                  <ol className="surface max-h-120 overflow-y-auto rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
                     {unrankedEntries.map((entry) => (
                       <SortableEntry
                         key={entry.id}

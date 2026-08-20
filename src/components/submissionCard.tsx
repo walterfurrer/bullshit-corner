@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from '#/components/ui/tooltip.tsx'
 import { FormatDetails } from '#/lib/formatDetails'
+import { cn } from '#/lib/utils'
 
 type BaseProps = {
   topic: string
@@ -21,6 +22,7 @@ type BaseProps = {
   youtubeUrl?: string
   submittedBy?: string
   submittedAt: number
+  presentation?: 'card' | 'list-item'
 }
 
 type ReadOnlyProps = BaseProps & {
@@ -52,12 +54,20 @@ function truncateText(text: string, maxLength: number): string {
 export function SubmissionCard(props: SubmissionCardProps) {
   const { topic, details, youtubeUrl, submittedBy } = props
   const [showDetails, setShowDetails] = useState(false)
+  const isListItem = props.presentation === 'list-item'
 
   return (
-    <article className="surface flex flex-col gap-2 rounded-lg border p-4 text-start">
-      <div className="flex items-start justify-between gap-3">
+    <article
+      className={cn(
+        'flex flex-col gap-2 p-4 text-start',
+        isListItem
+          ? 'bg-transparent transition-colors hover:bg-accent/30 focus-within:bg-accent/30'
+          : 'surface rounded-lg border',
+      )}
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          <h2 className="text-base font-semibold tracking-racing-compact">
+          <h2 className="font-sans text-base font-semibold tracking-normal">
             {truncateText(topic, 200)}
           </h2>
           <p className="mt-0.5 text-xs text-muted-foreground">
@@ -67,7 +77,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
           </p>
         </div>
         <TooltipProvider delay={500}>
-          <div className="flex shrink-0 items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1 self-end sm:self-auto">
             {youtubeUrl && (
               <Tooltip>
                 <TooltipTrigger
@@ -79,7 +89,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
                       aria-label="Watch on YouTube"
                     />
                   }
-                  className="inline-flex size-8 items-center justify-center rounded-xs text-muted-foreground transition-colors hover:text-primary"
+                  className="inline-flex size-11 items-center justify-center rounded-xs text-muted-foreground transition-colors hover:text-primary sm:size-8"
                 >
                   <YoutubeLogoIcon size={20} aria-hidden="true" />
                 </TooltipTrigger>
@@ -99,7 +109,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
                         aria-label="Promote to leaderboard"
                       />
                     }
-                    className="text-muted-foreground hover:text-primary"
+                    className="size-11 text-muted-foreground hover:text-primary sm:size-8"
                   >
                     <ArrowFatUpIcon data-icon="inline-start" aria-hidden="true" />
                   </TooltipTrigger>
@@ -116,7 +126,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
                         aria-label="Dismiss submission"
                       />
                     }
-                    className="text-muted-foreground hover:text-destructive"
+                    className="size-11 text-muted-foreground hover:text-destructive sm:size-8"
                   >
                     <XIcon data-icon="inline-start" aria-hidden="true" />
                   </TooltipTrigger>
@@ -136,7 +146,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
                       aria-label="Restore submission"
                     />
                   }
-                  className="text-muted-foreground hover:text-primary"
+                  className="size-11 text-muted-foreground hover:text-primary sm:size-8"
                 >
                   <ArrowCounterClockwiseIcon data-icon="inline-start" aria-hidden="true" />
                 </TooltipTrigger>

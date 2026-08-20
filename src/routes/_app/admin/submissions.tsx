@@ -117,7 +117,7 @@ function SubmissionsReview() {
             : 'No dismissed submissions.'}
         </p>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
           {filter === 'available'
             ? submissions.map((submission) => (
               <SubmissionCard
@@ -132,6 +132,7 @@ function SubmissionsReview() {
                 onPromote={handlePromote}
                 onDismiss={handleDismiss}
                 isActionPending={pendingId === submission._id}
+                presentation="list-item"
               />
             ))
             : submissions.map((submission) => (
@@ -146,6 +147,7 @@ function SubmissionsReview() {
                 submittedAt={submission.submittedAt}
                 onUndoDismiss={handleUndoDismiss}
                 isActionPending={pendingId === submission._id}
+                presentation="list-item"
               />
             ))}
         </div>

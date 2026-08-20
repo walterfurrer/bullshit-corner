@@ -3,12 +3,12 @@ import type { ComponentProps } from 'react'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 import { cn } from '#/lib/utils'
 
-function AdminUserRow({ className, ...props }: ComponentProps<'div'>) {
+function AdminUserRow({ className, ...props }: ComponentProps<'li'>) {
   return (
-    <div
+    <li
       data-slot="admin-user-row"
       className={cn(
-        'flex items-center gap-3 rounded-md border p-3',
+        'flex items-center gap-3 px-4 py-3 transition-colors hover:bg-accent/30 focus-within:bg-accent/30',
         className,
       )}
       {...props}

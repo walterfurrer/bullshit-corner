@@ -196,7 +196,7 @@ export function ConnectionsSection({
       <CardContent className="gap-4">
         {/* Connected accounts list */}
         {externalAccounts.length > 0 ? (
-          <ul className="flex flex-col gap-3" role="list">
+          <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border" role="list">
             {externalAccounts.map((account) => {
               const Icon = getProviderIcon(account.provider)
               const isLoading = loadingAction === `disconnect-${account.id}`
@@ -204,7 +204,7 @@ export function ConnectionsSection({
               return (
                 <li
                   key={account.id}
-                  className="flex items-center justify-between rounded-md border px-3 py-2.5"
+                  className="flex flex-col items-start gap-3 px-4 py-3 transition-colors hover:bg-accent/30 focus-within:bg-accent/30 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex items-center gap-3">
                     <Icon className="size-5 shrink-0" aria-hidden="true" />
@@ -222,6 +222,7 @@ export function ConnectionsSection({
                   <Button
                     variant="ghost"
                     size="sm"
+                    className="min-h-11 sm:min-h-8"
                     onClick={() => handleDisconnect(account.id, account.label)}
                     disabled={isLoading || !canDisconnect}
                     aria-label={`Disconnect ${account.label}`}
@@ -271,6 +272,7 @@ export function ConnectionsSection({
                     key={strategy}
                     variant="outline"
                     size="sm"
+                    className="min-h-11 sm:min-h-8"
                     onClick={() => handleConnect(strategy, label)}
                     disabled={isLoading}
                   >
