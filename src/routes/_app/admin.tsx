@@ -17,8 +17,7 @@ import { ENABLE_AUTH, ENABLE_TEST_FEEDBACK } from '#/lib/featureFlags'
 const adminSections = [
   { to: '/admin/leaderboardManagement', label: 'Leaderboard Management' },
   { to: '/admin/submissions', label: 'View Submissions' },
-  { to: '/admin/userManagement', label: 'User Management' },
-  { to: '/admin/newUsers', label: 'New Users' },
+  { to: '/admin/newUsers', label: 'Users' },
   ...(ENABLE_TEST_FEEDBACK
     ? [{ to: '/admin/feedback', label: 'Beta Feedback' }]
     : []),

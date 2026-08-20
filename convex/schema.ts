@@ -12,7 +12,9 @@ export default defineSchema({
     alwaysAnonymous: v.optional(v.boolean()),
     deletedAt: v.optional(v.number()),
     updatedAt: v.number(),
-  }).index('by_tokenIdentifier', ['tokenIdentifier']),
+  })
+    .index('by_tokenIdentifier', ['tokenIdentifier'])
+    .index('by_deletedAt', ['deletedAt']),
 
   bullshitCornerEntries: defineTable({
     title: v.string(),

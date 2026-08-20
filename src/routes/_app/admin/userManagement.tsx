@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useUser } from '@clerk/tanstack-react-start'
 
 import {
@@ -40,10 +40,12 @@ import {
 } from '#/server/admin'
 
 export const Route = createFileRoute('/_app/admin/userManagement')({
-  component: UserManagement,
+  beforeLoad: () => {
+    throw redirect({ to: '/admin/newUsers' })
+  },
 })
 
-function UserManagement() {
+export function AdminAccessManagement() {
   const { user: currentUser } = useUser()
   const currentUserId = currentUser?.id ?? null
 
@@ -164,9 +166,14 @@ function UserManagement() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-xl font-bold tracking-racing-compact">
-        User Management
-      </h1>
+      <div className="flex flex-col gap-1">
+        <h2 className="text-lg font-semibold tracking-racing-compact">
+          Admin Access
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Find Clerk accounts and grant or remove administrator access.
+        </p>
+      </div>
 
       {actionError && (
         <Alert variant="destructive">
