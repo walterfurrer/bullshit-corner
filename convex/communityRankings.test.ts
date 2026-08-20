@@ -168,4 +168,89 @@ describe('community rankings', () => {
       rankedBy: 1,
     })
   })
+
+  test('keeps the original ballot normalization after an official entry is removed', async () => {
+    const t = setup()
+    const entries = await addEntries(t)
+    const firstUser = t.withIdentity(firstIdentity)
+    const secondUser = t.withIdentity(secondIdentity)
+    await firstUser.mutation(api.users.sync, {})
+    await secondUser.mutation(api.users.sync, {})
+
+    await firstUser.mutation(api.communityRankings.save, {
+      entryIds: [entries.first, entries.second],
+    })
+    await secondUser.mutation(api.communityRankings.save, {
+      entryIds: [entries.first, entries.second],
+    })
+    await t.withIdentity(adminIdentity).mutation(api.admin.topics.remove, {
+      id: entries.first,
+    })
+
+    await firstUser.mutation(api.communityRankings.clear, {})
+    let board = await t.query(api.communityRankings.list, {})
+    expect(board.find((entry) => entry.id === entries.second)).toMatchObject({
+      score: 1 / 3,
+      rankedBy: 1,
+    })
+
+    await secondUser.mutation(api.communityRankings.save, {
+      entryIds: [entries.second],
+    })
+    board = await t.query(api.communityRankings.list, {})
+    expect(board.find((entry) => entry.id === entries.second)).toMatchObject({
+      score: 1,
+      rankedBy: 1,
+    })
+  })
+
+  test('reads stats for the current top 50 when historical stat rows exceed that limit', async () => {
+    const t = setup()
+    const { currentEntries } = await t.run(async (ctx) => {
+      const historicEntries = []
+      const currentEntries = []
+
+      for (let index = 0; index < 50; index += 1) {
+        historicEntries.push(
+          await ctx.db.insert('bullshitCornerEntries', {
+            title: `Historic topic ${index + 1}`,
+            ranking: index + 51,
+          }),
+        )
+      }
+      for (let index = 0; index < 50; index += 1) {
+        currentEntries.push(
+          await ctx.db.insert('bullshitCornerEntries', {
+            title: `Current topic ${index + 1}`,
+            ranking: index + 1,
+          }),
+        )
+      }
+      for (const entryId of historicEntries) {
+        await ctx.db.insert('communityEntryStats', {
+          entryId,
+          score: 0,
+          rankedBy: 0,
+        })
+      }
+      for (const [index, entryId] of currentEntries.entries()) {
+        await ctx.db.insert('communityEntryStats', {
+          entryId,
+          score: index === 0 ? 2 : 1,
+          rankedBy: 1,
+        })
+      }
+
+      return { currentEntries }
+    })
+
+    const board = await t.query(api.communityRankings.list, {})
+    expect(board).toHaveLength(50)
+    expect(board[0]).toMatchObject({
+      id: currentEntries[0],
+      score: 2,
+      rankedBy: 1,
+    })
+    expect(board.every((entry) => entry.rankedBy === 1)).toBe(true)
+  })
 })

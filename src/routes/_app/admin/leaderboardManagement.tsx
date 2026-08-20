@@ -91,9 +91,6 @@ function LeaderboardManagement() {
   // Reorder mode — shows drag handles + up/down buttons on mobile
   const [reorderMode, setReorderMode] = useState(false)
 
-  // Snapshot of server order when entering reorder mode (for cancel)
-  const orderSnapshotRef = useRef<typeof serverTopics | null>(null)
-
   // Optimistic local order — overrides server data while a reorder is in-flight
   const [optimisticTopics, setOptimisticTopics] = useState<typeof serverTopics | null>(null)
   const pendingReorders = useRef(0)
@@ -230,17 +227,6 @@ function LeaderboardManagement() {
         {reorderMode ? (
           <div className="flex items-center gap-2 md:hidden">
             <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                // Cancel — revert to the snapshot taken when entering reorder mode
-                setOptimisticTopics(null)
-                setReorderMode(false)
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
               size="sm"
               onClick={() => setReorderMode(false)}
             >
@@ -255,7 +241,6 @@ function LeaderboardManagement() {
                 size="sm"
                 className="md:hidden"
                 onClick={() => {
-                  orderSnapshotRef.current = [...serverTopics]
                   setReorderMode(true)
                 }}
               >
