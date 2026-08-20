@@ -34,8 +34,8 @@ export function TopicForm({
   maxRanking = 1,
 }: TopicFormProps) {
   const [title, setTitle] = useState(initialValues?.title ?? '')
-  const [ranking, setRanking] = useState<number>(
-    initialValues?.ranking ?? maxRanking,
+  const [ranking, setRanking] = useState(() =>
+    String(initialValues?.ranking ?? maxRanking),
   )
   const [youtubeUrl, setYoutubeUrl] = useState(
     initialValues?.youtubeUrl ?? '',
@@ -59,9 +59,18 @@ export function TopicForm({
       return
     }
 
+    const parsedRanking = Number(ranking)
+    if (
+      showRanking &&
+      (!Number.isInteger(parsedRanking) || parsedRanking < 1 || parsedRanking > maxRanking)
+    ) {
+      setError(`Ranking must be a whole number from 1 to ${maxRanking}.`)
+      return
+    }
+
     onSubmit({
       title: trimmedTitle,
-      ranking: showRanking ? ranking : undefined,
+      ranking: showRanking ? parsedRanking : undefined,
       youtubeUrl: youtubeUrl.trim() || undefined,
       submittedBy: submittedBy.trim() || undefined,
     })
@@ -93,7 +102,7 @@ export function TopicForm({
             min={1}
             max={maxRanking}
             value={ranking}
-            onChange={(e) => setRanking(Number(e.target.value))}
+            onChange={(e) => setRanking(e.target.value)}
             required
           />
           <p className="text-xs text-muted-foreground">

@@ -6,6 +6,7 @@
  * for bullshitCornerEntries, users, and submissions.
  */
 import { internalMutation } from './_generated/server'
+import { v } from 'convex/values'
 
 // ─── Leaderboard entries ──────────────────────────────────────────────────────
 
@@ -176,6 +177,40 @@ function buildSubmissions(userIds: { admin: string; olutosin: string; anon: stri
   ]
 }
 
+const testSubmitter = {
+  tokenIdentifier: 'seed:leaderboard-promotion-testing',
+  clerkId: 'seed_leaderboard_promotion_testing',
+  name: 'Leaderboard Test Driver',
+  alwaysAnonymous: false,
+}
+
+const testSubmissions = [
+  {
+    topic: 'The Safety Car Should Be Banned From Restarting Races',
+    details: 'Red flags are clearer. Safety-car restarts turn every race into a random sprint.',
+  },
+  {
+    topic: 'Every Team Should Run a Rookie in FP1 at Every Round',
+    details: 'Two sessions a year is not enough to develop the next generation of drivers.',
+  },
+  {
+    topic: 'Qualifying Tyre Rules Make No Sense',
+    details: 'Let drivers use the compound that works best instead of designing strategy around arbitrary restrictions.',
+  },
+  {
+    topic: 'Radio Coaching Should Be Limited During Races',
+    details: 'Drivers should make more calls themselves instead of receiving a constant stream of instructions.',
+  },
+  {
+    topic: 'Championship Points Should Go Down to P15',
+    details: 'The current system makes most midfield races invisible in the standings.',
+  },
+  {
+    topic: 'Track Limits Penalties Should Be Automated',
+    details: 'Sensors already know when all four wheels are off track, so steward decisions should be consistent.',
+  },
+]
+
 // ─── Seed mutation ────────────────────────────────────────────────────────────
 
 export const seed = internalMutation({
@@ -224,5 +259,51 @@ export const seed = internalMutation({
         submittedAt: sub.submittedAt,
       })
     }
+  },
+})
+
+/** Adds repeatable fixtures for testing the submission promotion flow. */
+export const seedMoreSubmissions = internalMutation({
+  args: {},
+  returns: v.object({ inserted: v.number(), skipped: v.number() }),
+  handler: async (ctx) => {
+    const now = Date.now()
+    let user = await ctx.db
+      .query('users')
+      .withIndex('by_tokenIdentifier', (q) =>
+        q.eq('tokenIdentifier', testSubmitter.tokenIdentifier),
+      )
+      .unique()
+
+    if (!user) {
+      const userId = await ctx.db.insert('users', {
+        ...testSubmitter,
+        updatedAt: now,
+      })
+      user = await ctx.db.get(userId)
+    }
+
+    if (!user) throw new Error('Unable to create the test submitter.')
+
+    const existingSubmissions = await ctx.db
+      .query('submissions')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .take(testSubmissions.length)
+    const existingTopics = new Set(existingSubmissions.map((submission) => submission.topic))
+    let inserted = 0
+
+    for (const [index, submission] of testSubmissions.entries()) {
+      if (existingTopics.has(submission.topic)) continue
+
+      await ctx.db.insert('submissions', {
+        userId: user._id,
+        ...submission,
+        submittedBy: testSubmitter.name,
+        submittedAt: now - index * 60_000,
+      })
+      inserted += 1
+    }
+
+    return { inserted, skipped: testSubmissions.length - inserted }
   },
 })
