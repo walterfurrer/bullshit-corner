@@ -22,6 +22,18 @@ export default defineSchema({
     submittedBy: v.optional(v.string()),
   }).index('by_ranking', ['ranking']),
 
+  communityRankings: defineTable({
+    userId: v.id('users'),
+    entryIds: v.array(v.id('bullshitCornerEntries')),
+    updatedAt: v.number(),
+  }).index('by_userId', ['userId']),
+
+  communityEntryStats: defineTable({
+    entryId: v.id('bullshitCornerEntries'),
+    score: v.number(),
+    rankedBy: v.number(),
+  }).index('by_entryId', ['entryId']),
+
   submissions: defineTable({
     userId: v.id('users'),
     topic: v.string(),

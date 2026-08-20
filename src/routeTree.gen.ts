@@ -13,6 +13,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
+import { Route as AppCommunityRouteImport } from './routes/_app/community'
 import { Route as AppSubmitTopicRouteImport } from './routes/_app/submit-topic'
 import { Route as AppUserSettingsRouteImport } from './routes/_app/userSettings'
 import { Route as AppYourSubmissionsRouteImport } from './routes/_app/yourSubmissions'
@@ -42,6 +43,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppAdminRoute = AppAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCommunityRoute = AppCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSubmitTopicRoute = AppSubmitTopicRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/onboarding': typeof OnboardingRoute
   '/admin': typeof AppAdminRouteWithChildren
+  '/community': typeof AppCommunityRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/userSettings': typeof AppUserSettingsRoute
   '/yourSubmissions': typeof AppYourSubmissionsRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
+  '/community': typeof AppCommunityRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/userSettings': typeof AppUserSettingsRoute
   '/yourSubmissions': typeof AppYourSubmissionsRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/_app/admin': typeof AppAdminRouteWithChildren
+  '/_app/community': typeof AppCommunityRoute
   '/_app/submit-topic': typeof AppSubmitTopicRoute
   '/_app/userSettings': typeof AppUserSettingsRoute
   '/_app/yourSubmissions': typeof AppYourSubmissionsRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/admin'
+    | '/community'
     | '/submit-topic'
     | '/userSettings'
     | '/yourSubmissions'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/onboarding'
+    | '/community'
     | '/submit-topic'
     | '/userSettings'
     | '/yourSubmissions'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/onboarding'
     | '/_app/admin'
+    | '/_app/community'
     | '/_app/submit-topic'
     | '/_app/userSettings'
     | '/_app/yourSubmissions'
@@ -237,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/community': {
+      id: '/_app/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof AppCommunityRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/submit-topic': {
@@ -341,6 +360,7 @@ const AppAdminRouteWithChildren = AppAdminRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRouteWithChildren
+  AppCommunityRoute: typeof AppCommunityRoute
   AppSubmitTopicRoute: typeof AppSubmitTopicRoute
   AppUserSettingsRoute: typeof AppUserSettingsRoute
   AppYourSubmissionsRoute: typeof AppYourSubmissionsRoute
@@ -349,6 +369,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRouteWithChildren,
+  AppCommunityRoute: AppCommunityRoute,
   AppSubmitTopicRoute: AppSubmitTopicRoute,
   AppUserSettingsRoute: AppUserSettingsRoute,
   AppYourSubmissionsRoute: AppYourSubmissionsRoute,

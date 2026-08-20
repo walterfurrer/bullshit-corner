@@ -3,6 +3,7 @@ import { ConvexError, v } from 'convex/values'
 import { mutation, query } from './_generated/server'
 import { internalQuery } from './_generated/server'
 import { DISPLAY_NAME_MAX_LENGTH } from '../shared/constants'
+import { removeUserRanking } from './communityRankings'
 
 import type { Id } from './_generated/dataModel'
 import type { MutationCtx } from './_generated/server'
@@ -179,6 +180,8 @@ export const softDelete = mutation({
       .unique()
 
     if (!user) throw new ConvexError('User not found.')
+
+    await removeUserRanking(ctx, user._id)
 
     // Anonymize all submissions
     const submissions = await ctx.db
