@@ -8,12 +8,15 @@
  * @module
  */
 
+import type * as admin_feedback from "../admin/feedback.js";
 import type * as admin_submissions from "../admin/submissions.js";
 import type * as admin_topics from "../admin/topics.js";
 import type * as admin_users from "../admin/users.js";
 import type * as backfillClerkNames from "../backfillClerkNames.js";
 import type * as entries from "../entries.js";
+import type * as feedback from "../feedback.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as preview from "../preview.js";
 import type * as seed from "../seed.js";
 import type * as submissions from "../submissions.js";
 import type * as users from "../users.js";
@@ -25,12 +28,15 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  "admin/feedback": typeof admin_feedback;
   "admin/submissions": typeof admin_submissions;
   "admin/topics": typeof admin_topics;
   "admin/users": typeof admin_users;
   backfillClerkNames: typeof backfillClerkNames;
   entries: typeof entries;
+  feedback: typeof feedback;
   "lib/auth": typeof lib_auth;
+  preview: typeof preview;
   seed: typeof seed;
   submissions: typeof submissions;
   users: typeof users;

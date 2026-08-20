@@ -38,4 +38,16 @@ export default defineSchema({
   })
     .index('by_submittedAt', ['submittedAt'])
     .index('by_userId', ['userId']),
+
+  feedback: defineTable({
+    userId: v.id('users'),
+    category: v.union(
+      v.literal('bug'),
+      v.literal('idea'),
+      v.literal('general'),
+    ),
+    message: v.string(),
+    pagePath: v.string(),
+    createdAt: v.number(),
+  }).index('by_createdAt', ['createdAt']),
 })

@@ -18,3 +18,9 @@ export const SUBMISSION_LIMITS = {
   details: 1000,
   youtubeUrl: 500,
 } as const
+
+/** Maximum character count for a beta feedback message after trimming. */
+export const FEEDBACK_MESSAGE_MAX_LENGTH = 2000
+
+/** Maximum character count for the route captured with beta feedback. */
+export const FEEDBACK_PAGE_PATH_MAX_LENGTH = 500

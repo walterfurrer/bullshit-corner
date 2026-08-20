@@ -8,8 +8,8 @@ import { Link } from '@tanstack/react-router'
 import { Button } from '#/components/ui/button.tsx'
 import { MobileNav } from '#/components/mobileNav'
 import { UserMenu } from '#/components/userMenu'
-import { ENABLE_AUTH } from '#/lib/featureFlags'
-import { primaryNavLinks } from '#/lib/navigation'
+import { ENABLE_AUTH, ENABLE_TEST_FEEDBACK } from '#/lib/featureFlags'
+import { betaNavLinks, primaryNavLinks } from '#/lib/navigation'
 
 export function SiteHeader() {
   const { isLoaded, isSignedIn } = useAuth()
@@ -39,7 +39,7 @@ export function SiteHeader() {
         <div className="hidden items-center gap-6 sm:flex">
           <nav aria-label="Site navigation">
             <ul className="flex items-center gap-6">
-              {primaryNavLinks.map(({ to, label, exact }) => (
+              {[...primaryNavLinks, ...(ENABLE_TEST_FEEDBACK ? betaNavLinks : [])].map(({ to, label, exact }) => (
                 <li key={to}>
                   <Link
                     to={to}

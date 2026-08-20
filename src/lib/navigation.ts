@@ -2,6 +2,7 @@ import type { ComponentType } from 'react'
 import {
   GaugeIcon,
   GearSixIcon,
+  ChatCenteredTextIcon,
   HouseIcon,
   ListBulletsIcon,
   PaperPlaneTiltIcon,
@@ -17,6 +18,10 @@ export interface NavLink {
 export const primaryNavLinks: NavLink[] = [
   { to: '/', label: 'Home', icon: HouseIcon, exact: true },
   { to: '/submit-topic', label: 'Submit a Topic', icon: PaperPlaneTiltIcon },
+]
+
+export const betaNavLinks: NavLink[] = [
+  { to: '/feedback', label: 'Beta Feedback', icon: ChatCenteredTextIcon },
 ]
 
 export const userNavLinks: NavLink[] = [

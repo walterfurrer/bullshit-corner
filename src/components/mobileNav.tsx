@@ -11,8 +11,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from '#/components/ui/sheet.tsx'
-import { ENABLE_AUTH } from '#/lib/featureFlags'
-import { adminNavLinks, primaryNavLinks, userNavLinks } from '#/lib/navigation'
+import { ENABLE_AUTH, ENABLE_TEST_FEEDBACK } from '#/lib/featureFlags'
+import {
+  adminNavLinks,
+  betaNavLinks,
+  primaryNavLinks,
+  userNavLinks,
+} from '#/lib/navigation'
 import type { NavLink } from '#/lib/navigation'
 
 export function MobileNav() {
@@ -52,7 +57,13 @@ export function MobileNav() {
 
           <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-4">
             {/* Primary nav links — always visible */}
-            <NavSection links={primaryNavLinks} onNavigate={handleNavigate} />
+            <NavSection
+              links={[
+                ...primaryNavLinks,
+                ...(ENABLE_TEST_FEEDBACK ? betaNavLinks : []),
+              ]}
+              onNavigate={handleNavigate}
+            />
 
             {/* User links — only when signed in */}
             {ENABLE_AUTH && isSignedIn && (

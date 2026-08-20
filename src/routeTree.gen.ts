@@ -13,6 +13,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
+import { Route as AppFeedbackRouteImport } from './routes/_app/feedback'
 import { Route as AppSubmitTopicRouteImport } from './routes/_app/submit-topic'
 import { Route as AppUserSettingsRouteImport } from './routes/_app/userSettings'
 import { Route as AppYourSubmissionsRouteImport } from './routes/_app/yourSubmissions'
@@ -20,6 +21,7 @@ import { Route as ApiOgRouteImport } from './routes/api/og'
 import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
 import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
 import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
+import { Route as AppAdminFeedbackRouteImport } from './routes/_app/admin/feedback'
 import { Route as AppAdminLeaderboardManagementRouteImport } from './routes/_app/admin/leaderboardManagement'
 import { Route as AppAdminNewUsersRouteImport } from './routes/_app/admin/newUsers'
 import { Route as AppAdminSubmissionsRouteImport } from './routes/_app/admin/submissions'
@@ -42,6 +44,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppAdminRoute = AppAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFeedbackRoute = AppFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSubmitTopicRoute = AppSubmitTopicRouteImport.update({
@@ -79,6 +86,11 @@ const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppAdminRoute,
 } as any)
+const AppAdminFeedbackRoute = AppAdminFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => AppAdminRoute,
+} as any)
 const AppAdminLeaderboardManagementRoute =
   AppAdminLeaderboardManagementRouteImport.update({
     id: '/leaderboardManagement',
@@ -105,12 +117,14 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/onboarding': typeof OnboardingRoute
   '/admin': typeof AppAdminRouteWithChildren
+  '/feedback': typeof AppFeedbackRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/userSettings': typeof AppUserSettingsRoute
   '/yourSubmissions': typeof AppYourSubmissionsRoute
   '/api/og': typeof ApiOgRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
+  '/admin/feedback': typeof AppAdminFeedbackRoute
   '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/admin/newUsers': typeof AppAdminNewUsersRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
@@ -119,6 +133,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
+  '/feedback': typeof AppFeedbackRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/userSettings': typeof AppUserSettingsRoute
   '/yourSubmissions': typeof AppYourSubmissionsRoute
@@ -126,6 +141,7 @@ export interface FileRoutesByTo {
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
   '/': typeof AppIndexRoute
+  '/admin/feedback': typeof AppAdminFeedbackRoute
   '/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/admin/newUsers': typeof AppAdminNewUsersRoute
   '/admin/submissions': typeof AppAdminSubmissionsRoute
@@ -137,6 +153,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/_app/admin': typeof AppAdminRouteWithChildren
+  '/_app/feedback': typeof AppFeedbackRoute
   '/_app/submit-topic': typeof AppSubmitTopicRoute
   '/_app/userSettings': typeof AppUserSettingsRoute
   '/_app/yourSubmissions': typeof AppYourSubmissionsRoute
@@ -144,6 +161,7 @@ export interface FileRoutesById {
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/admin/feedback': typeof AppAdminFeedbackRoute
   '/_app/admin/leaderboardManagement': typeof AppAdminLeaderboardManagementRoute
   '/_app/admin/newUsers': typeof AppAdminNewUsersRoute
   '/_app/admin/submissions': typeof AppAdminSubmissionsRoute
@@ -156,12 +174,14 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/admin'
+    | '/feedback'
     | '/submit-topic'
     | '/userSettings'
     | '/yourSubmissions'
     | '/api/og'
     | '/sign-in/$'
     | '/sign-up/$'
+    | '/admin/feedback'
     | '/admin/leaderboardManagement'
     | '/admin/newUsers'
     | '/admin/submissions'
@@ -170,6 +190,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/onboarding'
+    | '/feedback'
     | '/submit-topic'
     | '/userSettings'
     | '/yourSubmissions'
@@ -177,6 +198,7 @@ export interface FileRouteTypes {
     | '/sign-in/$'
     | '/sign-up/$'
     | '/'
+    | '/admin/feedback'
     | '/admin/leaderboardManagement'
     | '/admin/newUsers'
     | '/admin/submissions'
@@ -187,6 +209,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/onboarding'
     | '/_app/admin'
+    | '/_app/feedback'
     | '/_app/submit-topic'
     | '/_app/userSettings'
     | '/_app/yourSubmissions'
@@ -194,6 +217,7 @@ export interface FileRouteTypes {
     | '/sign-in/$'
     | '/sign-up/$'
     | '/_app/'
+    | '/_app/admin/feedback'
     | '/_app/admin/leaderboardManagement'
     | '/_app/admin/newUsers'
     | '/_app/admin/submissions'
@@ -237,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/feedback': {
+      id: '/_app/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof AppFeedbackRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/submit-topic': {
@@ -288,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminIndexRouteImport
       parentRoute: typeof AppAdminRoute
     }
+    '/_app/admin/feedback': {
+      id: '/_app/admin/feedback'
+      path: '/feedback'
+      fullPath: '/admin/feedback'
+      preLoaderRoute: typeof AppAdminFeedbackRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
     '/_app/admin/leaderboardManagement': {
       id: '/_app/admin/leaderboardManagement'
       path: '/leaderboardManagement'
@@ -320,6 +358,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppAdminRouteChildren {
+  AppAdminFeedbackRoute: typeof AppAdminFeedbackRoute
   AppAdminLeaderboardManagementRoute: typeof AppAdminLeaderboardManagementRoute
   AppAdminNewUsersRoute: typeof AppAdminNewUsersRoute
   AppAdminSubmissionsRoute: typeof AppAdminSubmissionsRoute
@@ -328,6 +367,7 @@ interface AppAdminRouteChildren {
 }
 
 const AppAdminRouteChildren: AppAdminRouteChildren = {
+  AppAdminFeedbackRoute: AppAdminFeedbackRoute,
   AppAdminLeaderboardManagementRoute: AppAdminLeaderboardManagementRoute,
   AppAdminNewUsersRoute: AppAdminNewUsersRoute,
   AppAdminSubmissionsRoute: AppAdminSubmissionsRoute,
@@ -341,6 +381,7 @@ const AppAdminRouteWithChildren = AppAdminRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRouteWithChildren
+  AppFeedbackRoute: typeof AppFeedbackRoute
   AppSubmitTopicRoute: typeof AppSubmitTopicRoute
   AppUserSettingsRoute: typeof AppUserSettingsRoute
   AppYourSubmissionsRoute: typeof AppYourSubmissionsRoute
@@ -349,6 +390,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRouteWithChildren,
+  AppFeedbackRoute: AppFeedbackRoute,
   AppSubmitTopicRoute: AppSubmitTopicRoute,
   AppUserSettingsRoute: AppUserSettingsRoute,
   AppYourSubmissionsRoute: AppYourSubmissionsRoute,

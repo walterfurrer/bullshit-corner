@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 import { SiteHeader } from '#/components/siteHeader'
+import { BetaBanner } from '#/components/betaBanner'
 
 export const Route = createFileRoute('/_app')({
   component: AppLayout,
@@ -9,6 +10,7 @@ export const Route = createFileRoute('/_app')({
 function AppLayout() {
   return (
     <div className="min-h-dvh">
+      <BetaBanner />
       <SiteHeader />
       <main
         className="mx-auto max-w-4xl px-4 py-10 animate-content-enter sm:px-6 sm:py-14"
