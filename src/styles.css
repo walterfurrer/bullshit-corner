@@ -63,6 +63,14 @@
   --bronze: oklch(0.62 0.12 55);
 }
 
+@media (width >= 80rem) {
+  :root {
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1.0625rem;
+  }
+}
+
 @theme inline {
   --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -75,6 +83,9 @@
   --text-sm: var(--font-size-sm);
   --text-sm--line-height: var(--line-height-sm);
   --text-sm--letter-spacing: var(--letter-spacing-sm);
+  --text-base: var(--font-size-base);
+  --text-base--line-height: var(--line-height-base);
+  --text-base--letter-spacing: var(--letter-spacing-base);
   --tracking-racing-compact: 0.01em;
   --color-background: var(--background);
   --color-foreground: var(--foreground);

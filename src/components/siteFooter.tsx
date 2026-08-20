@@ -17,8 +17,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-10 flex flex-col gap-4 sm:mt-14">
       <p className="text-center text-xs text-muted-foreground">
-        Unofficial fan project tracking Bullshit Corner from High Performance
-        Racing.
+        bscorner.com is an unofficial fan site for the High Performance Racing podcast.
       </p>
       <Separator className="pt-0.5 opacity-50" />
       <div className="flex items-center justify-between text-xs text-muted-foreground">
