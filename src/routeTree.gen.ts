@@ -13,6 +13,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
+import { Route as AppCommunityRouteImport } from './routes/_app/community'
 import { Route as AppFeedbackRouteImport } from './routes/_app/feedback'
 import { Route as AppSubmitTopicRouteImport } from './routes/_app/submit-topic'
 import { Route as AppUserSettingsRouteImport } from './routes/_app/userSettings'
@@ -44,6 +45,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppAdminRoute = AppAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCommunityRoute = AppCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFeedbackRoute = AppFeedbackRouteImport.update({
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/onboarding': typeof OnboardingRoute
   '/admin': typeof AppAdminRouteWithChildren
+  '/community': typeof AppCommunityRoute
   '/feedback': typeof AppFeedbackRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/userSettings': typeof AppUserSettingsRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
+  '/community': typeof AppCommunityRoute
   '/feedback': typeof AppFeedbackRoute
   '/submit-topic': typeof AppSubmitTopicRoute
   '/userSettings': typeof AppUserSettingsRoute
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/_app/admin': typeof AppAdminRouteWithChildren
+  '/_app/community': typeof AppCommunityRoute
   '/_app/feedback': typeof AppFeedbackRoute
   '/_app/submit-topic': typeof AppSubmitTopicRoute
   '/_app/userSettings': typeof AppUserSettingsRoute
@@ -174,6 +183,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/admin'
+    | '/community'
     | '/feedback'
     | '/submit-topic'
     | '/userSettings'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/onboarding'
+    | '/community'
     | '/feedback'
     | '/submit-topic'
     | '/userSettings'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/onboarding'
     | '/_app/admin'
+    | '/_app/community'
     | '/_app/feedback'
     | '/_app/submit-topic'
     | '/_app/userSettings'
@@ -261,6 +273,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/community': {
+      id: '/_app/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof AppCommunityRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/feedback': {
@@ -381,6 +400,7 @@ const AppAdminRouteWithChildren = AppAdminRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRouteWithChildren
+  AppCommunityRoute: typeof AppCommunityRoute
   AppFeedbackRoute: typeof AppFeedbackRoute
   AppSubmitTopicRoute: typeof AppSubmitTopicRoute
   AppUserSettingsRoute: typeof AppUserSettingsRoute
@@ -390,6 +410,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRouteWithChildren,
+  AppCommunityRoute: AppCommunityRoute,
   AppFeedbackRoute: AppFeedbackRoute,
   AppSubmitTopicRoute: AppSubmitTopicRoute,
   AppUserSettingsRoute: AppUserSettingsRoute,
@@ -409,13 +430,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

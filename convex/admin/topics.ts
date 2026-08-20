@@ -3,6 +3,7 @@ import { ConvexError, v } from 'convex/values'
 import { mutation, query } from '../_generated/server'
 import { TITLE_MAX } from '../../shared/constants'
 import { requireAdmin } from '../lib/auth'
+import { removeEntryStats } from '../communityRankings'
 
 function validateTitle(title: string): string {
   const trimmed = title.trim()
@@ -158,6 +159,8 @@ export const remove = mutation({
     if (!topic) {
       throw new ConvexError({ code: 'NOT_FOUND', message: 'Topic not found.' })
     }
+
+    await removeEntryStats(ctx, args.id)
 
     // Delete the topic
     await ctx.db.delete(args.id)

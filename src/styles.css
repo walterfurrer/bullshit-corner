@@ -37,6 +37,12 @@
   --foreground: oklch(0.96 0.003 230);
   --card: oklch(0.19 0.006 230);
   --card-foreground: oklch(0.96 0.003 230);
+  --surface-gradient: linear-gradient(
+    145deg,
+    color-mix(in oklch, var(--card), var(--accent) 16%) 0%,
+    var(--card) 52%,
+    color-mix(in oklch, var(--card), var(--background) 45%) 100%
+  );
   --popover: oklch(0.19 0.006 230);
   --popover-foreground: oklch(0.96 0.003 230);
   --primary: oklch(0.65 0.19 29);
@@ -61,6 +67,62 @@
   --gold: oklch(0.8 0.15 88);
   --silver: oklch(0.78 0.006 230);
   --bronze: oklch(0.62 0.12 55);
+}
+
+/* Community is a page-local teal–emerald context. It overrides the same
+ * semantic tokens used by the existing UI primitives, so the rest of the
+ * application retains the canonical slate and coral treatment. */
+.community-theme {
+  --background: oklch(0.17 0.022 180);
+  --card: oklch(0.215 0.028 178);
+  --popover: oklch(0.215 0.028 178);
+  --primary: oklch(0.72 0.14 160);
+  --primary-foreground: oklch(0.18 0.025 160);
+  --secondary: oklch(0.235 0.027 178);
+  --muted: oklch(0.235 0.021 180);
+  --muted-foreground: oklch(0.67 0.022 182);
+  --accent: oklch(0.275 0.035 176);
+  --border: oklch(0.34 0.04 178);
+  --input: oklch(0.34 0.04 178);
+  --ring: oklch(0.6 0.11 165);
+  --surface-gradient: linear-gradient(
+    145deg,
+    color-mix(in oklch, var(--card), var(--accent) 20%) 0%,
+    var(--card) 52%,
+    color-mix(in oklch, var(--card), var(--background) 45%) 100%
+  );
+}
+
+.app-page-background {
+  background: var(--background);
+}
+
+.community-theme .app-page-background {
+  background:
+    radial-gradient(
+      95% 70% at 0% 0%,
+      oklch(0.29 0.065 190 / 45%) 0%,
+      transparent 68%
+    ),
+    radial-gradient(
+      80% 65% at 100% 100%,
+      oklch(0.27 0.07 165 / 35%) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      to bottom,
+      oklch(0.14 0.005 230) 0%,
+      var(--background) 28rem
+    );
+}
+
+.surface {
+  background-color: var(--card);
+  background-image: var(--surface-gradient);
+}
+
+.surface-flat {
+  background-image: none;
 }
 
 @media (width >= 80rem) {

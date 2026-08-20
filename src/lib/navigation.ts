@@ -6,6 +6,7 @@ import {
   HouseIcon,
   ListBulletsIcon,
   PaperPlaneTiltIcon,
+  UsersThreeIcon,
 } from '@phosphor-icons/react'
 
 export interface NavLink {
@@ -17,6 +18,7 @@ export interface NavLink {
 
 export const primaryNavLinks: NavLink[] = [
   { to: '/', label: 'Home', icon: HouseIcon, exact: true },
+  { to: '/community', label: 'Community', icon: UsersThreeIcon },
   { to: '/submit-topic', label: 'Submit a Topic', icon: PaperPlaneTiltIcon },
 ]
 
