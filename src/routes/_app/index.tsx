@@ -49,9 +49,9 @@ function Home() {
           </p>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <h2>Have some bullshit to submit?</h2>
-        <div>
+      <div className="glass-section flex flex-col gap-3 rounded-xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <h2>Have some bullshit to share?</h2>
+        <div className="shrink-0">
           <Button render={<Link to="/submit-topic" viewTransition />} nativeButton={false} size="lg">Submit a Topic</Button>
         </div>
       </div>

@@ -205,7 +205,7 @@ export function AdminAccessManagement() {
             <p className="sr-only" role="status">
               Searching users…
             </p>
-            <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+            <ul className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
               {Array.from({ length: 3 }).map((_, i) => (
                 <AdminUserRowSkeleton key={i} />
               ))}
@@ -220,7 +220,7 @@ export function AdminAccessManagement() {
         )}
 
         {!searchLoading && searchResults.length > 0 && (
-          <ul className="surface mt-4 overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+          <ul className="glass-collection mt-4 overflow-hidden rounded-xl divide-y divide-border">
             {searchResults.map((u) => (
               <UserCard
                 key={u.id}
@@ -252,7 +252,7 @@ export function AdminAccessManagement() {
             <p className="sr-only" role="status">
               Loading administrators…
             </p>
-            <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+            <ul className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
               {Array.from({ length: 2 }).map((_, i) => (
                 <AdminUserRowSkeleton key={i} />
               ))}
@@ -265,7 +265,7 @@ export function AdminAccessManagement() {
         )}
 
         {!adminsLoading && admins.length > 0 && (
-          <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+          <ul className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
             {admins.map((u) => (
               <UserCard
                 key={u.id}

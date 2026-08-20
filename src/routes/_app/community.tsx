@@ -51,25 +51,27 @@ function CommunityPage() {
 
       <CommunityLeaderboard entries={entries} />
 
-      {ENABLE_AUTH && isAuthenticated ? (
-        <CommunityRankingEditor entries={entries} savedEntryIds={savedEntryIds} />
-      ) : ENABLE_AUTH ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Want to shape the board?</CardTitle>
-            <CardDescription>
-              Sign in or create a free account to add your ranking to the community aggregate.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div>
-              <SignInButton mode="modal">
-                <Button>Sign in to rank</Button>
-              </SignInButton>
-            </div>
-          </CardContent>
-        </Card>
-      ) : null}
+      <div className="mt-6 sm:mt-10">
+        {ENABLE_AUTH && isAuthenticated ? (
+          <CommunityRankingEditor entries={entries} savedEntryIds={savedEntryIds} />
+        ) : ENABLE_AUTH ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Want to shape the board?</CardTitle>
+              <CardDescription>
+                Sign in or create a free account to add your ranking to the community aggregate.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div>
+                <SignInButton mode="modal">
+                  <Button>Sign in to rank</Button>
+                </SignInButton>
+              </div>
+            </CardContent>
+          </Card>
+        ) : null}
+      </div>
 
       <SiteFooter />
     </div>

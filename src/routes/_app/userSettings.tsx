@@ -9,6 +9,7 @@ import { ConnectionsSection } from '#/components/settings/connectionsSection'
 import { DeleteAccountSection } from '#/components/settings/deleteAccountSection'
 import { EmailSection } from '#/components/settings/emailSection'
 import { PasswordSection } from '#/components/settings/passwordSection'
+import { MobileSectionPicker } from '#/components/mobileSectionPicker'
 import { Button } from '#/components/ui/button.tsx'
 import {
   Card,
@@ -76,8 +77,14 @@ function SettingsLayout({ sections }: { sections: SettingsSection[] }) {
 
   return (
     <div className="flex flex-col gap-6 md:flex-row md:gap-8">
-      {/* Sidebar — vertical on desktop, horizontal scroll on mobile */}
-      <nav aria-label="Settings sections" className="section-nav">
+      <MobileSectionPicker
+        label="Settings section"
+        options={sections.map(({ id, label }) => ({ value: id, label }))}
+        value={activeSection}
+        onValueChange={setActiveSection}
+      />
+
+      <nav aria-label="Settings sections" className="section-nav hidden md:block">
         <ul className="section-nav-list">
           {sections.map((section) => (
             <li key={section.id}>

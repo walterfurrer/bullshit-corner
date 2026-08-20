@@ -62,7 +62,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
         'flex flex-col gap-2 p-4 text-start',
         isListItem
           ? 'bg-transparent transition-colors hover:bg-accent/30 focus-within:bg-accent/30'
-          : 'surface rounded-lg border',
+          : 'glass-section rounded-lg border',
       )}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">

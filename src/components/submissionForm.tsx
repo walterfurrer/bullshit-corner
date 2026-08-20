@@ -121,7 +121,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
         event.stopPropagation()
         void form.handleSubmit()
       }}
-      className="flex flex-col gap-6"
+      className="glass-section flex flex-col gap-6 rounded-xl p-5 sm:p-6"
       noValidate
     >
       <div className="grid gap-6 sm:grid-cols-2">
