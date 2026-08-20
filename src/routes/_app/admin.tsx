@@ -7,11 +7,13 @@ import {
   Outlet,
   redirect,
   useNavigate,
+  useRouterState,
 } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { useEffect } from 'react'
 
 import { Spinner } from '#/components/ui/spinner.tsx'
+import { MobileSectionPicker } from '#/components/mobileSectionPicker'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 
 const adminSections = [
@@ -53,6 +55,7 @@ export const Route = createFileRoute('/_app/admin')({
 function AdminLayout() {
   const { user, isLoaded } = useUser()
   const navigate = useNavigate()
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
 
   useEffect(() => {
     if (!isLoaded) return
@@ -82,12 +85,22 @@ function AdminLayout() {
     return null // Will redirect via useEffect
   }
 
+  const activeSection = adminSections.find(({ to }) => to === pathname) ?? adminSections[0]
+
   return (
     <div className="flex flex-col gap-6 md:flex-row md:gap-8">
       {/* Layout has no heading — each admin child page owns its own <h1>,
           matching the rest of the app's route structure. */}
-      {/* Sidebar — vertical on desktop, horizontal scroll on mobile */}
-      <nav aria-label="Admin sections" className="section-nav">
+      <MobileSectionPicker
+        label="Admin section"
+        options={adminSections.map(({ to, label }) => ({ value: to, label }))}
+        value={activeSection.to}
+        onValueChange={(to) => {
+          void navigate({ to, viewTransition: true })
+        }}
+      />
+
+      <nav aria-label="Admin sections" className="section-nav hidden md:block">
         <ul className="section-nav-list">
           {adminSections.map(({ to, label }) => (
             <li key={to}>
@@ -107,7 +120,7 @@ function AdminLayout() {
       </nav>
 
       {/* Content area */}
-      <div className="min-w-0 flex-1">
+      <div className="glass-section min-w-0 flex-1 rounded-xl p-4 sm:p-6">
         <Outlet />
       </div>
     </div>

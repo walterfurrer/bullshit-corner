@@ -65,7 +65,7 @@ function OnboardingPage() {
 
   if (success) {
     return (
-      <div className="flex min-h-dvh items-center justify-center px-4">
+      <div className="app-auth-frame flex items-center justify-center px-4">
         <h1 className="sr-only">Onboarding complete</h1>
         <Card className="w-full max-w-md">
           <CardHeader>
@@ -120,7 +120,7 @@ function OnboardingPage() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center px-4">
+    <div className="app-auth-frame flex items-center justify-center px-4">
       <h1 className="sr-only">Welcome to Bullshit Corner</h1>
       <Card className="w-full max-w-md">
         <CardHeader>

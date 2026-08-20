@@ -96,7 +96,7 @@ function Users() {
             <p className="sr-only" role="status">
               Loading users…
             </p>
-            <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+            <ul className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
               {Array.from({ length: 8 }).map((_, index) => (
                 <AdminUserRowSkeleton key={index} trailing="time" />
               ))}
@@ -107,7 +107,7 @@ function Users() {
             No {statusFilter === 'all' ? '' : `${statusFilter} `}users found.
           </p>
         ) : (
-          <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+          <ul className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
             {users.map((user) => (
               <UserRow key={user._id} user={user} />
             ))}

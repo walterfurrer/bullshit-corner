@@ -76,12 +76,12 @@ function SortableEntry({
           ref={setNodeRef}
           style={{ transform: CSS.Transform.toString(transform), transition }}
           className={cn(
-            'transition-colors hover:bg-accent/30 focus-within:bg-accent/30',
+            'min-w-0 overflow-hidden transition-colors hover:bg-accent/30 focus-within:bg-accent/30',
             isDragging && 'relative z-10 rounded-md bg-card shadow-md ring-1 ring-primary/30',
           )}
           {...attributes}
         >
-          <div className="flex items-center gap-3 px-4 py-3">
+          <div className="grid min-w-0 grid-cols-[2rem_auto_minmax(0,1fr)_2rem] items-center gap-2 px-3 py-3 sm:grid-cols-[2.25rem_auto_minmax(0,1fr)_2rem] sm:gap-3 sm:px-4">
             <button
               type="button"
               className="shrink-0 cursor-grab touch-none rounded-xs p-1.5 text-muted-foreground hover:text-foreground focus-visible:bg-accent/50 focus-visible:ring-2 focus-visible:ring-ring/50 active:cursor-grabbing"
@@ -93,7 +93,7 @@ function SortableEntry({
             {ranked && position ? (
               <PositionBadge position={position} className="shrink-0" />
             ) : (
-              <span className="shrink-0 font-mono text-xs text-muted-foreground">
+              <span className="whitespace-nowrap font-mono text-xs text-muted-foreground">
                 HPR P{entry.officialRanking}
               </span>
             )}
@@ -104,6 +104,7 @@ function SortableEntry({
               type="button"
               variant="ghost"
               size="icon-sm"
+              className="justify-self-end"
               aria-label={ranked ? `Remove ${entry.title} from your ranking` : `Rank ${entry.title}`}
               onClick={() => (ranked ? onUnrank(entry.id) : onRank(entry.id))}
             >
@@ -284,7 +285,7 @@ export function CommunityRankingEditor({
               <RankingDropZone id={RANKED_DROP_ZONE}>
                 {rankedEntries.length > 0 ? (
                   <SortableContext items={rankedEntryIds} strategy={verticalListSortingStrategy}>
-                    <ol className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+                    <ol className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
                       {rankedEntries.map((entry, index) => (
                         <SortableEntry
                           key={entry.id}
@@ -298,7 +299,7 @@ export function CommunityRankingEditor({
                     </ol>
                   </SortableContext>
                 ) : (
-                  <p className="surface rounded-xl border border-dashed px-4 py-8 text-sm text-muted-foreground">
+                  <p className="glass-collection rounded-xl border border-dashed px-4 py-8 text-sm text-muted-foreground">
                     Add at least one entry to create your ranking.
                   </p>
                 )}
@@ -320,7 +321,7 @@ export function CommunityRankingEditor({
                   items={unrankedEntries.map((entry) => entry.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <ol className="surface max-h-120 overflow-y-auto rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+                  <ol className="glass-collection max-h-120 overflow-y-auto rounded-xl divide-y divide-border">
                     {unrankedEntries.map((entry) => (
                       <SortableEntry
                         key={entry.id}

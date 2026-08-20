@@ -117,7 +117,7 @@ function SubmissionsReview() {
             : 'No dismissed submissions.'}
         </p>
       ) : (
-        <div className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+        <div className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
           {filter === 'available'
             ? submissions.map((submission) => (
               <SubmissionCard

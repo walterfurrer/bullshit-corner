@@ -45,7 +45,7 @@ function SubmitTopicPage() {
       {ENABLE_AUTH && (
         <Show when="signed-out">
           <Alert
-            className="rounded-lg border-primary/30 bg-primary/5"
+            className="rounded-lg"
             role="note"
           >
             <AlertTitle>A free account is required to submit.</AlertTitle>

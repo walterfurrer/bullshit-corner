@@ -196,7 +196,7 @@ export function ConnectionsSection({
       <CardContent className="gap-4">
         {/* Connected accounts list */}
         {externalAccounts.length > 0 ? (
-          <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border" role="list">
+          <ul className="glass-collection overflow-hidden rounded-xl divide-y divide-border" role="list">
             {externalAccounts.map((account) => {
               const Icon = getProviderIcon(account.provider)
               const isLoading = loadingAction === `disconnect-${account.id}`

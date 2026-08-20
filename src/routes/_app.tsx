@@ -16,8 +16,8 @@ function AppLayout() {
       <SiteHeader />
       <div
         className={cn(
-          'relative isolate',
-          isCommunityPage && 'community-theme min-h-dvh',
+          'relative isolate min-h-dvh',
+          isCommunityPage && 'community-theme',
         )}
       >
         <div

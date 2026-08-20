@@ -284,7 +284,7 @@ function LeaderboardManagement() {
             items={topicIds}
             strategy={verticalListSortingStrategy}
           >
-            <ol className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+            <ol className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
               {topics.map((topic, index) => (
                 <SortableTopicItem
                   key={topic._id}
