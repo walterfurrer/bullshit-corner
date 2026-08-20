@@ -98,6 +98,92 @@ describe('submissions', () => {
       data: expect.objectContaining({ kind: 'RateLimited' }),
     })
   })
+
+  test('lets an owner update their submission but rejects another user', async () => {
+    const t = setup()
+    const asUser = t.withIdentity(identity)
+    const otherIdentity = {
+      ...identity,
+      subject: 'user_submitter_456',
+      tokenIdentifier: 'https://nice-sailfish-32.clerk.accounts.dev|user_submitter_456',
+    }
+    const asOtherUser = t.withIdentity(otherIdentity)
+    const submissionId = await asUser.mutation(api.submissions.submit, {
+      topic: 'Original take',
+    })
+
+    await asUser.mutation(api.submissions.update, {
+      id: submissionId,
+      topic: '  Updated take  ',
+      details: '  More detail  ',
+      youtubeUrl: 'https://youtu.be/example',
+      submittedBy: '  Updated alias  ',
+    })
+
+    await asOtherUser.mutation(api.users.sync, {})
+    await expect(
+      asOtherUser.mutation(api.submissions.update, {
+        id: submissionId,
+        topic: 'Someone else’s take',
+      }),
+    ).rejects.toThrow('only manage your own submissions')
+
+    const submission = await t.run((ctx) => ctx.db.get('submissions', submissionId))
+    expect(submission).toMatchObject({
+      topic: 'Updated take',
+      details: 'More detail',
+      youtubeUrl: 'https://youtu.be/example',
+      submittedBy: 'Updated alias',
+    })
+  })
+
+  test('lets an owner make an individual submission anonymous', async () => {
+    const t = setup()
+    const asUser = t.withIdentity(identity)
+    const submissionId = await asUser.mutation(api.submissions.submit, {
+      topic: 'Identity change',
+      submittedBy: 'Paddock Sleuth',
+    })
+
+    await asUser.mutation(api.submissions.update, {
+      id: submissionId,
+      topic: 'Identity change',
+      submittedBy: '   ',
+    })
+
+    const submission = await t.run((ctx) => ctx.db.get('submissions', submissionId))
+    expect(submission?.submittedBy).toBeUndefined()
+  })
+
+  test('deleting a promoted submission keeps and anonymizes its leaderboard entry', async () => {
+    const t = setup()
+    const asUser = t.withIdentity(identity)
+    const submissionId = await asUser.mutation(api.submissions.submit, {
+      topic: 'Safety car chaos',
+      submittedBy: 'Paddock Sleuth',
+    })
+
+    const leaderboardEntryId = await t.run(async (ctx) => {
+      await ctx.db.patch(submissionId, { promotedAt: Date.now() })
+      return ctx.db.insert('bullshitCornerEntries', {
+        title: 'Safety car chaos',
+        ranking: 1,
+        submittedBy: 'Paddock Sleuth',
+        sourceSubmissionId: submissionId,
+      })
+    })
+
+    await expect(asUser.mutation(api.submissions.remove, { id: submissionId })).resolves.toEqual({
+      wasPromoted: true,
+    })
+
+    const [submission, leaderboardEntry] = await t.run(async (ctx) => [
+      await ctx.db.get('submissions', submissionId),
+      await ctx.db.get('bullshitCornerEntries', leaderboardEntryId),
+    ])
+    expect(submission).toBeNull()
+    expect(leaderboardEntry?.submittedBy).toBe('Anonymous')
+  })
 })
 
 /**
@@ -155,6 +241,17 @@ describe('Property 7: Backend anonymity enforcement on submission', () => {
           )
 
           expect(submission?.submittedBy).toBe('Anonymous')
+
+          await asUser.mutation(api.submissions.update, {
+            id: submissionId,
+            topic: 'Updated property test topic',
+            submittedBy: clientAlias,
+          })
+
+          const updatedSubmission = await t.run((ctx) =>
+            ctx.db.get('submissions', submissionId),
+          )
+          expect(updatedSubmission?.submittedBy).toBe('Anonymous')
         },
       ),
       { numRuns: 25 },

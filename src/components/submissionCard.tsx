@@ -3,10 +3,14 @@ import {
   ArrowFatUpIcon,
   XIcon,
   ArrowCounterClockwiseIcon,
+  PencilSimpleIcon,
+  TrashIcon,
+  TrophyIcon,
   YoutubeLogoIcon,
 } from '@phosphor-icons/react'
 
 import { Button } from '#/components/ui/button.tsx'
+import { Badge } from '#/components/ui/badge.tsx'
 import {
   Tooltip,
   TooltipContent,
@@ -44,7 +48,16 @@ type DismissedProps = BaseProps & {
   isActionPending?: boolean
 }
 
-export type SubmissionCardProps = ReadOnlyProps | ActionableProps | DismissedProps
+type OwnerProps = BaseProps & {
+  variant: 'owner'
+  id: string
+  isPromoted: boolean
+  onEdit: (id: string) => void
+  onDelete: (id: string) => void
+  isActionPending?: boolean
+}
+
+export type SubmissionCardProps = ReadOnlyProps | ActionableProps | DismissedProps | OwnerProps
 
 function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text
@@ -67,9 +80,17 @@ export function SubmissionCard(props: SubmissionCardProps) {
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          <h2 className="font-sans text-base font-semibold tracking-normal">
-            {truncateText(topic, 200)}
-          </h2>
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="font-sans text-base font-semibold tracking-normal">
+              {truncateText(topic, 200)}
+            </h2>
+            {props.variant === 'owner' && props.isPromoted ? (
+              <Badge variant="outline">
+                <TrophyIcon data-icon="inline-start" aria-hidden="true" />
+                On leaderboard
+              </Badge>
+            ) : null}
+          </div>
           <p className="mt-0.5 text-xs text-muted-foreground">
             {submittedBy
               ? `Submitted by ${submittedBy}`
@@ -152,6 +173,44 @@ export function SubmissionCard(props: SubmissionCardProps) {
                 </TooltipTrigger>
                 <TooltipContent>Restore</TooltipContent>
               </Tooltip>
+            )}
+            {props.variant === 'owner' && (
+              <>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => props.onEdit(props.id)}
+                        disabled={props.isActionPending}
+                        aria-label="Edit submission"
+                      />
+                    }
+                    className="size-11 text-muted-foreground hover:text-primary sm:size-8"
+                  >
+                    <PencilSimpleIcon data-icon="inline-start" aria-hidden="true" />
+                  </TooltipTrigger>
+                  <TooltipContent>Edit submission</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => props.onDelete(props.id)}
+                        disabled={props.isActionPending}
+                        aria-label="Delete submission"
+                      />
+                    }
+                    className="size-11 text-muted-foreground hover:text-destructive sm:size-8"
+                  >
+                    <TrashIcon data-icon="inline-start" aria-hidden="true" />
+                  </TooltipTrigger>
+                  <TooltipContent>Delete submission</TooltipContent>
+                </Tooltip>
+              </>
             )}
           </div>
         </TooltipProvider>

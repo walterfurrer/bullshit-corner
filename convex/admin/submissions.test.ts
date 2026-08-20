@@ -114,6 +114,37 @@ describe('Property 6: Dismissing a submission excludes it from available view', 
   })
 })
 
+describe('submission promotion', () => {
+  test('records the source submission on the leaderboard entry', async () => {
+    const t = setup()
+    const asAdmin = t.withIdentity(adminIdentity)
+    const submissionId = await t.run(async (ctx) => {
+      const userId = await ctx.db.insert('users', {
+        tokenIdentifier: adminIdentity.tokenIdentifier,
+        clerkId: adminIdentity.subject,
+        updatedAt: Date.now(),
+      })
+
+      return ctx.db.insert('submissions', {
+        userId,
+        topic: 'Promotion source tracking',
+        submittedBy: 'Pit Wall',
+        submittedAt: Date.now(),
+      })
+    })
+
+    const leaderboardEntryId = await asAdmin.mutation(api.admin.submissions.promote, {
+      id: submissionId,
+      ranking: 1,
+    })
+    const leaderboardEntry = await t.run((ctx) =>
+      ctx.db.get('bullshitCornerEntries', leaderboardEntryId),
+    )
+
+    expect(leaderboardEntry?.sourceSubmissionId).toBe(submissionId)
+  })
+})
+
 /**
  * Property 7: Undoing a dismissal returns the submission to the available pool
  * Validates: undoDismiss mutation restores dismissed submissions

@@ -22,7 +22,11 @@ export default defineSchema({
     ranking: v.number(),
     youtubeUrl: v.optional(v.string()),
     submittedBy: v.optional(v.string()),
-  }).index('by_ranking', ['ranking']),
+    // Keeps promoted submissions linked for owner-initiated anonymization.
+    sourceSubmissionId: v.optional(v.id('submissions')),
+  })
+    .index('by_ranking', ['ranking'])
+    .index('by_sourceSubmissionId', ['sourceSubmissionId']),
 
   communityRankings: defineTable({
     userId: v.id('users'),

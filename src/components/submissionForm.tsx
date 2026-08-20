@@ -193,7 +193,9 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
           >
             {(field) => (
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor={field.name}>Name/Alias</Label>
+                <Label htmlFor={field.name}>
+                  Name/Alias <span className="text-muted-foreground">(optional)</span>
+                </Label>
                 {aliasLocked ? (
                   <TooltipProvider>
                     <Tooltip>
@@ -266,7 +268,9 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
           >
             {(field) => (
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor={field.name}>YouTube Link</Label>
+              <Label htmlFor={field.name}>
+                YouTube Link <span className="text-muted-foreground">(optional)</span>
+              </Label>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -320,7 +324,9 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
         >
           {(field) => (
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor={field.name}>Details</Label>
+              <Label htmlFor={field.name}>
+                Details <span className="text-muted-foreground">(optional)</span>
+              </Label>
               <Textarea
                 id={field.name}
                 name={field.name}

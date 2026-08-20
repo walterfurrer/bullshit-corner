@@ -12,6 +12,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
@@ -37,7 +38,7 @@ export const Route = createFileRoute('/_app/community')({
 function CommunityPage() {
   const { data: entries } = useSuspenseQuery(communityBoardQuery)
   const { data: savedEntryIds } = useSuspenseQuery(personalRankingQuery)
-  const { isAuthenticated } = useConvexAuth()
+  const { isAuthenticated, isLoading } = useConvexAuth()
 
   return (
     <div className="flex flex-col gap-8 sm:gap-10">
@@ -52,7 +53,12 @@ function CommunityPage() {
       <CommunityLeaderboard entries={entries} />
 
       <div className="mt-6 sm:mt-10">
-        {ENABLE_AUTH && isAuthenticated ? (
+        {ENABLE_AUTH && isLoading ? (
+          <CommunityRankingLoading
+            entries={entries}
+            savedEntryIds={savedEntryIds}
+          />
+        ) : ENABLE_AUTH && isAuthenticated ? (
           <CommunityRankingEditor entries={entries} savedEntryIds={savedEntryIds} />
         ) : ENABLE_AUTH ? (
           <Card>
@@ -75,6 +81,101 @@ function CommunityPage() {
 
       <SiteFooter />
     </div>
+  )
+}
+
+function CommunityRankingLoading({
+  entries,
+  savedEntryIds,
+}: {
+  entries: Parameters<typeof CommunityRankingEditor>[0]['entries']
+  savedEntryIds: Parameters<typeof CommunityRankingEditor>[0]['savedEntryIds']
+}) {
+  const entryById = new Map(entries.map((entry) => [entry.id, entry]))
+  const rankedEntries = savedEntryIds.flatMap((id) => {
+    const entry = entryById.get(id)
+    return entry ? [entry] : []
+  })
+  const availableEntries = entries.filter((entry) => !savedEntryIds.includes(entry.id))
+
+  return (
+    <Card className="xl:relative xl:left-1/2 xl:w-[min(100vw-3rem,80rem)] xl:-translate-x-1/2">
+      <CardHeader>
+        <CardTitle className="text-xl/7 font-semibold tracking-normal">Your ranking</CardTitle>
+        <CardDescription>
+          Rank as many entries as you like. Unranked entries are treated as no opinion.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(22rem,1fr)] xl:gap-8">
+          <RankingListLoading
+            title="Ranked entries"
+            description="Drag to reorder or use the remove button."
+            entries={rankedEntries}
+            ranked
+          />
+          <RankingListLoading
+            title="Available entries"
+            description="Choose only the entries you want to rank."
+            entries={availableEntries}
+          />
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-between gap-3">
+        <Skeleton className="h-8 w-28" />
+        <Skeleton className="h-8 w-28" />
+      </CardFooter>
+    </Card>
+  )
+}
+
+function RankingListLoading({
+  title,
+  description,
+  entries,
+  ranked = false,
+}: {
+  title: string
+  description: string
+  entries: Parameters<typeof CommunityRankingEditor>[0]['entries']
+  ranked?: boolean
+}) {
+  return (
+    <section className="flex flex-col gap-3" aria-busy="true">
+      <div>
+        <h3 className="text-lg/6 font-semibold tracking-normal">{title}</h3>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </div>
+      {entries.length > 0 ? (
+        <div className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
+          {entries.map((entry) => (
+            <div
+              key={entry.id}
+              className={
+                ranked
+                  ? 'grid grid-cols-[2rem_auto_minmax(0,1fr)_2rem] items-center gap-2 px-3 py-3 sm:grid-cols-[2.25rem_auto_minmax(0,1fr)_2rem] sm:gap-3 sm:px-4'
+                  : 'grid grid-cols-[2rem_minmax(0,1fr)_2rem] items-center gap-2 px-3 py-3 sm:grid-cols-[2.25rem_minmax(0,1fr)_2rem] sm:gap-3 sm:px-4'
+              }
+            >
+              <Skeleton className="size-5" />
+              {ranked ? <Skeleton className="h-8 w-12" /> : null}
+              <span className="relative min-w-0">
+                <span className="invisible block break-words text-pretty font-medium">
+                  {entry.title}
+                </span>
+                <Skeleton className="absolute start-0 top-1/2 h-5 w-3/4 -translate-y-1/2" />
+              </span>
+              <Skeleton className="size-8 justify-self-end" />
+            </div>
+          ))}
+        </div>
+      ) : ranked ? (
+        <p className="glass-collection relative rounded-xl border border-dashed px-4 py-8 text-sm text-muted-foreground">
+          <span className="invisible">Add at least one entry to create your ranking.</span>
+          <Skeleton className="absolute h-5 w-3/4" />
+        </p>
+      ) : null}
+    </section>
   )
 }
 

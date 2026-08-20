@@ -118,6 +118,7 @@ export const promote = mutation({
     id: v.id('submissions'),
     ranking: v.number(),
   },
+  returns: v.id('bullshitCornerEntries'),
   handler: async (ctx, args) => {
     const identity = await requireAdmin(ctx)
 
@@ -148,11 +149,12 @@ export const promote = mutation({
     }
 
     // Create the new entry from submission data
-    await ctx.db.insert('bullshitCornerEntries', {
+    const leaderboardEntryId = await ctx.db.insert('bullshitCornerEntries', {
       title: submission.topic,
       ranking: args.ranking,
       youtubeUrl: submission.youtubeUrl,
       submittedBy: submission.submittedBy,
+      sourceSubmissionId: submission._id,
     })
 
     // Mark submission as promoted
@@ -167,5 +169,7 @@ export const promote = mutation({
       promotedAt: Date.now(),
       promotedBy: user?._id,
     })
+
+    return leaderboardEntryId
   },
 })

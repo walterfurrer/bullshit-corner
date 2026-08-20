@@ -42,7 +42,7 @@ export function RankingBoard({
             <div className="grid grid-cols-[3rem_minmax(0,1fr)_2.5rem] items-center gap-x-3 px-4 py-4 sm:gap-x-4 sm:px-5">
               <PositionBadge position={entry.position} />
               <div className="flex min-w-0 flex-col gap-1">
-                <p className="truncate font-semibold text-foreground">{entry.title}</p>
+                <p className="break-words text-pretty font-semibold text-foreground">{entry.title}</p>
                 {entry.metadata}
               </div>
               {entry.youtubeUrl ? (
