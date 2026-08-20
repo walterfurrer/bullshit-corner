@@ -92,24 +92,26 @@ function Users() {
         </div>
 
         {isLoadingFirstPage ? (
-          <div className="flex flex-col gap-2">
+          <div>
             <p className="sr-only" role="status">
               Loading users…
             </p>
-            {Array.from({ length: 8 }).map((_, index) => (
-              <AdminUserRowSkeleton key={index} trailing="time" />
-            ))}
+            <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <AdminUserRowSkeleton key={index} trailing="time" />
+              ))}
+            </ul>
           </div>
         ) : users.length === 0 ? (
           <p className="text-sm text-muted-foreground">
             No {statusFilter === 'all' ? '' : `${statusFilter} `}users found.
           </p>
         ) : (
-          <div className="flex flex-col gap-2">
+          <ul className="surface overflow-hidden rounded-xl ring-1 ring-foreground/10 divide-y divide-border">
             {users.map((user) => (
               <UserRow key={user._id} user={user} />
             ))}
-          </div>
+          </ul>
         )}
 
         {canLoadMore || isLoadingMore ? (

@@ -49,8 +49,8 @@ export function TopicListItem({
   return (
     <div
       className={cn(
-        'flex items-center gap-3 rounded-lg border px-4 py-3',
-        isDragging && 'opacity-50',
+        'flex items-center gap-3 px-4 py-3 transition-colors hover:bg-accent/30 focus-within:bg-accent/30',
+        isDragging && 'relative z-10 rounded-md bg-card shadow-md ring-1 ring-primary/30',
       )}
     >
       {/* Drag handle — always visible on desktop, only in reorder mode on mobile */}
@@ -58,7 +58,7 @@ export function TopicListItem({
         <button
           type="button"
           className={cn(
-            'shrink-0 cursor-grab touch-none items-center justify-center rounded-xs p-1.5 text-muted-foreground hover:text-foreground active:cursor-grabbing md:flex md:p-0',
+            'shrink-0 cursor-grab touch-none items-center justify-center rounded-xs p-1.5 text-muted-foreground hover:text-foreground focus-visible:bg-accent/50 focus-visible:ring-2 focus-visible:ring-ring/50 active:cursor-grabbing md:flex md:p-0',
             reorderMode ? 'flex' : 'hidden',
           )}
           aria-label="Drag to reorder"

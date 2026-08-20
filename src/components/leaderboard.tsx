@@ -12,7 +12,7 @@ import { PositionBadge } from './positionBadge'
 export function Leaderboard({ topics }: { topics: Array<Doc<'bullshitCornerEntries'>> }) {
   return (
     <div className="flex flex-col gap-2">
-      <h2>HPR's Leaderboard</h2>
+      <h2>HPR's Rankings</h2>
       <div className="surface overflow-hidden rounded-xl border bg-card">
         <div className="grid grid-cols-[3rem_1fr_2.5rem] gap-x-3 border-b px-4 py-2.5 text-xs font-medium tracking-widest text-muted-foreground uppercase sm:gap-x-4 sm:px-5">
           <span>Pos</span>
