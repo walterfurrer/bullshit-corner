@@ -19,14 +19,14 @@ interface CommunityLeaderboardEntry extends RankableCommunityEntry {
 export function CommunityLeaderboard({ entries }: { entries: CommunityLeaderboardEntry[] }) {
   if (entries.every((entry) => entry.rankedBy === 0)) {
     return (
-      <p className="rounded-xl border border-dashed px-4 py-8 text-sm text-muted-foreground">
+      <p className="surface rounded-xl border border-dashed px-4 py-8 text-sm text-muted-foreground">
         No community rankings yet. Be the first person to rank the board.
       </p>
     )
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-card">
+    <div className="surface overflow-hidden rounded-xl border bg-card">
         <div className="grid grid-cols-[3rem_1fr_2.5rem] gap-x-3 border-b px-4 py-2.5 text-xs font-medium tracking-widest text-muted-foreground uppercase sm:gap-x-4 sm:px-5">
           <span>Pos</span>
           <span>Topic</span>

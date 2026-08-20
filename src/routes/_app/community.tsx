@@ -44,7 +44,7 @@ function CommunityPage() {
       <div className="flex flex-col gap-2">
         <h1>Community Leaderboard</h1>
         <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-          See how the community ranks the current entires in Bullshit Corner.
+          See how the community ranks the current entries in Bullshit Corner.
           Every member can rank as many entries as they like.
         </p>
       </div>

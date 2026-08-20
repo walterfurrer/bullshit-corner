@@ -72,7 +72,7 @@ export function DeleteAccountSection() {
   }
 
   return (
-    <Card className="border-destructive/40">
+    <Card className="surface-flat border-destructive/40">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-destructive">
           <WarningOctagonIcon className="size-5" aria-hidden="true" />
