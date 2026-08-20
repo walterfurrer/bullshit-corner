@@ -79,15 +79,11 @@ export async function removeUserRanking(ctx: MutationCtx, userId: Id<'users'>) {
 
   if (!ranking) return
 
-  const currentEntryIds = new Set(
-    (await getCurrentEntries(ctx)).map((entry) => entry._id),
-  )
-  const activeEntryIds = ranking.entryIds.filter((entryId) =>
-    currentEntryIds.has(entryId),
-  )
-
-  if (activeEntryIds.length > 0) {
-    await updateEntryStats(ctx, activeEntryIds, -1)
+  if (ranking.entryIds.length > 0) {
+    // Keep the original ballot intact so every remaining entry is debited
+    // using the same normalized Borda score it received when saved. Deleted
+    // entries have no stat row and are therefore skipped by updateEntryStats.
+    await updateEntryStats(ctx, ranking.entryIds, -1)
   }
   await ctx.db.delete(ranking._id)
 }
@@ -121,11 +117,19 @@ export const list = query({
       .withIndex('by_ranking')
       .order('asc')
       .take(MAX_COMMUNITY_ENTRIES)
-    const stats = await ctx.db
-      .query('communityEntryStats')
-      .withIndex('by_entryId')
-      .take(MAX_COMMUNITY_ENTRIES)
-    const statsByEntryId = new Map(stats.map((stat) => [stat.entryId, stat]))
+    const statsByEntryId = new Map(
+      await Promise.all(
+        entries.map(async (entry) =>
+          [
+            entry._id,
+            await ctx.db
+              .query('communityEntryStats')
+              .withIndex('by_entryId', (q) => q.eq('entryId', entry._id))
+              .unique(),
+          ] as const,
+        ),
+      ),
+    )
 
     return [...entries
       .map((entry) => {
@@ -205,9 +209,10 @@ export const save = mutation({
       .query('communityRankings')
       .withIndex('by_userId', (q) => q.eq('userId', userId))
       .unique()
-    const previousEntryIds = (existing?.entryIds ?? []).filter((entryId) =>
-      currentEntryIds.has(entryId),
-    )
+    // Preserve the saved ballot's original length and positions while
+    // subtracting it. Entries removed from the official board simply have no
+    // aggregate row to update.
+    const previousEntryIds = existing?.entryIds ?? []
 
     if (previousEntryIds.length > 0) {
       await updateEntryStats(ctx, previousEntryIds, -1)
