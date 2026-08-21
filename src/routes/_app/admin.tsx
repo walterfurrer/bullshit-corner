@@ -10,19 +10,19 @@ import {
   useRouterState,
 } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { MobileSectionPicker } from '#/components/mobileSectionPicker'
+import { PageHeader, PageLayout } from '#/components/pageLayout'
+import { SectionNavigation } from '#/components/sectionNavigation'
 import { Spinner } from '#/components/ui/spinner.tsx'
-import { ENABLE_AUTH, ENABLE_TEST_FEEDBACK } from '#/lib/featureFlags'
+import { ENABLE_AUTH } from '#/lib/featureFlags'
+import { cn } from '#/lib/utils'
 
 const adminSections = [
   { to: '/admin/leaderboardManagement', label: 'Leaderboard Management' },
   { to: '/admin/submissions', label: 'View Submissions' },
   { to: '/admin/newUsers', label: 'Users' },
-  ...(ENABLE_TEST_FEEDBACK
-    ? [{ to: '/admin/feedback', label: 'Beta Feedback' }]
-    : []),
 ] as const
 
 const clerkClient = createClerkClient({
@@ -42,6 +42,9 @@ const checkAdminAuth = createServerFn({ method: 'GET' }).handler(async () => {
 })
 
 export const Route = createFileRoute('/_app/admin')({
+  head: () => ({
+    meta: [{ title: 'Admin | Bullshit Corner' }],
+  }),
   beforeLoad: async () => {
     if (!ENABLE_AUTH) {
       throw redirect({ to: '/' })
@@ -59,6 +62,11 @@ function AdminLayout() {
   const { user, isLoaded } = useUser()
   const navigate = useNavigate()
   const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const activeSection = adminSections.find(({ to }) => to === pathname) ?? adminSections[0]
+
+  const navigateToSection = useCallback((to: typeof adminSections[number]['to']) => {
+    void navigate({ to })
+  }, [navigate])
 
   useEffect(() => {
     if (!isLoaded) return
@@ -88,44 +96,40 @@ function AdminLayout() {
     return null // Will redirect via useEffect
   }
 
-  const activeSection = adminSections.find(({ to }) => to === pathname) ?? adminSections[0]
-
   return (
-    <div className="flex flex-col gap-6 md:flex-row md:gap-8">
-      {/* Layout has no heading — each admin child page owns its own <h1>,
-          matching the rest of the app's route structure. */}
-      <MobileSectionPicker
-        label="Admin section"
-        options={adminSections.map(({ to, label }) => ({ value: to, label }))}
-        value={activeSection.to}
-        onValueChange={(to) => {
-          void navigate({ to, viewTransition: true })
-        }}
-      />
+    <PageLayout>
+      <PageHeader title="Admin Dashboard" />
+      <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+        <MobileSectionPicker
+          label="Admin section"
+          options={adminSections.map(({ to, label }) => ({ value: to, label }))}
+          value={activeSection.to}
+          onValueChange={navigateToSection}
+        />
 
-      <nav aria-label="Admin sections" className="section-nav hidden md:block">
-        <ul className="section-nav-list">
-          {adminSections.map(({ to, label }) => (
-            <li key={to}>
-              <Link
-                to={to}
-                className="section-nav-item"
-                activeProps={{
-                  className: 'section-nav-item section-nav-item-active',
-                }}
-                viewTransition
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+        <SectionNavigation
+          activeValue={activeSection.to}
+          ariaLabel="Admin sections"
+          id="admin-sections"
+          items={adminSections.map(({ to, label }) => ({ value: to, label }))}
+          renderItem={(section, isActive) => (
+            <Link
+              to={section.value}
+              className={cn(
+                'section-nav-item',
+                isActive && 'section-nav-item-active',
+              )}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {section.label}
+            </Link>
+          )}
+        />
 
-      {/* Content area */}
-      <div className="glass-section min-w-0 flex-1 rounded-xl p-4 sm:p-6">
-        <Outlet />
+        <div className="glass-section min-w-0 flex-1 rounded-xl p-4 sm:p-6">
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </PageLayout>
   )
 }

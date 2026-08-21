@@ -6,6 +6,7 @@ import { useConvexAuth } from 'convex/react'
 
 import { CommunityLeaderboard } from '#/components/communityLeaderboard'
 import { CommunityRankingEditor } from '#/components/communityRankingEditor'
+import { PageHeader, PageLayout } from '#/components/pageLayout'
 import { SiteFooter } from '#/components/siteFooter'
 import { Button } from '#/components/ui/button'
 import {
@@ -41,18 +42,17 @@ function CommunityPage() {
   const { isAuthenticated, isLoading } = useConvexAuth()
 
   return (
-    <div className="flex flex-col gap-8 sm:gap-10">
-      <div className="flex flex-col gap-2">
-        <h1>Community Leaderboard</h1>
+    <PageLayout>
+      <PageHeader title="Community Leaderboard">
         <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
           See how the community ranks the current entries in Bullshit Corner.
           Every member can rank as many entries as they like.
         </p>
-      </div>
+      </PageHeader>
 
       <CommunityLeaderboard entries={entries} />
 
-      <div className="mt-6 sm:mt-10">
+      <div className="mt-6 sm:mt-8">
         {ENABLE_AUTH && isLoading ? (
           <CommunityRankingLoading
             entries={entries}
@@ -80,7 +80,7 @@ function CommunityPage() {
       </div>
 
       <SiteFooter />
-    </div>
+    </PageLayout>
   )
 }
 

@@ -18,6 +18,8 @@
     "convex-test": { "source": "get-convex/agent-skills", "sourceType": "github", "skillPath": "skills/convex-test/SKILL.md", "computedHash": "8d782d8ad6f6e43d85e8fb9966a01d49bd007451f950108894a64b1e7da2fceb" },
     "convex-verify": { "source": "get-convex/agent-skills", "sourceType": "github", "skillPath": "skills/convex-verify/SKILL.md", "computedHash": "dbe65a37ca2e9a5afa55669b8928ce1dc3ac765151452008f9105bde049228f7" },
     "phosphor-icons": { "source": "lasaths/phosphor-icons", "sourceType": "github", "skillPath": "skills/phosphor-icons/SKILL.md", "computedHash": "008d48e4e60d22332a76d898e492e08305af212401335dcdc7585db33f43e5bc" },
-    "shadcn": { "source": "shadcn/ui", "sourceType": "github", "skillPath": "skills/shadcn/SKILL.md", "computedHash": "c1a68ee06a668aced9ab2b5fbdea5f989864123794eb2e056b339a072dbb7f10" }
+    "shadcn": { "source": "shadcn/ui", "sourceType": "github", "skillPath": "skills/shadcn/SKILL.md", "computedHash": "c1a68ee06a668aced9ab2b5fbdea5f989864123794eb2e056b339a072dbb7f10" },
+    "transitions-dev": { "source": "Jakubantalik/transitions.dev", "sourceType": "github", "skillPath": "skills/transitions-dev/SKILL.md", "computedHash": "a0e64646586db8ba7603eb3a2132f01aa17725e4979d556a9050757db0b0d5e0" },
+    "transitions-polish": { "source": "Jakubantalik/transitions.dev", "sourceType": "github", "skillPath": "skills/transitions-polish/SKILL.md", "computedHash": "95aec18ac2c9fb2c545c2bf2e7419a8001b8e7f1fb640cdb89db0a543548d27f" }
   }
 }

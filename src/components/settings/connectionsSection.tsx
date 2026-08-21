@@ -17,6 +17,7 @@ import {
   Alert,
   AlertDescription,
 } from '#/components/ui/alert.tsx'
+import { AnimatedStatus } from '#/components/ui/animatedStatus.tsx'
 import {
   Card,
   CardContent,
@@ -293,18 +294,14 @@ export function ConnectionsSection({
         )}
 
         {/* Error */}
-        {error && (
-          <p role="alert" className="text-sm text-destructive">
-            {error}
-          </p>
-        )}
+        <AnimatedStatus show={!!error} variant="destructive" aria-live="assertive">
+          <AlertDescription>{error}</AlertDescription>
+        </AnimatedStatus>
 
         {/* Success */}
-        {success && (
-          <p role="status" className="text-sm text-success">
-            {success}
-          </p>
-        )}
+        <AnimatedStatus show={!!success} variant="success" aria-live="polite">
+          <AlertDescription>{success}</AlertDescription>
+        </AnimatedStatus>
       </CardContent>
     </Card>
   )

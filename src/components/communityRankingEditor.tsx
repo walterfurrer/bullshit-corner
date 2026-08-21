@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { LayoutGroup, motion, useReducedMotion } from 'motion/react'
 import {
   DndContext,
   KeyboardSensor,
@@ -33,7 +34,8 @@ import { useMutation } from '@tanstack/react-query'
 
 import { api } from '#convex/_generated/api'
 import type { Id } from '#convex/_generated/dataModel'
-import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert'
+import { AnimatedStatus } from '#/components/ui/animatedStatus'
+import { AlertDescription, AlertTitle } from '#/components/ui/alert'
 import { Button } from '#/components/ui/button'
 import { PositionBadge } from '#/components/positionBadge'
 import { SortableListItem } from '#/components/sortableListItem'
@@ -45,6 +47,7 @@ import {
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
+import { getMotionTransition } from '#/lib/motion'
 import { cn } from '#/lib/utils'
 
 type EntryId = Id<'bullshitCornerEntries'>
@@ -77,6 +80,7 @@ function EntryRow({
   draggable = false,
   isDragging = false,
   dragHandleProps,
+  motionId,
 }: {
   entry: RankableCommunityEntry
   position?: number
@@ -90,9 +94,16 @@ function EntryRow({
   draggable?: boolean
   isDragging?: boolean
   dragHandleProps?: ButtonHTMLAttributes<HTMLButtonElement>
+  motionId?: string
 }) {
+  const prefersReducedMotion = useReducedMotion()
+  const transition = getMotionTransition(prefersReducedMotion)
+
   return (
-    <div
+    <motion.div
+      layout={isDragging ? false : 'position'}
+      layoutId={isDragging ? undefined : motionId}
+      transition={{ layout: transition }}
       className={cn(
         'grid min-w-0 items-center gap-2 px-3 py-3 transition-colors hover:bg-accent/30 focus-within:bg-accent/30 sm:gap-3 sm:px-4',
         isDragging && 'relative z-10 rounded-md bg-card shadow-md ring-1 ring-primary/30',
@@ -159,7 +170,7 @@ function EntryRow({
           <PlusIcon data-icon="inline-start" aria-hidden="true" />
         </Button>
       )}
-    </div>
+    </motion.div>
   )
 }
 
@@ -207,6 +218,7 @@ function SortableEntry({
               draggable
               isDragging={isDragging}
               dragHandleProps={listeners}
+              motionId={`community-ranking-${entry.id}`}
             />
           </li>
         )
@@ -348,87 +360,92 @@ export function CommunityRankingEditor({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(22rem,1fr)] xl:gap-8">
-          <section className="flex flex-col gap-3" aria-labelledby="your-ranked-entries">
-            <div>
-              <h3 id="your-ranked-entries" className="text-lg/6 font-semibold tracking-normal">
-                Ranked entries
-              </h3>
-              <p className="text-sm text-muted-foreground">Drag to reorder or use the arrow buttons.</p>
-            </div>
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              {rankedEntries.length > 0 ? (
-                <SortableContext items={rankedEntryIds} strategy={verticalListSortingStrategy}>
-                  <ol className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
-                    {rankedEntries.map((entry, index) => (
-                      <SortableEntry
-                        key={entry.id}
-                        entry={entry}
-                        position={index + 1}
-                        onRank={addEntry}
-                        onUnrank={removeEntry}
-                        canMoveUp={index > 0}
-                        canMoveDown={index < rankedEntries.length - 1}
-                        onMoveUp={(id) => moveEntry(id, 'up')}
-                        onMoveDown={(id) => moveEntry(id, 'down')}
-                      />
-                    ))}
-                  </ol>
-                </SortableContext>
-              ) : (
-                <p className="glass-collection rounded-xl border border-dashed px-4 py-8 text-sm text-muted-foreground">
-                  Add at least one entry to create your ranking.
-                </p>
-              )}
-            </DndContext>
-          </section>
-
-          <section
-            className="flex flex-col gap-3 xl:sticky xl:top-6 xl:self-start"
-            aria-labelledby="unranked-entries"
-          >
-            <div>
-              <h3
-                id="unranked-entries"
-                className="text-lg/6 font-semibold tracking-normal"
+        <LayoutGroup id="community-ranking">
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(22rem,1fr)] xl:gap-8">
+            <section className="flex flex-col gap-3" aria-labelledby="your-ranked-entries">
+              <div>
+                <h3 id="your-ranked-entries" className="text-lg/6 font-semibold tracking-normal">
+                  Ranked entries
+                </h3>
+                <p className="text-sm text-muted-foreground">Drag to reorder or use the arrow buttons.</p>
+              </div>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
               >
-                Available entries
-              </h3>
-              <p className="text-sm text-muted-foreground">Choose only the entries you want to rank.</p>
-            </div>
-            <ol className="glass-collection max-h-120 overflow-y-auto rounded-xl divide-y divide-border xl:max-h-[min(34rem,calc(100dvh-20rem))]">
-              {unrankedEntries.map((entry) => (
-                <li
-                  key={entry.id}
-                  className="min-w-0 hover:bg-accent/30 focus-within:bg-accent/30"
-                >
-                  <EntryRow
-                    entry={entry}
-                    ranked={false}
-                    onRank={addEntry}
-                    onUnrank={removeEntry}
-                  />
-                </li>
-              ))}
-            </ol>
-          </section>
-        </div>
+                {rankedEntries.length > 0 ? (
+                  <SortableContext items={rankedEntryIds} strategy={verticalListSortingStrategy}>
+                    <ol className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
+                      {rankedEntries.map((entry, index) => (
+                        <SortableEntry
+                          key={entry.id}
+                          entry={entry}
+                          position={index + 1}
+                          onRank={addEntry}
+                          onUnrank={removeEntry}
+                          canMoveUp={index > 0}
+                          canMoveDown={index < rankedEntries.length - 1}
+                          onMoveUp={(id) => moveEntry(id, 'up')}
+                          onMoveDown={(id) => moveEntry(id, 'down')}
+                        />
+                      ))}
+                    </ol>
+                  </SortableContext>
+                ) : (
+                  <p className="glass-collection rounded-xl border border-dashed px-4 py-8 text-sm text-muted-foreground">
+                    Add at least one entry to create your ranking.
+                  </p>
+                )}
+              </DndContext>
+            </section>
 
-        {feedback ? (
-          <Alert variant="success" role="status">
+            <section
+              className="flex flex-col gap-3 xl:sticky xl:top-6 xl:self-start"
+              aria-labelledby="unranked-entries"
+            >
+              <div>
+                <h3
+                  id="unranked-entries"
+                  className="text-lg/6 font-semibold tracking-normal"
+                >
+                  Available entries
+                </h3>
+                <p className="text-sm text-muted-foreground">Choose only the entries you want to rank.</p>
+              </div>
+              <ol className="glass-collection max-h-120 overflow-y-auto rounded-xl divide-y divide-border xl:max-h-[min(34rem,calc(100dvh-20rem))]">
+                {unrankedEntries.map((entry) => (
+                  <li
+                    key={entry.id}
+                    className="min-w-0 hover:bg-accent/30 focus-within:bg-accent/30"
+                  >
+                    <EntryRow
+                      entry={entry}
+                      ranked={false}
+                      onRank={addEntry}
+                      onUnrank={removeEntry}
+                      motionId={`community-ranking-${entry.id}`}
+                    />
+                  </li>
+                ))}
+              </ol>
+            </section>
+          </div>
+        </LayoutGroup>
+
+        <AnimatedStatus show={!!feedback} variant="success" role="status">
+          {feedback ? (
             <AlertDescription>{feedback}</AlertDescription>
-          </Alert>
-        ) : null}
-        {error ? (
-          <Alert variant="destructive">
-            <AlertTitle>Couldn’t update your ranking</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        ) : null}
+          ) : null}
+        </AnimatedStatus>
+        <AnimatedStatus show={!!error} variant="destructive">
+          {error ? (
+            <>
+              <AlertTitle>Couldn’t update your ranking</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </>
+          ) : null}
+        </AnimatedStatus>
       </CardContent>
       <CardFooter className="flex flex-wrap justify-between gap-3">
         <Button

@@ -1,20 +1,20 @@
-import { useState } from 'react'
+import { useId, useRef, useState, type RefObject } from 'react'
 import { SignInButton, useAuth, useClerk, useUser } from '@clerk/tanstack-react-start'
 import { ListIcon, SignOutIcon } from '@phosphor-icons/react'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router'
 
 import { Button } from '#/components/ui/button.tsx'
 import { Separator } from '#/components/ui/separator.tsx'
+import { useMotionHighlightItem, MotionHighlightProvider } from '#/components/ui/motionHighlight.tsx'
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from '#/components/ui/sheet.tsx'
-import { ENABLE_AUTH, ENABLE_TEST_FEEDBACK } from '#/lib/featureFlags'
+import { ENABLE_AUTH } from '#/lib/featureFlags'
 import {
   adminNavLinks,
-  betaNavLinks,
   primaryNavLinks,
   userNavLinks,
 } from '#/lib/navigation'
@@ -22,9 +22,11 @@ import type { NavLink } from '#/lib/navigation'
 
 export function MobileNav() {
   const [open, setOpen] = useState(false)
+  const activeLinkRef = useRef<HTMLAnchorElement>(null)
   const { isLoaded, isSignedIn } = useAuth()
   const { user } = useUser()
   const { signOut } = useClerk()
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
 
   const isAdmin =
     ENABLE_AUTH && (user?.publicMetadata as Record<string, unknown>)?.role === 'admin'
@@ -50,7 +52,11 @@ export function MobileNav() {
           <ListIcon data-icon="inline-start" aria-hidden="true" />
         </Button>
 
-        <SheetContent side="right" aria-label="Navigation menu">
+        <SheetContent
+          side="right"
+          aria-label="Navigation menu"
+          initialFocus={() => activeLinkRef.current ?? false}
+        >
           <SheetHeader>
             <SheetTitle>Menu</SheetTitle>
           </SheetHeader>
@@ -58,20 +64,29 @@ export function MobileNav() {
           <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-4">
             {/* Primary nav links — always visible */}
             <NavSection
-              links={[
-                ...primaryNavLinks,
-                ...(ENABLE_TEST_FEEDBACK ? betaNavLinks : []),
-              ]}
+              links={primaryNavLinks}
               onNavigate={handleNavigate}
+              pathname={pathname}
+              activeLinkRef={activeLinkRef}
             />
 
             {/* User links — only when signed in */}
             {ENABLE_AUTH && isSignedIn && (
               <>
                 <Separator className="my-3" />
-                <NavSection links={userNavLinks} onNavigate={handleNavigate} />
+                <NavSection
+                  links={userNavLinks}
+                  onNavigate={handleNavigate}
+                  pathname={pathname}
+                  activeLinkRef={activeLinkRef}
+                />
                 {isAdmin && (
-                  <NavSection links={adminNavLinks} onNavigate={handleNavigate} />
+                  <NavSection
+                    links={adminNavLinks}
+                    onNavigate={handleNavigate}
+                    pathname={pathname}
+                    activeLinkRef={activeLinkRef}
+                  />
                 )}
               </>
             )}
@@ -109,29 +124,69 @@ export function MobileNav() {
 function NavSection({
   links,
   onNavigate,
+  pathname,
+  activeLinkRef,
 }: {
   links: NavLink[]
   onNavigate: () => void
+  pathname: string
+  activeLinkRef: RefObject<HTMLAnchorElement | null>
 }) {
+  const highlightId = useId()
+
   return (
-    <ul className="flex flex-col gap-1">
-      {links.map((link) => (
-        <li key={link.to}>
-          <Link
-            to={link.to}
-            className="flex min-h-11 items-center gap-3 rounded-xs px-3 py-2.5 text-base font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
-            activeProps={{
-              className: 'bg-accent text-accent-foreground',
-            }}
-            activeOptions={link.exact ? { exact: true } : undefined}
-            onClick={onNavigate}
-            viewTransition
-          >
-            <link.icon size={20} aria-hidden={true} />
-            {link.label}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <MotionHighlightProvider id={highlightId}>
+      {({ clear }) => (
+        <ul className="flex flex-col gap-1" onPointerLeave={clear}>
+          {links.map((link) => (
+            <MobileNavItem
+              key={link.to}
+              link={link}
+              onNavigate={onNavigate}
+              isActive={link.exact
+                ? pathname === link.to
+                : pathname === link.to || pathname.startsWith(`${link.to}/`)}
+              activeLinkRef={activeLinkRef}
+            />
+          ))}
+        </ul>
+      )}
+    </MotionHighlightProvider>
+  )
+}
+
+function MobileNavItem({
+  link,
+  onNavigate,
+  isActive,
+  activeLinkRef,
+}: {
+  link: NavLink
+  onNavigate: () => void
+  isActive: boolean
+  activeLinkRef: RefObject<HTMLAnchorElement | null>
+}) {
+  const { activate, indicator } = useMotionHighlightItem()
+
+  return (
+    <li>
+      <Link
+        to={link.to}
+        ref={isActive ? activeLinkRef : undefined}
+        className="relative isolate flex min-h-11 items-center gap-3 rounded-xs px-3 py-2.5 text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+        activeProps={{
+          className: 'bg-accent text-accent-foreground',
+        }}
+        activeOptions={link.exact ? { exact: true } : undefined}
+        onClick={onNavigate}
+        onFocus={activate}
+        onPointerMove={activate}
+        viewTransition
+      >
+        {indicator}
+        <link.icon size={20} aria-hidden={true} />
+        {link.label}
+      </Link>
+    </li>
   )
 }

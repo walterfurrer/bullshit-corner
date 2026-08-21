@@ -23,6 +23,8 @@ import {
   type TopicFormValues,
 } from '#/components/admin/topicForm'
 import { SortableTopicItem } from '#/components/admin/sortableTopicItem'
+import { AnimatedStatus } from '#/components/ui/animatedStatus.tsx'
+import { AlertDescription } from '#/components/ui/alert.tsx'
 import { Button } from '#/components/ui/button.tsx'
 import {
   Dialog,
@@ -60,6 +62,8 @@ function LeaderboardManagement() {
   const { data: serverTopics } = useSuspenseQuery(topicsQuery)
   const [editingId, setEditingId] = useState<Id<'bullshitCornerEntries'> | null>(null)
   const [showCreate, setShowCreate] = useState(false)
+  const [actionError, setActionError] = useState<string | null>(null)
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null)
 
   // Promote flow — detect search params from submissions page
   const {
@@ -130,6 +134,14 @@ function LeaderboardManagement() {
   const reorderMutationFn = useConvexMutation(api.admin.topics.reorder)
   const reorderMutation = useMutation({
     mutationFn: reorderMutationFn,
+    onSuccess: () => {
+      setActionFeedback('Leaderboard order updated.')
+      setActionError(null)
+    },
+    onError: (error) => {
+      setActionFeedback(null)
+      setActionError(error instanceof Error ? error.message : 'Unable to reorder the leaderboard.')
+    },
     onSettled: () => {
       pendingReorders.current -= 1
       if (pendingReorders.current <= 0) {
@@ -148,29 +160,38 @@ function LeaderboardManagement() {
     : null
 
   async function handleCreate(values: TopicFormValues) {
+    setActionError(null)
+    setActionFeedback(null)
     await createMutation.mutateAsync({
       ...values,
       ranking: topics.length + 1,
     })
     setShowCreate(false)
+    setActionFeedback('Leaderboard entry created.')
   }
 
   async function handlePromote(values: TopicFormValues) {
     if (!promoteSubmissionId || !values.ranking) return
+    setActionError(null)
+    setActionFeedback(null)
     await promoteMutation.mutateAsync({
       id: promoteSubmissionId as Id<'submissions'>,
       ranking: values.ranking,
     })
     closePromoteDialog()
+    setActionFeedback('Submission promoted to the leaderboard.')
   }
 
   async function handleUpdate(values: TopicFormValues) {
     if (!editingId) return
+    setActionError(null)
+    setActionFeedback(null)
     await updateMutation.mutateAsync({
       id: editingId,
       ...values,
     })
     setEditingId(null)
+    setActionFeedback('Leaderboard entry updated.')
   }
 
   function applyOptimisticReorder(oldIndex: number, newIndex: number) {
@@ -187,6 +208,8 @@ function LeaderboardManagement() {
     const index = topics.findIndex((t) => t._id === id)
     if (index <= 0) return
     const newRanking = applyOptimisticReorder(index, index - 1)
+    setActionFeedback(null)
+    setActionError(null)
     markAsMoved(id, 'up')
     reorderMutation.mutate({ id: id as Id<'bullshitCornerEntries'>, newRanking })
   }
@@ -195,13 +218,22 @@ function LeaderboardManagement() {
     const index = topics.findIndex((t) => t._id === id)
     if (index === -1 || index >= topics.length - 1) return
     const newRanking = applyOptimisticReorder(index, index + 1)
+    setActionFeedback(null)
+    setActionError(null)
     markAsMoved(id, 'down')
     reorderMutation.mutate({ id: id as Id<'bullshitCornerEntries'>, newRanking })
   }
 
-  function handleRemove(id: string) {
+  async function handleRemove(id: string) {
     if (!confirm('Remove this topic from the leaderboard?')) return
-    removeMutation.mutate({ id: id as Id<'bullshitCornerEntries'> })
+    setActionError(null)
+    setActionFeedback(null)
+    try {
+      await removeMutation.mutateAsync({ id: id as Id<'bullshitCornerEntries'> })
+      setActionFeedback('Leaderboard entry removed.')
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : 'Unable to remove the leaderboard entry.')
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -213,6 +245,8 @@ function LeaderboardManagement() {
     if (oldIndex === -1 || newIndex === -1) return
 
     const newRanking = applyOptimisticReorder(oldIndex, newIndex)
+    setActionFeedback(null)
+    setActionError(null)
     reorderMutation.mutate({ id: active.id as Id<'bullshitCornerEntries'>, newRanking })
   }
 
@@ -221,9 +255,9 @@ function LeaderboardManagement() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-xl font-bold tracking-racing-compact">
+        <h2 className="text-xl font-bold tracking-racing-compact">
           Leaderboard Management
-        </h1>
+        </h2>
         {reorderMode ? (
           <div className="flex items-center gap-2 md:hidden">
             <Button
@@ -254,6 +288,13 @@ function LeaderboardManagement() {
           </div>
         )}
       </div>
+
+      <AnimatedStatus show={!!actionError} variant="destructive" aria-live="assertive">
+        <AlertDescription>{actionError}</AlertDescription>
+      </AnimatedStatus>
+      <AnimatedStatus show={!!actionFeedback} variant="success" aria-live="polite">
+        <AlertDescription>{actionFeedback}</AlertDescription>
+      </AnimatedStatus>
 
       {topics.length === 0 ? (
         <p className="py-8 text-center text-muted-foreground">

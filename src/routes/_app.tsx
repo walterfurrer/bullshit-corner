@@ -1,7 +1,6 @@
 import { createFileRoute, Outlet, useRouterState } from '@tanstack/react-router'
 
 import { SiteHeader } from '#/components/siteHeader'
-import { BetaBanner } from '#/components/betaBanner'
 import { cn } from '#/lib/utils'
 
 export const Route = createFileRoute('/_app')({
@@ -14,7 +13,6 @@ function AppLayout() {
 
   return (
     <div className="min-h-dvh">
-      <BetaBanner />
       <SiteHeader />
       <div
         className={cn(

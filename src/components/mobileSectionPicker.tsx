@@ -22,6 +22,7 @@ export function MobileSectionPicker<T extends string>({
       <div className="flex flex-col gap-1.5">
         <span className="text-sm font-medium text-muted-foreground">{label}</span>
         <Select
+          items={options}
           value={value}
           onValueChange={(nextValue) => {
             if (nextValue) onValueChange(nextValue as T)

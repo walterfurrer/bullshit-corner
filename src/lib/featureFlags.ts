@@ -14,10 +14,3 @@
  */
 export const ENABLE_AUTH =
   import.meta.env.VITE_ENABLE_AUTH === 'true'
-
-/**
- * Enables the private-beta notice and authenticated feedback tools.
- * Keep this false for production and ordinary engineering previews.
- */
-export const ENABLE_TEST_FEEDBACK =
-  import.meta.env.VITE_ENABLE_TEST_FEEDBACK === 'true'

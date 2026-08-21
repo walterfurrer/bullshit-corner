@@ -2,6 +2,7 @@ import { Show } from '@clerk/tanstack-react-start'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 import { SubmissionForm } from '#/components/submissionForm'
+import { PageHeader, PageLayout } from '#/components/pageLayout'
 import { SiteFooter } from '#/components/siteFooter'
 import {
   Alert,
@@ -26,9 +27,8 @@ function SubmitTopicPage() {
   const { user } = Route.useLoaderData()
 
   return (
-    <div className="flex flex-col gap-8 sm:gap-10">
-      <div className="flex flex-col gap-2">
-        <h1>Submit a Topic</h1>
+    <PageLayout>
+      <PageHeader title="Submit a Topic">
         <div className="flex flex-col gap-2">
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
             Think something deserves a spot in Bullshit Corner? Submit it here
@@ -40,7 +40,7 @@ function SubmitTopicPage() {
             season, a person, a thing — anything you like!
           </p>
         </div>
-      </div>
+      </PageHeader>
 
       {ENABLE_AUTH && (
         <Show when="signed-out">
@@ -75,6 +75,6 @@ function SubmitTopicPage() {
       )}
 
       <SiteFooter />
-    </div>
+    </PageLayout>
   )
 }

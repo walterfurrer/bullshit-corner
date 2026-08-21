@@ -7,7 +7,8 @@ import { useConvexAuth } from 'convex/react'
 import { ConvexError } from 'convex/values'
 
 import { api } from '#convex/_generated/api'
-import { Alert, AlertDescription } from '#/components/ui/alert'
+import { AlertDescription } from '#/components/ui/alert'
+import { AnimatedStatus } from '#/components/ui/animatedStatus'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
@@ -363,33 +364,31 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
         </form.Field>
       </div>
 
-      {submitStatus === 'auth-required' && (
-        <Alert
-          className="border-primary/30 bg-primary/5"
-          role="status"
-          aria-live="polite"
-        >
+      <AnimatedStatus
+        show={submitStatus === 'auth-required'}
+        className="border-primary/30 bg-primary/5"
+        aria-live="polite"
+      >
+        {submitStatus === 'auth-required' ? (
           <AlertDescription className="text-foreground">
             {isAuthenticated
               ? 'You\u2019re signed in. Click \u201cSubmit Topic\u201d again to confirm your submission.'
               : 'Sign in or create an account to continue. Your draft will stay here.'}
           </AlertDescription>
-        </Alert>
-      )}
+        ) : null}
+      </AnimatedStatus>
 
-      {submitStatus === 'success' && (
-        <Alert variant="success" role="status" aria-live="polite">
+      <AnimatedStatus show={submitStatus === 'success'} variant="success" aria-live="polite">
+        {submitStatus === 'success' ? (
           <AlertDescription>
             Your topic has been submitted! Thanks for contributing.
           </AlertDescription>
-        </Alert>
-      )}
+        ) : null}
+      </AnimatedStatus>
 
-      {submitStatus === 'error' && submitError && (
-        <Alert variant="destructive" aria-live="assertive">
-          <AlertDescription>{submitError}</AlertDescription>
-        </Alert>
-      )}
+      <AnimatedStatus show={submitStatus === 'error' && !!submitError} variant="destructive" aria-live="assertive">
+        <AlertDescription>{submitError}</AlertDescription>
+      </AnimatedStatus>
 
       <form.Subscribe selector={(state) => state.isSubmitting}>
         {(isSubmitting) => (

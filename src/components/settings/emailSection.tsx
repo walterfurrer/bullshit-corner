@@ -9,6 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from '#/components/ui/card.tsx'
+import { AnimatedStatus } from '#/components/ui/animatedStatus.tsx'
+import { AlertDescription } from '#/components/ui/alert.tsx'
 import { Button } from '#/components/ui/button.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
@@ -250,22 +252,14 @@ export function EmailSection({ emails, onUpdated }: EmailSectionProps) {
         )}
 
         {/* Error message */}
-        {error && (
-          <p
-            id="email-change-error"
-            role="alert"
-            className="text-sm text-destructive"
-          >
-            {error}
-          </p>
-        )}
+        <AnimatedStatus show={!!error} variant="destructive" aria-live="assertive">
+          <AlertDescription id="email-change-error">{error}</AlertDescription>
+        </AnimatedStatus>
 
         {/* Success message */}
-        {success && (
-          <p role="status" className="text-sm text-success">
-            {success}
-          </p>
-        )}
+        <AnimatedStatus show={!!success} variant="success" aria-live="polite">
+          <AlertDescription>{success}</AlertDescription>
+        </AnimatedStatus>
       </CardContent>
     </Card>
   )

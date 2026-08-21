@@ -3,6 +3,7 @@
 
 @import 'tw-animate-css';
 @import "shadcn/tailwind.css";
+@import './transitions.css';
 
 :root {
   color-scheme: dark;
@@ -111,13 +112,13 @@
  * semantic tokens used by the existing UI primitives, so the rest of the
  * application retains the canonical slate and coral treatment. */
 .community-theme {
-  --background: oklch(0.17 0.022 180);
-  --card: oklch(0.215 0.028 178);
-  --popover: oklch(0.215 0.028 178);
+  --background: oklch(0.13 0.007 220);
+  --card: oklch(0.19 0.018 180);
+  --popover: oklch(0.19 0.018 180);
   --primary: oklch(0.72 0.14 160);
   --primary-foreground: oklch(0.18 0.025 160);
-  --secondary: oklch(0.235 0.027 178);
-  --muted: oklch(0.235 0.021 180);
+  --secondary: oklch(0.215 0.02 180);
+  --muted: oklch(0.215 0.015 185);
   --muted-foreground: oklch(0.78 0.018 182);
   --accent: oklch(0.275 0.035 176);
   --border: oklch(0.34 0.04 178);
@@ -126,28 +127,33 @@
   --page-background:
     linear-gradient(
       to bottom,
-      oklch(0.14 0.005 230) 0%,
-      oklch(0.14 0.005 230 / 92%) 7rem,
-      transparent 26rem
+      oklch(0.095 0.006 230) 0%,
+      oklch(0.11 0.007 225 / 94%) 10rem,
+      transparent 34rem
     ),
     radial-gradient(
-      110% 52% at 50% 30rem,
-      oklch(0.43 0.13 175 / 52%) 0%,
-      oklch(0.33 0.1 178 / 34%) 44%,
+      105% 44% at 50% 33rem,
+      oklch(0.34 0.075 175 / 30%) 0%,
+      oklch(0.24 0.045 178 / 18%) 52%,
+      transparent 78%
+    ),
+    radial-gradient(
+      75% 70% at -14% 38rem,
+      oklch(0.25 0.045 190 / 25%) 0%,
+      oklch(0.19 0.025 185 / 12%) 48%,
       transparent 76%
     ),
     radial-gradient(
-      120% 95% at 0% 34rem,
-      oklch(0.32 0.085 190 / 58%) 0%,
-      oklch(0.27 0.07 185 / 34%) 45%,
-      transparent 76%
+      65% 58% at 108% 56rem,
+      oklch(0.22 0.035 165 / 18%) 0%,
+      transparent 72%
     ),
     radial-gradient(
-      80% 65% at 100% 100%,
-      oklch(0.27 0.07 165 / 35%) 0%,
-      transparent 70%
+      145% 105% at 50% 42%,
+      transparent 26%,
+      oklch(0.055 0.004 230 / 36%) 100%
     ),
-    linear-gradient(to bottom, oklch(0.14 0.005 230) 0%, var(--background) 38rem);
+    linear-gradient(to bottom, oklch(0.095 0.006 230) 0%, var(--background) 48rem);
   --glass-highlight:
     linear-gradient(
       135deg,
@@ -427,9 +433,9 @@ body {
     @apply flex gap-1 overflow-x-auto pb-2 md:flex-col md:gap-0.5 md:overflow-x-visible md:pb-0;
   }
   .section-nav-item {
-    @apply block w-full whitespace-nowrap rounded-xs px-3 py-2 text-start text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground;
+    @apply relative z-10 block w-full whitespace-nowrap rounded-xs px-3 py-2 text-start text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring;
   }
   .section-nav-item-active {
-    @apply bg-primary/15 text-primary ring-1 ring-primary/30 hover:bg-primary/20 hover:text-primary;
+    @apply bg-transparent text-primary hover:bg-transparent hover:text-primary;
   }
 }

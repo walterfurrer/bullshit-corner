@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { useId, useState } from 'react'
 import {
   ArrowFatUpIcon,
   XIcon,
@@ -18,6 +19,7 @@ import {
   TooltipTrigger,
 } from '#/components/ui/tooltip.tsx'
 import { FormatDetails } from '#/lib/formatDetails'
+import { getMotionTransition } from '#/lib/motion'
 import { cn } from '#/lib/utils'
 
 type BaseProps = {
@@ -67,7 +69,10 @@ function truncateText(text: string, maxLength: number): string {
 export function SubmissionCard(props: SubmissionCardProps) {
   const { topic, details, youtubeUrl, submittedBy } = props
   const [showDetails, setShowDetails] = useState(false)
+  const detailsId = useId()
   const isListItem = props.presentation === 'list-item'
+  const prefersReducedMotion = useReducedMotion()
+  const transition = getMotionTransition(prefersReducedMotion)
 
   return (
     <article
@@ -222,15 +227,28 @@ export function SubmissionCard(props: SubmissionCardProps) {
             type="button"
             onClick={() => setShowDetails(!showDetails)}
             className="text-xs text-muted-foreground hover:text-foreground"
+            aria-controls={detailsId}
+            aria-expanded={showDetails}
           >
             {showDetails ? 'Hide details' : 'Show details'}
           </button>
-          {showDetails && (
-            <FormatDetails
-              text={details}
-              className="mt-1.5 text-sm text-muted-foreground"
-            />
-          )}
+          <AnimatePresence initial={false}>
+            {showDetails ? (
+              <motion.div
+                id={detailsId}
+                initial={{ height: 0, opacity: 0, filter: 'blur(2px)' }}
+                animate={{ height: 'auto', opacity: 1, filter: 'blur(0px)' }}
+                exit={{ height: 0, opacity: 0, filter: 'blur(2px)' }}
+                transition={transition}
+                className="overflow-hidden"
+              >
+                <FormatDetails
+                  text={details}
+                  className="mt-1.5 text-sm text-muted-foreground"
+                />
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
         </div>
       )}
     </article>

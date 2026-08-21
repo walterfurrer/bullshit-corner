@@ -3,6 +3,7 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Leaderboard } from '#/components/leaderboard.tsx'
+import { PageHeader, PageLayout } from '#/components/pageLayout'
 import { SiteFooter } from '#/components/siteFooter'
 import { Button } from '#/components/ui/button.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
@@ -26,11 +27,8 @@ function Home() {
   const { data: topics } = useSuspenseQuery(leaderboardQuery)
 
   return (
-    <div className="flex flex-col gap-8 sm:gap-10">
-      <div className="flex flex-col">
-        <h1>
-          Welcome to Bullshit Corner
-        </h1>
+    <PageLayout>
+      <PageHeader title="Welcome to Bullshit Corner">
         <div className="flex flex-col gap-2">
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
             Bullshit Corner is a segment on the Formula 1 podcast, {" "}
@@ -48,7 +46,7 @@ function Home() {
             Here you can view the official HPR Leaderboard, submit your own entries for a future episode, and even provide your own rankings to the community-based leaderboard.
           </p>
         </div>
-      </div>
+      </PageHeader>
       <div className="glass-section flex flex-col gap-3 rounded-xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <h2>Have some bullshit to share?</h2>
         <div className="shrink-0">
@@ -57,7 +55,7 @@ function Home() {
       </div>
       <Leaderboard topics={topics} />
       <SiteFooter />
-    </div>
+    </PageLayout>
   )
 }
 

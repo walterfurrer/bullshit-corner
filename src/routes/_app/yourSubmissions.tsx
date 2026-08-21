@@ -5,7 +5,9 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { useConvexAuth } from 'convex/react'
 
 import { SubmissionCard } from '#/components/submissionCard'
+import { PageHeader, PageLayout } from '#/components/pageLayout'
 import { SiteFooter } from '#/components/siteFooter'
+import { AnimatedStatus } from '#/components/ui/animatedStatus.tsx'
 import { Alert, AlertDescription } from '#/components/ui/alert.tsx'
 import {
   AlertDialog,
@@ -81,16 +83,15 @@ function YourSubmissionsPage() {
 
 function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-8 sm:gap-10">
-      <div className="flex flex-col gap-2">
-        <h1>Your Submissions</h1>
+    <PageLayout>
+      <PageHeader title="Your Submissions">
         <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
           Topics you've submitted to Bullshit Corner.
         </p>
-      </div>
+      </PageHeader>
       {children}
       <SiteFooter />
-    </div>
+    </PageLayout>
   )
 }
 
@@ -147,6 +148,7 @@ function SubmissionsList() {
   const [editingSubmission, setEditingSubmission] = useState<Doc<'submissions'> | null>(null)
   const [deletingSubmission, setDeletingSubmission] = useState<Doc<'submissions'> | null>(null)
   const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null)
   const updateMutation = useMutation({
     mutationFn: useConvexMutation(api.submissions.update),
   })
@@ -163,15 +165,18 @@ function SubmissionsList() {
   }) {
     await updateMutation.mutateAsync(values)
     setEditingSubmission(null)
+    setActionFeedback('Submission updated.')
   }
 
   async function handleDelete() {
     if (!deletingSubmission) return
 
     setDeleteError(null)
+    setActionFeedback(null)
     try {
       await deleteMutation.mutateAsync({ id: deletingSubmission._id })
       setDeletingSubmission(null)
+      setActionFeedback('Submission deleted.')
     } catch (error) {
       setDeleteError(error instanceof Error ? error.message : 'Unable to delete this submission.')
     }
@@ -190,6 +195,9 @@ function SubmissionsList() {
 
   return (
     <>
+      <AnimatedStatus show={!!actionFeedback} variant="success" aria-live="polite">
+        <AlertDescription>{actionFeedback}</AlertDescription>
+      </AnimatedStatus>
       <div className="grid gap-4 sm:grid-cols-2">
         {submissions.map((submission) => (
           <SubmissionCard

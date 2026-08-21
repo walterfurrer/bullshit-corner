@@ -6,6 +6,7 @@ import {
   AdminUserRow,
   AdminUserRowSkeleton,
 } from '#/components/admin/adminUserRow'
+import { AnimatedStatus } from '#/components/ui/animatedStatus.tsx'
 import { Alert, AlertDescription } from '#/components/ui/alert.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Button } from '#/components/ui/button.tsx'
@@ -64,6 +65,7 @@ export function AdminAccessManagement() {
   // --- Action state ---
   const [pendingUserId, setPendingUserId] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null)
 
   // --- Remove confirmation dialog ---
   const [removeTarget, setRemoveTarget] = useState<AdminUser | null>(null)
@@ -125,6 +127,7 @@ export function AdminAccessManagement() {
   // --- Role actions ---
   async function handleMakeAdmin(userId: string) {
     setActionError(null)
+    setActionFeedback(null)
     setPendingUserId(userId)
     try {
       await setUserRole({ data: { userId, role: 'admin' } })
@@ -134,6 +137,7 @@ export function AdminAccessManagement() {
         const results = await searchUsers({ data: { query: query.trim() } })
         setSearchResults(results)
       }
+      setActionFeedback('Administrator access granted.')
     } catch (err) {
       setActionError(
         err instanceof Error ? err.message : 'Failed to update role',
@@ -146,6 +150,7 @@ export function AdminAccessManagement() {
   async function handleRemoveAdmin(userId: string) {
     setRemoveTarget(null)
     setActionError(null)
+    setActionFeedback(null)
     setPendingUserId(userId)
     try {
       await setUserRole({ data: { userId, role: null } })
@@ -155,6 +160,7 @@ export function AdminAccessManagement() {
         const results = await searchUsers({ data: { query: query.trim() } })
         setSearchResults(results)
       }
+      setActionFeedback('Administrator access removed.')
     } catch (err) {
       setActionError(
         err instanceof Error ? err.message : 'Failed to update role',
@@ -175,11 +181,12 @@ export function AdminAccessManagement() {
         </p>
       </div>
 
-      {actionError && (
-        <Alert variant="destructive">
-          <AlertDescription>{actionError}</AlertDescription>
-        </Alert>
-      )}
+      <AnimatedStatus show={!!actionError} variant="destructive" aria-live="assertive">
+        <AlertDescription>{actionError}</AlertDescription>
+      </AnimatedStatus>
+      <AnimatedStatus show={!!actionFeedback} variant="success" aria-live="polite">
+        <AlertDescription>{actionFeedback}</AlertDescription>
+      </AnimatedStatus>
 
       <section>
         <h2 className="mb-3 text-lg font-medium tracking-racing-compact">

@@ -31,7 +31,7 @@ export function UserMenu() {
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-48" fullBleedHighlight>
         {user?.primaryEmailAddress?.emailAddress && (
           <>
             <div className="px-2 py-1.5">

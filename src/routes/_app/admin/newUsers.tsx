@@ -69,7 +69,7 @@ function Users() {
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <h1 className="text-xl font-bold tracking-racing-compact">Users</h1>
+          <h2 className="text-xl font-bold tracking-racing-compact">Users</h2>
           <p className="text-sm text-muted-foreground">
             Browse every account, including soft-deleted records retained for
             audit purposes.

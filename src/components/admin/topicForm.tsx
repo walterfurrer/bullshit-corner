@@ -45,7 +45,7 @@ export function TopicForm({
   )
   const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
 
@@ -68,12 +68,20 @@ export function TopicForm({
       return
     }
 
-    onSubmit({
-      title: trimmedTitle,
-      ranking: showRanking ? parsedRanking : undefined,
-      youtubeUrl: youtubeUrl.trim() || undefined,
-      submittedBy: submittedBy.trim() || undefined,
-    })
+    try {
+      await onSubmit({
+        title: trimmedTitle,
+        ranking: showRanking ? parsedRanking : undefined,
+        youtubeUrl: youtubeUrl.trim() || undefined,
+        submittedBy: submittedBy.trim() || undefined,
+      })
+    } catch (caughtError) {
+      setError(
+        caughtError instanceof Error
+          ? caughtError.message
+          : 'Unable to save this leaderboard entry.',
+      )
+    }
   }
 
   return (

@@ -10,7 +10,11 @@ import { DeleteAccountSection } from '#/components/settings/deleteAccountSection
 import { EmailSection } from '#/components/settings/emailSection'
 import { PasswordSection } from '#/components/settings/passwordSection'
 import { MobileSectionPicker } from '#/components/mobileSectionPicker'
+import { PageHeader, PageLayout } from '#/components/pageLayout'
+import { SectionNavigation } from '#/components/sectionNavigation'
 import { Button } from '#/components/ui/button.tsx'
+import { AnimatedStatus } from '#/components/ui/animatedStatus.tsx'
+import { AlertDescription } from '#/components/ui/alert.tsx'
 import {
   Card,
   CardContent,
@@ -75,37 +79,44 @@ function SettingsLayout({ sections }: { sections: SettingsSection[] }) {
 
   const activeContent = sections.find((s) => s.id === activeSection)?.content
 
+  const changeSection = useCallback((nextSection: string) => {
+    if (nextSection === activeSection) return
+    setActiveSection(nextSection)
+  }, [activeSection])
+
   return (
     <div className="flex flex-col gap-6 md:flex-row md:gap-8">
       <MobileSectionPicker
         label="Settings section"
         options={sections.map(({ id, label }) => ({ value: id, label }))}
         value={activeSection}
-        onValueChange={setActiveSection}
+        onValueChange={changeSection}
       />
 
-      <nav aria-label="Settings sections" className="section-nav hidden md:block">
-        <ul className="section-nav-list">
-          {sections.map((section) => (
-            <li key={section.id}>
-              <button
-                type="button"
-                onClick={() => setActiveSection(section.id)}
-                className={cn(
-                  'section-nav-item',
-                  activeSection === section.id && 'section-nav-item-active',
-                )}
-                aria-current={activeSection === section.id ? 'page' : undefined}
-              >
-                {section.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <SectionNavigation
+        activeValue={activeSection}
+        ariaLabel="Settings sections"
+        id="settings-sections"
+        items={sections.map(({ id, label }) => ({ value: id, label }))}
+        renderItem={(section, isActive) => (
+          <button
+            type="button"
+            onClick={() => changeSection(section.value)}
+            className={cn(
+              'section-nav-item',
+              isActive && 'section-nav-item-active',
+            )}
+            aria-current={isActive ? 'page' : undefined}
+          >
+            {section.label}
+          </button>
+        )}
+      />
 
       {/* Content area */}
-      <div className="min-w-0 flex-1">{activeContent}</div>
+      <div className="min-w-0 flex-1">
+        {activeContent}
+      </div>
     </div>
   )
 }
@@ -325,10 +336,10 @@ function SettingsPage() {
   ]
 
   return (
-    <>
-      <h1 className="mb-4">Settings</h1>
+    <PageLayout>
+      <PageHeader title="Settings" />
       <SettingsLayout sections={sections} />
-    </>
+    </PageLayout>
   )
 }
 
@@ -445,11 +456,9 @@ function IdentitySection({
         )}
 
         {/* Shared success message */}
-        {successMessage && (
-          <p role="status" className="text-sm text-success">
-            {successMessage}
-          </p>
-        )}
+        <AnimatedStatus show={!!successMessage} variant="success" aria-live="polite">
+          <AlertDescription>{successMessage}</AlertDescription>
+        </AnimatedStatus>
       </CardContent>
     </Card>
   )
