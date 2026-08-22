@@ -46,13 +46,16 @@ export const Route = createFileRoute('/_app/admin/userManagement')({
   },
 })
 
-export function AdminAccessManagement() {
+export function AdminAccessManagement({
+  initialAdmins,
+}: {
+  initialAdmins: AdminUser[]
+}) {
   const { user: currentUser } = useUser()
   const currentUserId = currentUser?.id ?? null
 
   // --- Admin list state ---
-  const [admins, setAdmins] = useState<AdminUser[]>([])
-  const [adminsLoading, setAdminsLoading] = useState(true)
+  const [admins, setAdmins] = useState(initialAdmins)
   const [adminsError, setAdminsError] = useState<string | null>(null)
 
   // --- Search state ---
@@ -72,7 +75,6 @@ export function AdminAccessManagement() {
 
   // --- Fetch admin list ---
   const fetchAdmins = useCallback(async () => {
-    setAdminsLoading(true)
     setAdminsError(null)
     try {
       const result = await listAdminUsers()
@@ -81,14 +83,8 @@ export function AdminAccessManagement() {
       setAdminsError(
         err instanceof Error ? err.message : 'Failed to load admins',
       )
-    } finally {
-      setAdminsLoading(false)
     }
   }, [])
-
-  useEffect(() => {
-    void fetchAdmins()
-  }, [fetchAdmins])
 
   // --- Debounced search ---
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -254,24 +250,11 @@ export function AdminAccessManagement() {
           </Alert>
         )}
 
-        {adminsLoading && (
-          <div>
-            <p className="sr-only" role="status">
-              Loading administrators…
-            </p>
-            <ul className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
-              {Array.from({ length: 2 }).map((_, i) => (
-                <AdminUserRowSkeleton key={i} />
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {!adminsLoading && admins.length === 0 && !adminsError && (
+        {admins.length === 0 && !adminsError && (
           <p className="text-sm text-muted-foreground">No admins found.</p>
         )}
 
-        {!adminsLoading && admins.length > 0 && (
+        {admins.length > 0 && (
           <ul className="glass-collection overflow-hidden rounded-xl divide-y divide-border">
             {admins.map((u) => (
               <UserCard

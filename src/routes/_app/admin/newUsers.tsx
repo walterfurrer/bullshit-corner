@@ -24,6 +24,7 @@ import {
 } from '#/components/ui/dropdownMenu.tsx'
 import { Separator } from '#/components/ui/separator.tsx'
 import { AdminAccessManagement } from '#/routes/_app/admin/userManagement'
+import { listAdminUsers } from '#/server/admin'
 
 import { api } from '#convex/_generated/api'
 
@@ -47,10 +48,12 @@ const deletionSortLabels: Record<SortDirection, string> = {
 }
 
 export const Route = createFileRoute('/_app/admin/newUsers')({
+  loader: () => listAdminUsers(),
   component: Users,
 })
 
 function Users() {
+  const initialAdmins = Route.useLoaderData()
   const [statusFilter, setStatusFilter] = useState<UserStatus>('all')
   const [sort, setSort] = useState<SortDirection>('desc')
   const sortOptions =
@@ -129,7 +132,7 @@ function Users() {
 
       <Separator />
 
-      <AdminAccessManagement />
+      <AdminAccessManagement initialAdmins={initialAdmins} />
     </div>
   )
 }
