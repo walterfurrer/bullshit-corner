@@ -36,7 +36,7 @@ export function RankingBoard({
         <span>{positionLabel}</span>
         <span>{topicLabel}</span>
       </div>
-      <ol className="divide-y divide-border">
+      <ol className="divide-y divide-border border-b border-border">
         {entries.map((entry) => (
           <li key={entry.id}>
             <div className="grid grid-cols-[3rem_minmax(0,1fr)_2.5rem] items-center gap-x-3 px-4 py-4 sm:gap-x-4 sm:px-5">
