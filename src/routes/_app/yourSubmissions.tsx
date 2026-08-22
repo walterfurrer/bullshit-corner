@@ -42,6 +42,7 @@ import {
 import { normalizeSubmission, validateLength, validateTopic } from '#/lib/submissionUtils'
 import { SUBMISSION_LIMITS } from '#/lib/submissionConstants'
 import { isValidYouTubeUrl } from '#shared/youtubeUrl'
+import { canUseAppViewTransitions } from '#/lib/viewTransitions'
 
 import { api } from '#convex/_generated/api'
 import type { Doc, Id } from '#convex/_generated/dataModel'
@@ -105,7 +106,7 @@ function AuthGate() {
       <p className="text-sm text-muted-foreground sm:text-base">
         You must be logged in to see this page.
       </p>
-      <Button render={<Link to="/" viewTransition />} nativeButton={false} variant="outline">Go to Home</Button>
+      <Button render={<Link to="/" viewTransition={canUseAppViewTransitions()} />} nativeButton={false} variant="outline">Go to Home</Button>
     </div>
   )
 }
@@ -188,7 +189,7 @@ function SubmissionsList() {
         <p className="text-sm text-muted-foreground sm:text-base">
           You haven't submitted any topics yet.
         </p>
-        <Button render={<Link to="/submit-topic" viewTransition />} nativeButton={false}>Submit a Topic</Button>
+        <Button render={<Link to="/submit-topic" viewTransition={canUseAppViewTransitions()} />} nativeButton={false}>Submit a Topic</Button>
       </div>
     )
   }

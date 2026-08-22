@@ -18,6 +18,7 @@ import {
   primaryNavLinks,
   userNavLinks,
 } from '#/lib/navigation'
+import { canUseAppViewTransitions } from '#/lib/viewTransitions'
 import type { NavLink } from '#/lib/navigation'
 
 export function MobileNav() {
@@ -181,7 +182,7 @@ function MobileNavItem({
         onClick={onNavigate}
         onFocus={activate}
         onPointerMove={activate}
-        viewTransition
+        viewTransition={canUseAppViewTransitions()}
       >
         {indicator}
         <link.icon size={20} aria-hidden={true} />

@@ -31,6 +31,7 @@ import { Button } from '#/components/ui/button.tsx'
 import { Input } from '#/components/ui/input.tsx'
 import { Label } from '#/components/ui/label.tsx'
 import { deleteClerkAccount } from '#/server/account.ts'
+import { canUseAppViewTransitions } from '#/lib/viewTransitions'
 import { api } from '#convex/_generated/api'
 
 const CONFIRMATION_TEXT = 'DELETE'
@@ -61,7 +62,7 @@ export function DeleteAccountSection() {
       await deleteClerkAccount()
 
       // Step 3: Redirect to home (session is now invalid)
-      void navigate({ to: '/', viewTransition: true })
+      void navigate({ to: '/', viewTransition: canUseAppViewTransitions() })
     } catch (e) {
       const message =
         e instanceof Error

@@ -7,6 +7,7 @@ import { PageHeader, PageLayout } from '#/components/pageLayout'
 import { SiteFooter } from '#/components/siteFooter'
 import { Button } from '#/components/ui/button.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
+import { canUseAppViewTransitions } from '#/lib/viewTransitions'
 
 import { api } from '#convex/_generated/api'
 
@@ -50,7 +51,7 @@ function Home() {
       <div className="glass-section flex flex-col gap-3 rounded-xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <h2>Have some bullshit to share?</h2>
         <div className="shrink-0">
-          <Button render={<Link to="/submit-topic" viewTransition />} nativeButton={false} size="lg">Submit a Topic</Button>
+          <Button render={<Link to="/submit-topic" viewTransition={canUseAppViewTransitions()} />} nativeButton={false} size="lg">Submit a Topic</Button>
         </div>
       </div>
       <Leaderboard topics={topics} />

@@ -11,6 +11,7 @@ import {
 } from '#/components/ui/alert.tsx'
 import { currentUserQuery } from '#/hooks/useCurrentUser.ts'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
+import { canUseAppViewTransitions } from '#/lib/viewTransitions'
 
 export const Route = createFileRoute('/_app/submit-topic')({
   head: () => ({
@@ -66,7 +67,7 @@ function SubmitTopicPage() {
             <Link
               to="/yourSubmissions"
               className="font-medium transition-colors duration-200 hover:text-primary"
-              viewTransition
+              viewTransition={canUseAppViewTransitions()}
             >
               View your past submissions →
             </Link>

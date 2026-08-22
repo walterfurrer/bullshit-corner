@@ -4,6 +4,7 @@ import { SignOutIcon, UserIcon } from '@phosphor-icons/react'
 
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { adminNavLinks, userNavLinks } from '#/lib/navigation'
+import { canUseAppViewTransitions } from '#/lib/viewTransitions'
 
 import {
   DropdownMenu,
@@ -43,7 +44,7 @@ export function UserMenu() {
           </>
         )}
         {userNavLinks.map((link) => (
-          <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
+          <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition={canUseAppViewTransitions()} />}>
             <link.icon aria-hidden={true} />
             {link.label}
           </DropdownMenuItem>
@@ -52,7 +53,7 @@ export function UserMenu() {
           <>
             <DropdownMenuSeparator />
             {adminNavLinks.map((link) => (
-              <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition />}>
+              <DropdownMenuItem key={link.to} render={<Link to={link.to} viewTransition={canUseAppViewTransitions()} />}>
                 <link.icon aria-hidden={true} />
                 {link.label}
               </DropdownMenuItem>

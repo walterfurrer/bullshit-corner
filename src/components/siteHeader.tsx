@@ -10,6 +10,7 @@ import { MobileNav } from '#/components/mobileNav'
 import { UserMenu } from '#/components/userMenu'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { primaryNavLinks } from '#/lib/navigation'
+import { canUseAppViewTransitions } from '#/lib/viewTransitions'
 
 export function SiteHeader() {
   const { isLoaded, isSignedIn } = useAuth()
@@ -17,7 +18,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-10 border-b border-border/60 bg-background/80 backdrop-blur-xs">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
-        <Link to="/" title="Home" aria-label="Home" id="logo" viewTransition>
+        <Link to="/" title="Home" aria-label="Home" id="logo" viewTransition={canUseAppViewTransitions()}>
           <div className="flex items-center gap-2.5">
             <CaretDoubleUpIcon
               size={24}
@@ -46,7 +47,7 @@ export function SiteHeader() {
                     className="nav-link-desktop"
                     activeProps={{ className: 'nav-link-active' }}
                     activeOptions={exact ? { exact: true } : undefined}
-                    viewTransition
+                    viewTransition={canUseAppViewTransitions()}
                   >
                     {label}
                   </Link>
