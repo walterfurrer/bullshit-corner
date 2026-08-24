@@ -11,6 +11,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import { createServerFn } from '@tanstack/react-start'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import { OnboardingGuard } from '../components/onboardingGuard'
 import { SyncUser } from '../components/syncUser'
@@ -164,6 +165,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           </ConvexProviderWithClerk>
         </ClerkProvider>
         <Analytics />
+        <SpeedInsights />
         <Scripts />
       </body>
     </html>
