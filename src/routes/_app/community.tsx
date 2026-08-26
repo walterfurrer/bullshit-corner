@@ -172,10 +172,10 @@ function RankingListLoading({
               <Skeleton className="size-5" />
               {ranked ? <Skeleton className="h-8 w-12" /> : null}
               <span className="relative min-w-0">
-                <span className="invisible block break-words text-pretty font-medium">
+                <span className="invisible block wrap-break-word text-pretty font-medium">
                   {entry.title}
                 </span>
-                <Skeleton className="absolute start-0 top-1/2 h-5 w-3/4 -translate-y-1/2" />
+                <Skeleton className="absolute inset-s-0 top-1/2 h-5 w-3/4 -translate-y-1/2" />
               </span>
               <Skeleton className="size-8 justify-self-end" />
             </div>

@@ -123,7 +123,7 @@ function EntryRow({
         </button>
       ) : null}
       {ranked && position ? <PositionBadge position={position} className="shrink-0" /> : null}
-      <span className="min-w-0 break-words text-pretty font-medium text-foreground">
+      <span className="min-w-0 wrap-break-word text-pretty font-medium text-foreground">
         {entry.title}
       </span>
       {ranked ? (
