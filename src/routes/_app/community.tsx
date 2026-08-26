@@ -19,19 +19,31 @@ import {
 } from '#/components/ui/card'
 import { Skeleton } from '#/components/ui/skeleton'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
+import { leaderboardJsonLd, publicSeo } from '#/lib/seo'
 import { api } from '#convex/_generated/api'
 
 const communityBoardQuery = convexQuery(api.communityRankings.list, {})
 const personalRankingQuery = convexQuery(api.communityRankings.getMine, {})
 
 export const Route = createFileRoute('/_app/community')({
-  head: () => ({ meta: [{ title: 'Community Leaderboard | Bullshit Corner' }] }),
   loader: async ({ context }) => {
-    await Promise.all([
+    const [entries] = await Promise.all([
       context.queryClient.ensureQueryData(communityBoardQuery),
       context.queryClient.ensureQueryData(personalRankingQuery),
     ])
+    return { seoEntries: entries.map(({ title }) => ({ title })) }
   },
+  head: ({ loaderData }) => publicSeo({
+    title: 'Community Rankings | Bullshit Corner',
+    description:
+      'Disagree with the official ranking from High Performance Racing? Provide your own ranking of the current leaderboard topics and vote with the rest of the community!',
+    path: '/community',
+    jsonLd: leaderboardJsonLd({
+      title: 'Community Bullshit Corner Rankings',
+      path: '/community',
+      entries: loaderData?.seoEntries ?? [],
+    }),
+  }),
   pendingComponent: CommunityPending,
   component: CommunityPage,
 })

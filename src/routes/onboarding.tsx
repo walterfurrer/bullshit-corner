@@ -20,11 +20,10 @@ import { Label } from '#/components/ui/label.tsx'
 import { api } from '#convex/_generated/api'
 
 import { DISPLAY_NAME_MAX_LENGTH } from '#shared/constants'
+import { privateSeo } from '#/lib/seo'
 
 export const Route = createFileRoute('/onboarding')({
-  head: () => ({
-    meta: [{ title: 'Welcome | Bullshit Corner' }],
-  }),
+  head: () => privateSeo('Welcome | Bullshit Corner'),
   component: OnboardingPage,
 })
 

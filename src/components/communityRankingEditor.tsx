@@ -353,7 +353,7 @@ export function CommunityRankingEditor({
     <Card className="xl:relative xl:left-1/2 xl:w-[min(100vw-3rem,80rem)] xl:-translate-x-1/2">
       <CardHeader>
         <CardTitle className="text-xl/7 font-semibold tracking-normal">
-          Your ranking
+          Your rankings
         </CardTitle>
         <CardDescription>
           Rank as many entries as you like. Unranked entries are treated as no opinion.
@@ -454,7 +454,7 @@ export function CommunityRankingEditor({
           disabled={clearMutation.isPending || saveMutation.isPending || persistedEntryIds.length === 0}
           onClick={() => void handleClear()}
         >
-          Clear ranking
+          Clear rankings
         </Button>
         <Button
           type="button"

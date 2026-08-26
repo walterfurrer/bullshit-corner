@@ -43,14 +43,13 @@ import { normalizeSubmission, validateLength, validateTopic } from '#/lib/submis
 import { SUBMISSION_LIMITS } from '#/lib/submissionConstants'
 import { isValidYouTubeUrl } from '#shared/youtubeUrl'
 import { canUseAppViewTransitions } from '#/lib/viewTransitions'
+import { privateSeo } from '#/lib/seo'
 
 import { api } from '#convex/_generated/api'
 import type { Doc, Id } from '#convex/_generated/dataModel'
 
 export const Route = createFileRoute('/_app/yourSubmissions')({
-  head: () => ({
-    meta: [{ title: 'Your Submissions | Bullshit Corner' }],
-  }),
+  head: () => privateSeo('Your Submissions | Bullshit Corner'),
   component: YourSubmissionsPage,
 })
 

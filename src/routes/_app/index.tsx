@@ -8,18 +8,29 @@ import { SiteFooter } from '#/components/siteFooter'
 import { Button } from '#/components/ui/button.tsx'
 import { Skeleton } from '#/components/ui/skeleton.tsx'
 import { canUseAppViewTransitions } from '#/lib/viewTransitions'
+import { leaderboardJsonLd, publicSeo } from '#/lib/seo'
 
 import { api } from '#convex/_generated/api'
 
 const leaderboardQuery = convexQuery(api.entries.listRanked, { limit: 50 })
 
 export const Route = createFileRoute('/_app/')({
-  head: () => ({
-    meta: [{ title: 'Home | Bullshit Corner' }],
-  }),
   loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(leaderboardQuery)
+    const topics = await context.queryClient.ensureQueryData(leaderboardQuery)
+    return { seoEntries: topics.map(({ title }) => ({ title })) }
   },
+  head: ({ loaderData }) => publicSeo({
+    title: 'Home | Bullshit Corner',
+    description:
+      'Home of the Bullshit Corner leaderboard for the High Performance Racing podcast. View the official rankings, provide your own rankings, and submit topics to be used on future episodes.',
+    path: '/',
+    jsonLd: leaderboardJsonLd({
+      title: 'Bullshit Corner Home',
+      path: '/',
+      entries: loaderData?.seoEntries ?? [],
+      includeWebsite: true,
+    }),
+  }),
   pendingComponent: HomePending,
   component: Home,
 })
@@ -29,7 +40,7 @@ function Home() {
 
   return (
     <PageLayout>
-      <PageHeader title="Welcome to Bullshit Corner">
+      <PageHeader title="Formula 1 Hot Takes: The Bullshit Corner Leaderboard">
         <div className="flex flex-col gap-2">
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
             Bullshit Corner is a segment on the Formula 1 podcast, {" "}

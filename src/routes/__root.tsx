@@ -63,26 +63,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content:
           'A fan-built website inspired by the High Performance Racing podcast',
       },
-      // Open Graph
-      { property: 'og:type', content: 'website' },
-      { property: 'og:title', content: 'Bullshit Corner' },
-      {
-        property: 'og:description',
-        content:
-          'A fan-built website inspired by the High Performance Racing podcast',
-      },
-      { property: 'og:image', content: 'https://bscorner.com/api/og' },
-      { property: 'og:url', content: 'https://bscorner.com' },
-      { property: 'og:site_name', content: 'Bullshit Corner' },
-      // Twitter Card
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:title', content: 'Bullshit Corner' },
-      {
-        name: 'twitter:description',
-        content:
-          'A fan-built website inspired by the High Performance Racing podcast',
-      },
-      { name: 'twitter:image', content: 'https://bscorner.com/api/og' },
     ],
     links: [
       { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },

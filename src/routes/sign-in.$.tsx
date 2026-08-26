@@ -1,7 +1,9 @@
 import { SignIn } from '@clerk/tanstack-react-start'
 import { createFileRoute } from '@tanstack/react-router'
+import { privateSeo } from '#/lib/seo'
 
 export const Route = createFileRoute('/sign-in/$')({
+  head: () => privateSeo('Sign In | Bullshit Corner'),
   component: SignInPage,
 })
 

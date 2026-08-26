@@ -12,10 +12,14 @@ import {
 import { currentUserQuery } from '#/hooks/useCurrentUser.ts'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { canUseAppViewTransitions } from '#/lib/viewTransitions'
+import { publicSeo } from '#/lib/seo'
 
 export const Route = createFileRoute('/_app/submit-topic')({
-  head: () => ({
-    meta: [{ title: 'Submit a Topic | Bullshit Corner' }],
+  head: () => publicSeo({
+    title: 'Submit a Topic | Bullshit Corner',
+    description:
+      'Feel passionate about something related to Formula 1 and think it deserves a spot in Bullshit Corner? Submit your idea here for possible debate on a future High Performance Racing episode.',
+    path: '/submit-topic',
   }),
   loader: async ({ context }) => {
     const user = await context.queryClient.ensureQueryData(currentUserQuery)

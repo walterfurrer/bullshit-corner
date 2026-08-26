@@ -18,6 +18,7 @@ import { SectionNavigation } from '#/components/sectionNavigation'
 import { Spinner } from '#/components/ui/spinner.tsx'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { cn } from '#/lib/utils'
+import { privateSeo } from '#/lib/seo'
 
 const adminSections = [
   { to: '/admin/leaderboardManagement', label: 'Leaderboard Management' },
@@ -42,9 +43,7 @@ const checkAdminAuth = createServerFn({ method: 'GET' }).handler(async () => {
 })
 
 export const Route = createFileRoute('/_app/admin')({
-  head: () => ({
-    meta: [{ title: 'Admin | Bullshit Corner' }],
-  }),
+  head: () => privateSeo('Admin | Bullshit Corner'),
   beforeLoad: async () => {
     if (!ENABLE_AUTH) {
       throw redirect({ to: '/' })

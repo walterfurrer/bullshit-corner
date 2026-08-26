@@ -31,6 +31,7 @@ import { useSyncToClerk } from '#/hooks/useSyncToClerk.ts'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { cn } from '#/lib/utils.ts'
 import { getAccountDetails } from '#/server/account.ts'
+import { privateSeo } from '#/lib/seo'
 
 import { api } from '#convex/_generated/api'
 
@@ -39,9 +40,7 @@ import type { AccountDetails } from '#/server/account.ts'
 import { DISPLAY_NAME_MAX_LENGTH } from '#shared/constants'
 
 export const Route = createFileRoute('/_app/userSettings')({
-  head: () => ({
-    meta: [{ title: 'Settings | Bullshit Corner' }],
-  }),
+  head: () => privateSeo('Settings | Bullshit Corner'),
   beforeLoad: async () => {
     if (!ENABLE_AUTH) {
       throw redirect({ to: '/' })
