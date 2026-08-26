@@ -40,7 +40,7 @@ function Home() {
 
   return (
     <PageLayout>
-      <PageHeader title="Formula 1 Hot Takes: The Bullshit Corner Leaderboard">
+      <PageHeader title="Welcome to Bullshit Corner">
         <div className="flex flex-col gap-2">
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
             Bullshit Corner is a segment on the Formula 1 podcast, {" "}
