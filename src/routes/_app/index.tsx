@@ -52,7 +52,7 @@ function Home() {
             >
               High Performance Racing
             </a>
-            {" "} where Host Jake Humphrey, along with Co-Hosts Otmar Szafnauerand Rob Smedley discuss, debate, and rank (or wank) fan-submitted topics surrounding Formula 1.
+            {" "} where Host Jake Humphrey, along with Co-Hosts Otmar Szafnauer and Rob Smedley discuss, debate, and rank (or wank) fan-submitted topics surrounding Formula 1.
           </p>
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
             Here you can view the official HPR Leaderboard, submit entries for a future episode, and even provide your own rankings to the community-based leaderboard.
