@@ -23,13 +23,19 @@ function AppLayout() {
         <div
           aria-hidden
           className="app-page-background pointer-events-none absolute inset-0 -z-10"
-          style={{ viewTransitionName: 'app-page-background' }}
+          style={{
+            viewTransitionName: isCommunityPage ? 'none' : 'app-page-background',
+          }}
         />
         <main
           className={cn(
             'mx-auto max-w-4xl px-4 py-10 animate-content-enter sm:px-6 sm:py-14',
           )}
-          style={{ viewTransitionName: 'app-content' }}
+          style={{
+            // Community owns the named transition on its tab content so the
+            // page header and section navigation stay out of tab transitions.
+            viewTransitionName: isCommunityPage ? 'none' : 'app-content',
+          }}
         >
           <Outlet />
         </main>

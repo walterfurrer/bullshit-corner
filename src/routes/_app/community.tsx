@@ -72,7 +72,11 @@ function CommunityPage() {
   const isSubmissionsView = view === 'submissions'
 
   function navigateToView(nextView: CommunityView) {
-    void navigate({ to: '/community', search: { view: nextView } })
+    void navigate({
+      to: '/community',
+      search: { view: nextView },
+      viewTransition: canUseAppViewTransitions(),
+    })
   }
 
   return (
@@ -114,40 +118,45 @@ function CommunityPage() {
         />
       </div>
 
-      {isSubmissionsView ? (
-        <CommunitySubmissions />
-      ) : (
-        <>
-          <CommunityLeaderboard entries={entries} />
+      <div
+        className="flex flex-col gap-10 sm:gap-12"
+        style={{ viewTransitionName: 'app-content' }}
+      >
+        {isSubmissionsView ? (
+          <CommunitySubmissions />
+        ) : (
+          <>
+            <CommunityLeaderboard entries={entries} />
 
-          <div className="mt-6 sm:mt-8">
-            {ENABLE_AUTH && isLoading ? (
-              <CommunityRankingLoading
-                entries={entries}
-                savedEntryIds={savedEntryIds}
-              />
-            ) : ENABLE_AUTH && isAuthenticated ? (
-              <CommunityRankingEditor entries={entries} savedEntryIds={savedEntryIds} />
-            ) : ENABLE_AUTH ? (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Want to shape the board?</CardTitle>
-                  <CardDescription>
-                    Sign in or create a free account to add your ranking to the community aggregate.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div>
-                    <SignInButton mode="modal">
-                      <Button>Sign in to rank</Button>
-                    </SignInButton>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : null}
-          </div>
-        </>
-      )}
+            <div className="mt-6 sm:mt-8">
+              {ENABLE_AUTH && isLoading ? (
+                <CommunityRankingLoading
+                  entries={entries}
+                  savedEntryIds={savedEntryIds}
+                />
+              ) : ENABLE_AUTH && isAuthenticated ? (
+                <CommunityRankingEditor entries={entries} savedEntryIds={savedEntryIds} />
+              ) : ENABLE_AUTH ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Want to shape the board?</CardTitle>
+                    <CardDescription>
+                      Sign in or create a free account to add your ranking to the community aggregate.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div>
+                      <SignInButton mode="modal">
+                        <Button>Sign in to rank</Button>
+                      </SignInButton>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : null}
+            </div>
+          </>
+        )}
+      </div>
 
       <SiteFooter />
     </PageLayout>
