@@ -269,9 +269,9 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
           >
             {(field) => (
               <div className="flex flex-col gap-1.5">
-              <Label htmlFor={field.name}>
-                YouTube Link <span className="text-muted-foreground">(optional)</span>
-              </Label>
+                <Label htmlFor={field.name}>
+                  YouTube Link <span className="text-muted-foreground">(optional)</span>
+                </Label>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -284,7 +284,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
                     field.state.meta.isTouched &&
                       field.state.meta.errors.length > 0
                       ? `${field.name}-error`
-                      : `${field.name}-hint`
+                      : undefined
                   }
                   aria-invalid={
                     field.state.meta.isTouched &&
@@ -302,14 +302,7 @@ export function SubmissionForm({ user }: SubmissionFormProps) {
                   >
                     {field.state.meta.errors[0]}
                   </p>
-                ) : (
-                  <p
-                    id={`${field.name}-hint`}
-                    className="text-xs text-muted-foreground"
-                  >
-                    Links are reviewed before publishing.
-                  </p>
-                )}
+                ) : null}
               </div>
             )}
           </form.Field>

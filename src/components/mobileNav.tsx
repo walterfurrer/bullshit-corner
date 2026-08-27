@@ -58,8 +58,8 @@ export function MobileNav() {
           aria-label="Navigation menu"
           initialFocus={() => activeLinkRef.current ?? false}
         >
-          <SheetHeader>
-            <SheetTitle>Menu</SheetTitle>
+          <SheetHeader className="min-h-16 flex-row! items-center">
+            <SheetTitle>Bullshit Corner</SheetTitle>
           </SheetHeader>
 
           <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-4">

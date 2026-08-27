@@ -110,7 +110,9 @@
 }
 
 .t-panel-slide {
-  transform: translateY(var(--panel-translate-y));
+  --panel-translate-x: 0px;
+  --panel-translate-y-start: var(--panel-translate-y);
+  transform: translate(var(--panel-translate-x), var(--panel-translate-y-start));
   opacity: 0;
   filter: blur(var(--panel-blur));
   pointer-events: none;
@@ -120,8 +122,20 @@
     filter var(--panel-close-dur) var(--panel-ease);
   will-change: transform, opacity, filter;
 }
+.t-panel-slide[data-side="right"] {
+  --panel-translate-x: 100%;
+  --panel-translate-y-start: 0px;
+}
+.t-panel-slide[data-side="left"] {
+  --panel-translate-x: -100%;
+  --panel-translate-y-start: 0px;
+}
+.t-panel-slide[data-side="top"] {
+  --panel-translate-x: 0px;
+  --panel-translate-y-start: calc(var(--panel-translate-y) * -1);
+}
 .t-panel-slide[data-open] {
-  transform: translateY(0);
+  transform: translate(0, 0);
   opacity: 1;
   filter: blur(0);
   pointer-events: auto;
@@ -131,7 +145,7 @@
     filter var(--panel-open-dur) var(--panel-ease);
 }
 .t-panel-slide[data-starting-style] {
-  transform: translateY(var(--panel-translate-y));
+  transform: translate(var(--panel-translate-x), var(--panel-translate-y-start));
   opacity: 0;
   filter: blur(var(--panel-blur));
   pointer-events: none;
