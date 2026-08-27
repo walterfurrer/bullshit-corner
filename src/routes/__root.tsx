@@ -1,5 +1,6 @@
 import { ClerkProvider, useAuth } from '@clerk/tanstack-react-start'
 import { auth } from '@clerk/tanstack-react-start/server'
+import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
   HeadContent,
   Link,
@@ -7,10 +8,10 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
 import { createServerFn } from '@tanstack/react-start'
-import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from "@vercel/speed-insights/react"
+import { ConvexProviderWithClerk } from 'convex/react-clerk'
 
 import { OnboardingGuard } from '../components/onboardingGuard'
 import { SyncUser } from '../components/syncUser'
@@ -144,6 +145,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           </ConvexProviderWithClerk>
         </ClerkProvider>
         <Analytics />
+        <SpeedInsights />
         <Scripts />
       </body>
     </html>
