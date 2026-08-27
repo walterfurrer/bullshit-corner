@@ -1,19 +1,32 @@
 import { useEffect, useState } from 'react'
-import { usePaginatedQuery } from 'convex/react'
+import { useQuery } from 'convex/react'
 import { Link } from '@tanstack/react-router'
+import {
+  CheckCircleIcon,
+  XCircleIcon,
+  YoutubeLogoIcon,
+  ArrowSquareOutIcon,
+} from '@phosphor-icons/react'
 
-import { SubmissionCard } from '#/components/submissionCard'
 import { Button } from '#/components/ui/button'
 import {
   Card,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '#/components/ui/dialog'
 import { Input } from '#/components/ui/input'
 import { Skeleton } from '#/components/ui/skeleton'
-import { Spinner } from '#/components/ui/spinner'
 import {
   Select,
   SelectContent,
@@ -22,9 +35,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '#/components/ui/select'
+import { FormatDetails } from '#/lib/formatDetails'
+import { formatSubmissionTopic } from '#/lib/submissionFormatting'
+import { cn } from '#/lib/utils'
 import { api } from '#convex/_generated/api'
+import { getYouTubeEmbedUrl } from '#shared/youtubeUrl'
 
-const PAGE_SIZE = 24
+const PAGE_SIZE = 12
 const SUBMISSION_SORT_STORAGE_KEY = 'bullshit-corner:community-submission-sort'
 
 const submissionSortOptions = [
@@ -42,6 +59,15 @@ type SortableSubmission = {
   submittedAt: number
 }
 
+type CommunitySubmission = SortableSubmission & {
+  _id: string
+  details?: string
+  youtubeUrl?: string
+  status?: SubmissionStatus | null
+}
+
+type SubmissionStatus = 'promoted' | 'dismissed'
+
 const submissionCollator = new Intl.Collator(undefined, {
   sensitivity: 'base',
   numeric: true,
@@ -50,11 +76,15 @@ const submissionCollator = new Intl.Collator(undefined, {
 export function CommunitySubmissions() {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState<SubmissionSort>('newest')
-  const { results, status, loadMore } = usePaginatedQuery(
+  const [selectedSubmissionId, setSelectedSubmissionId] = useState<string | null>(null)
+  const [pageIndex, setPageIndex] = useState(0)
+  const [pageCursors, setPageCursors] = useState<Array<string | null>>([null])
+  const pageCursor = pageCursors[pageIndex] ?? null
+  const submissionsPage = useQuery(
     api.submissions.listPublic,
-    {},
-    { initialNumItems: PAGE_SIZE },
+    { paginationOpts: { numItems: PAGE_SIZE, cursor: pageCursor } },
   )
+  const results = submissionsPage?.page ?? []
 
   useEffect(() => {
     try {
@@ -65,9 +95,21 @@ export function CommunitySubmissions() {
     }
   }, [])
 
-  if (status === 'LoadingFirstPage') {
+  useEffect(() => {
+    if (
+      selectedSubmissionId &&
+      submissionsPage &&
+      !results.some((submission) => submission._id === selectedSubmissionId)
+    ) {
+      setSelectedSubmissionId(null)
+    }
+  }, [results, selectedSubmissionId, submissionsPage])
+
+  if (!submissionsPage) {
     return <CommunitySubmissionsLoading />
   }
+
+  const currentPage = submissionsPage
 
   if (results.length === 0) {
     return (
@@ -103,8 +145,26 @@ export function CommunitySubmissions() {
   const sortedResults = [...visibleResults].sort((left, right) =>
     compareSubmissions(left, right, sortBy),
   )
+  const selectedSubmission = results.find(
+    (submission) => submission._id === selectedSubmissionId,
+  )
 
-  const canLoadMore = status === 'CanLoadMore' || status === 'LoadingMore'
+  const canGoToPreviousPage = pageIndex > 0
+  const canGoToNextPage = !currentPage.isDone
+
+  function showPreviousPage() {
+    setPageIndex((currentPage) => Math.max(0, currentPage - 1))
+  }
+
+  function showNextPage() {
+    if (currentPage.isDone) return
+
+    setPageCursors((cursors) => [
+      ...cursors.slice(0, pageIndex + 1),
+      currentPage.continueCursor,
+    ])
+    setPageIndex((currentPage) => currentPage + 1)
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -162,17 +222,12 @@ export function CommunitySubmissions() {
       </div>
 
       {sortedResults.length > 0 ? (
-        <div className="grid items-start gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-3">
           {sortedResults.map((submission) => (
-            <SubmissionCard
+            <CommunitySubmissionCard
               key={submission._id}
-              variant="readonly"
-              topic={submission.topic}
-              details={submission.details}
-              youtubeUrl={submission.youtubeUrl}
-              submittedBy={submission.submittedBy}
-              submittedAt={submission.submittedAt}
-              status={submission.status}
+              submission={submission}
+              onViewDetails={() => setSelectedSubmissionId(submission._id)}
             />
           ))}
         </div>
@@ -187,21 +242,175 @@ export function CommunitySubmissions() {
         </Card>
       )}
 
-      {canLoadMore ? (
-        <div className="flex justify-center">
+      {canGoToPreviousPage || canGoToNextPage ? (
+        <nav
+          className="flex items-center justify-center gap-3"
+          aria-label="Community submissions pages"
+        >
           <Button
             variant="outline"
-            onClick={() => loadMore(PAGE_SIZE)}
-            disabled={status === 'LoadingMore'}
+            size="sm"
+            onClick={showPreviousPage}
+            disabled={!canGoToPreviousPage}
           >
-            {status === 'LoadingMore' ? (
-              <Spinner data-icon="inline-start" aria-hidden="true" />
-            ) : null}
-            {status === 'LoadingMore' ? 'Loading submissions…' : 'Load more submissions'}
+            Previous
           </Button>
-        </div>
+          <p className="text-sm text-muted-foreground" aria-live="polite">
+            Page {pageIndex + 1}
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={showNextPage}
+            disabled={!canGoToNextPage}
+          >
+            Next
+          </Button>
+        </nav>
       ) : null}
+
+      <SubmissionDetailsDialog
+        submission={selectedSubmission}
+        onOpenChange={(open) => {
+          if (!open) setSelectedSubmissionId(null)
+        }}
+      />
     </div>
+  )
+}
+
+function CommunitySubmissionCard({
+  submission,
+  onViewDetails,
+}: {
+  submission: CommunitySubmission
+  onViewDetails: () => void
+}) {
+  const canViewDetails = Boolean(submission.details || submission.youtubeUrl)
+
+  return (
+    <Card size="sm" className="h-full min-h-40">
+      <CardHeader className="gap-2">
+        <h2 className="line-clamp-3 font-sans text-base/normal font-medium tracking-normal">
+          {formatSubmissionTopic(submission.topic)}
+        </h2>
+        <CardDescription>
+          {submission.submittedBy
+            ? `Submitted by ${submission.submittedBy}`
+            : 'Submitted anonymously'}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="min-h-10 justify-center">
+        <div className="flex flex-wrap items-center gap-2">
+          {submission.status ? <SubmissionStatus status={submission.status} /> : null}
+          {submission.youtubeUrl ? (
+            <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+              <YoutubeLogoIcon size={16} aria-hidden="true" />
+              Video attached
+            </span>
+          ) : null}
+        </div>
+      </CardContent>
+      <CardFooter className="mt-auto min-h-8">
+        {canViewDetails ? (
+          <Button variant="outline" size="sm" onClick={onViewDetails}>
+            View submission
+          </Button>
+        ) : null}
+      </CardFooter>
+    </Card>
+  )
+}
+
+function SubmissionDetailsDialog({
+  submission,
+  onOpenChange,
+}: {
+  submission: CommunitySubmission | undefined
+  onOpenChange: (open: boolean) => void
+}) {
+  const embedUrl = submission?.youtubeUrl
+    ? getYouTubeEmbedUrl(submission.youtubeUrl)
+    : undefined
+
+  return (
+    <Dialog open={submission !== undefined} onOpenChange={onOpenChange}>
+      {submission ? (
+        <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-2xl">
+          <DialogHeader className="pe-8">
+            <DialogTitle>{formatSubmissionTopic(submission.topic)}</DialogTitle>
+            <DialogDescription>
+              {submission.submittedBy
+                ? `Submitted by ${submission.submittedBy}`
+                : 'Submitted anonymously'}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-5">
+            {submission.status ? <SubmissionStatus status={submission.status} /> : null}
+
+            {embedUrl ? (
+              <iframe
+                className="aspect-video w-full rounded-lg border bg-muted"
+                src={embedUrl}
+                title={`YouTube video for ${formatSubmissionTopic(submission.topic)}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            ) : null}
+
+            {submission.details ? (
+              <section className="flex flex-col gap-2">
+                <h3 className="font-medium">Details</h3>
+                <FormatDetails text={submission.details} className="text-muted-foreground" />
+              </section>
+            ) : null}
+          </div>
+
+          {submission.youtubeUrl ? (
+            <DialogFooter>
+              <Button
+                variant="outline"
+                size="sm"
+                render={
+                  <a
+                    href={submission.youtubeUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  />
+                }
+              >
+                <ArrowSquareOutIcon data-icon="inline-start" aria-hidden="true" />
+                Open on YouTube
+              </Button>
+            </DialogFooter>
+          ) : null}
+        </DialogContent>
+      ) : null}
+    </Dialog>
+  )
+}
+
+function SubmissionStatus({ status }: { status: SubmissionStatus }) {
+  const config = {
+    promoted: {
+      label: 'Entered Bullshit Corner',
+      Icon: CheckCircleIcon,
+      className: 'text-success',
+    },
+    dismissed: {
+      label: 'Denied entry',
+      Icon: XCircleIcon,
+      className: 'text-destructive',
+    },
+  }[status]
+
+  return (
+    <p className={cn('inline-flex items-center gap-1.5 text-xs font-medium', config.className)}>
+      <config.Icon size={15} weight="bold" aria-hidden="true" />
+      {config.label}
+    </p>
   )
 }
 
@@ -233,12 +442,12 @@ function compareSubmissions(
 function CommunitySubmissionsLoading() {
   return (
     <div
-      className="grid gap-4 sm:grid-cols-2"
+      className="grid gap-4 md:grid-cols-3"
       aria-busy="true"
       aria-label="Loading community submissions"
     >
-      {Array.from({ length: 4 }).map((_, index) => (
-        <Skeleton key={index} className="h-36 w-full rounded-lg" />
+      {Array.from({ length: 6 }).map((_, index) => (
+        <Skeleton key={index} className="h-40 w-full rounded-lg" />
       ))}
     </div>
   )

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { isValidYouTubeUrl } from './youtubeUrl'
+import { getYouTubeEmbedUrl, isValidYouTubeUrl } from './youtubeUrl'
 
 describe('isValidYouTubeUrl', () => {
   describe('valid URLs', () => {
@@ -69,5 +69,25 @@ describe('isValidYouTubeUrl', () => {
       expect(isValidYouTubeUrl('https://www.youtube.com/watch')).toBe(false)
       expect(isValidYouTubeUrl('https://www.youtube.com/watch?list=PLxyz')).toBe(false)
     })
+  })
+})
+
+describe('getYouTubeEmbedUrl', () => {
+  it.each([
+    ['watch URLs', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'],
+    ['watch URLs with extra query params', 'https://youtube.com/watch?v=dQw4w9WgXcQ&t=42s'],
+    ['short URLs', 'https://youtu.be/dQw4w9WgXcQ?t=42'],
+    ['Shorts URLs', 'https://www.youtube.com/shorts/dQw4w9WgXcQ'],
+    ['live URLs', 'https://youtube.com/live/dQw4w9WgXcQ'],
+  ])('converts %s to an embed URL', (_label, url) => {
+    expect(getYouTubeEmbedUrl(url)).toBe(
+      'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
+    )
+  })
+
+  it('returns undefined for unsupported URLs', () => {
+    expect(getYouTubeEmbedUrl('https://www.youtube.com/channel/UCxyz')).toBeUndefined()
+    expect(getYouTubeEmbedUrl('https://vimeo.com/123456')).toBeUndefined()
+    expect(getYouTubeEmbedUrl('not a url')).toBeUndefined()
   })
 })

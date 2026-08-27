@@ -8,15 +8,20 @@
 :root {
   color-scheme: dark;
 
-  /* Typography scale — minor third (1.2), base 16px */
-  --font-size-xs: 0.6944rem;
-  --font-size-sm: 0.8333rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.2rem;
-  --font-size-xl: 1.44rem;
-  --font-size-2xl: 1.728rem;
-  --font-size-3xl: 2.0736rem;
-  --font-size-4xl: 2.4883rem;
+  /*
+   * Typography scale — minor third (1.2), fluid from 20rem to 80rem.
+   * Each tier grows 6.25% from its small-screen value; xs never drops below 12px.
+   */
+  --font-size-xs: clamp(0.75rem, calc(0.734375rem + 0.078125vw), 0.796875rem);
+  --font-size-sm: clamp(0.8333rem, calc(0.8159396rem + 0.0868021vw), 0.8853813rem);
+  --font-size-base: clamp(1rem, calc(0.9791667rem + 0.1041667vw), 1.0625rem);
+  --font-size-lg: clamp(1.2rem, calc(1.175rem + 0.125vw), 1.275rem);
+  --font-size-xl: clamp(1.44rem, calc(1.41rem + 0.15vw), 1.53rem);
+  --font-size-2xl: clamp(1.728rem, calc(1.692rem + 0.18vw), 1.836rem);
+  --font-size-3xl: clamp(2.0736rem, calc(2.0304rem + 0.216vw), 2.2032rem);
+  --font-size-4xl: clamp(2.4883rem, calc(2.4364604rem + 0.2591979vw), 2.6438188rem);
+  --font-size-5xl: clamp(3rem, calc(2.9375rem + 0.3125vw), 3.1875rem);
+  --font-size-6xl: clamp(3.75rem, calc(3.671875rem + 0.390625vw), 3.984375rem);
   --line-height-xs: 1.6;
   --line-height-sm: 1.6;
   --line-height-base: 1.5;
@@ -248,14 +253,6 @@
   background-image: none;
 }
 
-@media (width >= 80rem) {
-  :root {
-    --font-size-xs: 0.75rem;
-    --font-size-sm: 0.875rem;
-    --font-size-base: 1.0625rem;
-  }
-}
-
 @theme inline {
   --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -271,6 +268,23 @@
   --text-base: var(--font-size-base);
   --text-base--line-height: var(--line-height-base);
   --text-base--letter-spacing: var(--letter-spacing-base);
+  --text-lg: var(--font-size-lg);
+  --text-lg--line-height: var(--line-height-lg);
+  --text-lg--letter-spacing: var(--letter-spacing-lg);
+  --text-xl: var(--font-size-xl);
+  --text-xl--line-height: var(--line-height-xl);
+  --text-xl--letter-spacing: var(--letter-spacing-xl);
+  --text-2xl: var(--font-size-2xl);
+  --text-2xl--line-height: var(--line-height-2xl);
+  --text-2xl--letter-spacing: var(--letter-spacing-2xl);
+  --text-3xl: var(--font-size-3xl);
+  --text-3xl--line-height: var(--line-height-3xl);
+  --text-3xl--letter-spacing: var(--letter-spacing-3xl);
+  --text-4xl: var(--font-size-4xl);
+  --text-4xl--line-height: var(--line-height-4xl);
+  --text-4xl--letter-spacing: var(--letter-spacing-4xl);
+  --text-5xl: var(--font-size-5xl);
+  --text-6xl: var(--font-size-6xl);
   --tracking-racing-compact: 0.01em;
   --color-background: var(--background);
   --color-foreground: var(--foreground);

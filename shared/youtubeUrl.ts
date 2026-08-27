@@ -37,3 +37,29 @@ export function isValidYouTubeUrl(url: string): boolean {
     return false
   }
 }
+
+/**
+ * Returns a privacy-enhanced YouTube embed URL for a supported public video
+ * URL. Unsupported or malformed URLs return `undefined` so callers can keep
+ * offering the original link without rendering a broken iframe.
+ */
+export function getYouTubeEmbedUrl(url: string): string | undefined {
+  if (!isValidYouTubeUrl(url)) return undefined
+
+  const parsed = new URL(url)
+  const hostname = parsed.hostname.replace(/^www\./, '')
+  let videoId: string | null = null
+
+  if (hostname === 'youtu.be') {
+    videoId = parsed.pathname.split('/').filter(Boolean)[0] ?? null
+  } else if (parsed.pathname === '/watch') {
+    videoId = parsed.searchParams.get('v')
+  } else {
+    const [, format, id] = parsed.pathname.split('/')
+    if (format === 'shorts' || format === 'live') videoId = id ?? null
+  }
+
+  if (!videoId || !/^[\w-]+$/.test(videoId)) return undefined
+
+  return `https://www.youtube-nocookie.com/embed/${videoId}`
+}
