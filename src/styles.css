@@ -429,11 +429,20 @@ body {
   .section-nav {
     @apply shrink-0 md:w-48 lg:w-56;
   }
+  .section-nav-horizontal {
+    @apply w-fit max-w-full;
+  }
   .section-nav-list {
     @apply flex gap-1 overflow-x-auto pb-2 md:flex-col md:gap-0.5 md:overflow-x-visible md:pb-0;
   }
+  .section-nav-horizontal .section-nav-list {
+    @apply flex-row gap-1 overflow-x-auto pb-0;
+  }
   .section-nav-item {
     @apply relative z-10 block w-full whitespace-nowrap rounded-xs px-3 py-2 text-start text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring;
+  }
+  .section-nav-horizontal .section-nav-item {
+    @apply w-auto;
   }
   .section-nav-item-active {
     @apply bg-transparent text-primary hover:bg-transparent hover:text-primary;

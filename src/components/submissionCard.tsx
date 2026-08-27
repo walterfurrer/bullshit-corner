@@ -8,6 +8,8 @@ import {
   TrashIcon,
   TrophyIcon,
   YoutubeLogoIcon,
+  CheckCircleIcon,
+  XCircleIcon,
 } from '@phosphor-icons/react'
 
 import { Button } from '#/components/ui/button.tsx'
@@ -20,7 +22,10 @@ import {
 } from '#/components/ui/tooltip.tsx'
 import { FormatDetails } from '#/lib/formatDetails'
 import { getMotionTransition } from '#/lib/motion'
+import { formatSubmissionTopic } from '#/lib/submissionFormatting'
 import { cn } from '#/lib/utils'
+
+export type SubmissionStatus = 'promoted' | 'dismissed'
 
 type BaseProps = {
   topic: string
@@ -28,6 +33,7 @@ type BaseProps = {
   youtubeUrl?: string
   submittedBy?: string
   submittedAt: number
+  status?: SubmissionStatus | null
   presentation?: 'card' | 'list-item'
 }
 
@@ -67,27 +73,28 @@ function truncateText(text: string, maxLength: number): string {
 }
 
 export function SubmissionCard(props: SubmissionCardProps) {
-  const { topic, details, youtubeUrl, submittedBy } = props
+  const { topic, details, youtubeUrl, submittedBy, status } = props
   const [showDetails, setShowDetails] = useState(false)
   const detailsId = useId()
   const isListItem = props.presentation === 'list-item'
+  const isReadOnly = props.variant === undefined || props.variant === 'readonly'
   const prefersReducedMotion = useReducedMotion()
   const transition = getMotionTransition(prefersReducedMotion)
 
   return (
     <article
       className={cn(
-        'flex flex-col gap-2 p-4 text-start',
+        'flex h-full flex-col gap-3 p-4 text-start',
         isListItem
           ? 'bg-transparent transition-colors hover:bg-accent/30 focus-within:bg-accent/30'
           : 'glass-section rounded-lg border',
       )}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="font-sans text-base font-semibold tracking-normal">
-              {truncateText(topic, 200)}
+              {truncateText(formatSubmissionTopic(topic), 200)}
             </h2>
             {props.variant === 'owner' && props.isPromoted ? (
               <Badge variant="outline">
@@ -101,27 +108,15 @@ export function SubmissionCard(props: SubmissionCardProps) {
               ? `Submitted by ${submittedBy}`
               : 'Submitted anonymously'}
           </p>
+          {status ? (
+            <div className="mt-2">
+              <SubmissionStatusBadge status={status} />
+            </div>
+          ) : null}
         </div>
-        <TooltipProvider delay={500}>
-          <div className="flex shrink-0 items-center gap-1 self-end sm:self-auto">
-            {youtubeUrl && (
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <a
-                      href={youtubeUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      aria-label="Watch on YouTube"
-                    />
-                  }
-                  className="inline-flex size-11 items-center justify-center rounded-xs text-muted-foreground transition-colors hover:text-primary sm:size-8"
-                >
-                  <YoutubeLogoIcon size={20} aria-hidden="true" />
-                </TooltipTrigger>
-                <TooltipContent>Watch on YouTube</TooltipContent>
-              </Tooltip>
-            )}
+      <TooltipProvider delay={500}>
+          <div className="flex shrink-0 items-center gap-1">
+            {!isReadOnly && youtubeUrl ? <YoutubeLink youtubeUrl={youtubeUrl} /> : null}
             {props.variant === 'actionable' && (
               <>
                 <Tooltip>
@@ -221,36 +216,92 @@ export function SubmissionCard(props: SubmissionCardProps) {
         </TooltipProvider>
       </div>
 
-      {details && (
+      {(details || (isReadOnly && youtubeUrl)) && (
         <div>
-          <button
-            type="button"
-            onClick={() => setShowDetails(!showDetails)}
-            className="text-xs text-muted-foreground hover:text-foreground"
-            aria-controls={detailsId}
-            aria-expanded={showDetails}
-          >
-            {showDetails ? 'Hide details' : 'Show details'}
-          </button>
-          <AnimatePresence initial={false}>
-            {showDetails ? (
-              <motion.div
-                id={detailsId}
-                initial={{ height: 0, opacity: 0, filter: 'blur(2px)' }}
-                animate={{ height: 'auto', opacity: 1, filter: 'blur(0px)' }}
-                exit={{ height: 0, opacity: 0, filter: 'blur(2px)' }}
-                transition={transition}
-                className="overflow-hidden"
+          <div className="flex items-center justify-between gap-3">
+            {details ? (
+              <button
+                type="button"
+                onClick={() => setShowDetails(!showDetails)}
+                className="text-xs text-muted-foreground hover:text-foreground"
+                aria-controls={detailsId}
+                aria-expanded={showDetails}
               >
-                <FormatDetails
-                  text={details}
-                  className="mt-1.5 text-sm text-muted-foreground"
-                />
-              </motion.div>
+                {showDetails ? 'Hide details' : 'Show details'}
+              </button>
+            ) : (
+              <span aria-hidden="true" />
+            )}
+            {isReadOnly && youtubeUrl ? (
+              <TooltipProvider delay={500}>
+                <YoutubeLink youtubeUrl={youtubeUrl} />
+              </TooltipProvider>
             ) : null}
-          </AnimatePresence>
+          </div>
+          {details ? (
+            <AnimatePresence initial={false}>
+              {showDetails ? (
+                <motion.div
+                  id={detailsId}
+                  initial={{ height: 0, opacity: 0, filter: 'blur(2px)' }}
+                  animate={{ height: 'auto', opacity: 1, filter: 'blur(0px)' }}
+                  exit={{ height: 0, opacity: 0, filter: 'blur(2px)' }}
+                  transition={transition}
+                  className="overflow-hidden"
+                >
+                  <FormatDetails
+                    text={details}
+                    className="mt-1.5 text-sm text-muted-foreground"
+                  />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          ) : null}
         </div>
       )}
     </article>
+  )
+}
+
+function YoutubeLink({ youtubeUrl }: { youtubeUrl: string }) {
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <a
+            href={youtubeUrl}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="Watch on YouTube"
+          />
+        }
+        className="inline-flex size-11 items-center justify-center rounded-xs text-muted-foreground transition-colors hover:text-primary sm:size-8"
+      >
+        <YoutubeLogoIcon size={20} aria-hidden="true" />
+      </TooltipTrigger>
+      <TooltipContent>Watch on YouTube</TooltipContent>
+    </Tooltip>
+  )
+}
+
+function SubmissionStatusBadge({ status }: { status: SubmissionStatus }) {
+  const config = {
+    promoted: {
+      label: 'Entered Bullshit Corner',
+      Icon: CheckCircleIcon,
+      className: 'text-success',
+    },
+    dismissed: {
+      label: 'Denied entry',
+      Icon: XCircleIcon,
+      className: 'text-destructive',
+    },
+  }[status]
+
+  return (
+    <div className={cn('inline-flex items-center gap-1.5 text-xs font-medium', config.className)}>
+      <config.Icon size={15} weight="bold" aria-hidden="true" />
+      {config.label}
+    </div>
   )
 }

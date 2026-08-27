@@ -2,6 +2,7 @@ import { LayoutGroup, motion, useReducedMotion } from 'motion/react'
 import { useState, type ReactNode } from 'react'
 
 import { getMotionTransition } from '#/lib/motion'
+import { cn } from '#/lib/utils'
 
 interface SectionNavigationItem {
   label: string
@@ -13,6 +14,7 @@ interface SectionNavigationProps {
   ariaLabel: string
   id: string
   items: readonly SectionNavigationItem[]
+  orientation?: 'horizontal' | 'vertical'
   renderItem: (item: SectionNavigationItem, isActive: boolean) => ReactNode
 }
 
@@ -22,6 +24,7 @@ export function SectionNavigation({
   ariaLabel,
   id,
   items,
+  orientation = 'vertical',
   renderItem,
 }: SectionNavigationProps) {
   const [hoveredValue, setHoveredValue] = useState<string | null>(null)
@@ -31,7 +34,10 @@ export function SectionNavigation({
   return (
     <nav
       aria-label={ariaLabel}
-      className="section-nav hidden md:block"
+      className={cn(
+        'section-nav hidden md:block',
+        orientation === 'horizontal' && 'section-nav-horizontal',
+      )}
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
           setHoveredValue(null)

@@ -1,12 +1,15 @@
 import { SignInButton } from '@clerk/tanstack-react-start'
 import { convexQuery } from '@convex-dev/react-query'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useConvexAuth } from 'convex/react'
 
+import { CommunitySubmissions } from '#/components/communitySubmissions'
 import { CommunityLeaderboard } from '#/components/communityLeaderboard'
 import { CommunityRankingEditor } from '#/components/communityRankingEditor'
+import { MobileSectionPicker } from '#/components/mobileSectionPicker'
 import { PageHeader, PageLayout } from '#/components/pageLayout'
+import { SectionNavigation } from '#/components/sectionNavigation'
 import { SiteFooter } from '#/components/siteFooter'
 import { Button } from '#/components/ui/button'
 import {
@@ -20,12 +23,24 @@ import {
 import { Skeleton } from '#/components/ui/skeleton'
 import { ENABLE_AUTH } from '#/lib/featureFlags'
 import { leaderboardJsonLd, publicSeo } from '#/lib/seo'
+import { canUseAppViewTransitions } from '#/lib/viewTransitions'
+import { cn } from '#/lib/utils'
 import { api } from '#convex/_generated/api'
 
 const communityBoardQuery = convexQuery(api.communityRankings.list, {})
 const personalRankingQuery = convexQuery(api.communityRankings.getMine, {})
 
+type CommunityView = 'rankings' | 'submissions'
+
+const communitySections = [
+  { value: 'rankings', label: 'Rankings' },
+  { value: 'submissions', label: 'Submissions' },
+] as const
+
 export const Route = createFileRoute('/_app/community')({
+  validateSearch: (search: Record<string, unknown>): { view: CommunityView } => ({
+    view: search.view === 'submissions' ? 'submissions' : 'rankings',
+  }),
   loader: async ({ context }) => {
     const [entries] = await Promise.all([
       context.queryClient.ensureQueryData(communityBoardQuery),
@@ -52,44 +67,87 @@ function CommunityPage() {
   const { data: entries } = useSuspenseQuery(communityBoardQuery)
   const { data: savedEntryIds } = useSuspenseQuery(personalRankingQuery)
   const { isAuthenticated, isLoading } = useConvexAuth()
+  const { view } = Route.useSearch()
+  const navigate = useNavigate()
+  const isSubmissionsView = view === 'submissions'
+
+  function navigateToView(nextView: CommunityView) {
+    void navigate({ to: '/community', search: { view: nextView } })
+  }
 
   return (
     <PageLayout>
-      <PageHeader title="Community Leaderboard">
+      <PageHeader title="Community">
         <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-          See how the community ranks the current entries in Bullshit Corner.
-          Every member can rank as many entries as they like.
+          Explore community rankings and browse fan-submitted topics from fellow Bullshit Corner members.
         </p>
       </PageHeader>
 
-      <CommunityLeaderboard entries={entries} />
+      <div className="flex flex-col gap-4">
+        <MobileSectionPicker
+          label="Community section"
+          options={communitySections}
+          value={view}
+          onValueChange={navigateToView}
+        />
 
-      <div className="mt-6 sm:mt-8">
-        {ENABLE_AUTH && isLoading ? (
-          <CommunityRankingLoading
-            entries={entries}
-            savedEntryIds={savedEntryIds}
-          />
-        ) : ENABLE_AUTH && isAuthenticated ? (
-          <CommunityRankingEditor entries={entries} savedEntryIds={savedEntryIds} />
-        ) : ENABLE_AUTH ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>Want to shape the board?</CardTitle>
-              <CardDescription>
-                Sign in or create a free account to add your ranking to the community aggregate.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div>
-                <SignInButton mode="modal">
-                  <Button>Sign in to rank</Button>
-                </SignInButton>
-              </div>
-            </CardContent>
-          </Card>
-        ) : null}
+        <SectionNavigation
+          activeValue={view}
+          ariaLabel="Community sections"
+          id="community-sections"
+          items={communitySections}
+          orientation="horizontal"
+          renderItem={(section, isActive) => (
+            <Link
+              to="/community"
+              search={{ view: section.value as CommunityView }}
+              className={cn(
+                'section-nav-item',
+                isActive && 'section-nav-item-active',
+              )}
+              aria-current={isActive ? 'page' : undefined}
+              viewTransition={canUseAppViewTransitions()}
+            >
+              {section.label}
+            </Link>
+          )}
+        />
       </div>
+
+      {isSubmissionsView ? (
+        <CommunitySubmissions />
+      ) : (
+        <>
+          <CommunityLeaderboard entries={entries} />
+
+          <div className="mt-6 sm:mt-8">
+            {ENABLE_AUTH && isLoading ? (
+              <CommunityRankingLoading
+                entries={entries}
+                savedEntryIds={savedEntryIds}
+              />
+            ) : ENABLE_AUTH && isAuthenticated ? (
+              <CommunityRankingEditor entries={entries} savedEntryIds={savedEntryIds} />
+            ) : ENABLE_AUTH ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Want to shape the board?</CardTitle>
+                  <CardDescription>
+                    Sign in or create a free account to add your ranking to the community aggregate.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div>
+                    <SignInButton mode="modal">
+                      <Button>Sign in to rank</Button>
+                    </SignInButton>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : null}
+          </div>
+        </>
+      )}
 
       <SiteFooter />
     </PageLayout>

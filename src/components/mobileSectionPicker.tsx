@@ -5,7 +5,7 @@ interface MobileSectionPickerOption<T extends string> {
 
 interface MobileSectionPickerProps<T extends string> {
   label: string
-  options: MobileSectionPickerOption<T>[]
+  options: readonly MobileSectionPickerOption<T>[]
   value: T
   onValueChange: (value: T) => void
 }

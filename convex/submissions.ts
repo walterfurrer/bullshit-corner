@@ -1,4 +1,5 @@
 import { RateLimiter } from '@convex-dev/rate-limiter'
+import { paginationOptsValidator, paginationResultValidator } from 'convex/server'
 import { ConvexError, v } from 'convex/values'
 
 import { SUBMISSION_LIMITS } from '../shared/constants'
@@ -16,6 +17,20 @@ const DETAILS_MAX = SUBMISSION_LIMITS.details
 const YOUTUBE_URL_MAX = SUBMISSION_LIMITS.youtubeUrl
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000
+
+const publicSubmission = v.object({
+  _id: v.id('submissions'),
+  topic: v.string(),
+  details: v.optional(v.string()),
+  youtubeUrl: v.optional(v.string()),
+  submittedBy: v.optional(v.string()),
+  submittedAt: v.number(),
+  status: v.union(
+    v.literal('promoted'),
+    v.literal('dismissed'),
+    v.null(),
+  ),
+})
 
 const rateLimiter = new RateLimiter(components.rateLimiter, {
   submitTopic: { kind: 'fixed window', rate: 6, period: WEEK_MS },
@@ -172,6 +187,47 @@ export const listMine = query({
       .take(50)
 
     return { submissions, alwaysAnonymous: user.alwaysAnonymous === true }
+  },
+})
+
+/**
+ * Lists submissions for the public Community feed. The response is a
+ * deliberately small projection so ownership and admin identity fields never
+ * leave the backend.
+ */
+export const listPublic = query({
+  args: { paginationOpts: paginationOptsValidator },
+  returns: paginationResultValidator(publicSubmission),
+  handler: async (ctx, args) => {
+    const result = await ctx.db
+      .query('submissions')
+      .withIndex('by_submittedAt')
+      .order('desc')
+      .paginate(args.paginationOpts)
+
+    return {
+      ...result,
+      page: result.page.map((submission) => ({
+        _id: submission._id,
+        topic: submission.topic,
+        ...(submission.details !== undefined
+          ? { details: submission.details }
+          : {}),
+        ...(submission.youtubeUrl !== undefined
+          ? { youtubeUrl: submission.youtubeUrl }
+          : {}),
+        ...(submission.submittedBy !== undefined
+          ? { submittedBy: submission.submittedBy }
+          : {}),
+        submittedAt: submission.submittedAt,
+        status:
+          submission.promotedAt !== undefined
+            ? ('promoted' as const)
+            : submission.dismissedAt !== undefined
+              ? ('dismissed' as const)
+              : null,
+      })),
+    }
   },
 })
 

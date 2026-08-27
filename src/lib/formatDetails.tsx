@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 
+import { formatSubmissionDetailsParagraph } from './submissionFormatting'
+
 const MAX_PARAGRAPHS = 10
 
 interface FormatDetailsProps {
@@ -26,7 +28,7 @@ export function FormatDetails({ text, className }: FormatDetailsProps) {
     <div className="flex flex-col gap-2">
       {paragraphs.map((paragraph, index) => (
         <p key={index} className={className}>
-          {injectLineBreaks(paragraph)}
+          {injectLineBreaks(formatSubmissionDetailsParagraph(paragraph))}
         </p>
       ))}
     </div>

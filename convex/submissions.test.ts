@@ -25,6 +25,76 @@ function setup() {
 }
 
 describe('submissions', () => {
+  test('publicly lists submission outcomes without private fields', async () => {
+    const t = setup()
+    const ids = await t.run(async (ctx) => {
+      const userId = await ctx.db.insert('users', {
+        tokenIdentifier: 'public-feed-user',
+        clerkId: 'public-feed-user',
+        updatedAt: 1,
+      })
+
+      const pendingId = await ctx.db.insert('submissions', {
+        userId,
+        topic: 'Pending public topic',
+        submittedAt: 100,
+      })
+      const promotedId = await ctx.db.insert('submissions', {
+        userId,
+        topic: 'Promoted public topic',
+        details: 'A promoted explanation.',
+        youtubeUrl: 'https://youtu.be/promoted',
+        submittedBy: 'Paddock Sleuth',
+        submittedAt: 200,
+        promotedAt: 1,
+        promotedBy: userId,
+      })
+      const dismissedId = await ctx.db.insert('submissions', {
+        userId,
+        topic: 'Dismissed public topic',
+        submittedAt: 300,
+        dismissedAt: 1,
+        dismissedBy: userId,
+      })
+
+      return { pendingId, promotedId, dismissedId }
+    })
+
+    const firstPage = await t.query(api.submissions.listPublic, {
+      paginationOpts: { numItems: 2, cursor: null },
+    })
+
+    expect(firstPage.page.map((submission) => submission._id)).toEqual([
+      ids.dismissedId,
+      ids.promotedId,
+    ])
+    expect(firstPage.page.map((submission) => submission.status)).toEqual([
+      'dismissed',
+      'promoted',
+    ])
+    expect(firstPage.page[1]).toMatchObject({
+      details: 'A promoted explanation.',
+      youtubeUrl: 'https://youtu.be/promoted',
+      submittedBy: 'Paddock Sleuth',
+    })
+    expect(firstPage.page[1]).not.toHaveProperty('userId')
+    expect(firstPage.page[1]).not.toHaveProperty('promotedBy')
+    expect(firstPage.page[0]).not.toHaveProperty('dismissedBy')
+    expect(firstPage.isDone).toBe(false)
+
+    const secondPage = await t.query(api.submissions.listPublic, {
+      paginationOpts: {
+        numItems: 2,
+        cursor: firstPage.continueCursor,
+      },
+    })
+
+    expect(secondPage.page).toMatchObject([
+      { _id: ids.pendingId, topic: 'Pending public topic', status: null },
+    ])
+    expect(secondPage.isDone).toBe(true)
+  })
+
   test('rejects an unauthenticated submission', async () => {
     const t = setup()
 
