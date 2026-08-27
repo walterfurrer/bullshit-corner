@@ -84,7 +84,7 @@ export function SubmissionCard(props: SubmissionCardProps) {
   return (
     <article
       className={cn(
-        'flex h-full flex-col gap-3 p-4 text-start',
+        'flex h-auto min-h-36 flex-col gap-3 p-4 text-start',
         isListItem
           ? 'bg-transparent transition-colors hover:bg-accent/30 focus-within:bg-accent/30'
           : 'glass-section rounded-lg border',
