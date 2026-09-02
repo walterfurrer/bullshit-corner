@@ -306,6 +306,11 @@ body {
     cursor: pointer;
   }
 
+  button,
+  [role="button"] {
+    text-box: trim-both cap alphabetic;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
